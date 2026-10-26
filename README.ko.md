@@ -1,18 +1,20 @@
-# Spectacle
+# Split
 
 [English](README.md) · **한국어**
 
 키보드 단축키로 macOS 창을 옮기고 크기를 맞추는 앱입니다. 마우스가 필요 없습니다.
 
-Spectacle 은 [Eric Czarny](https://github.com/eczarny) 가 만들었고 2016년 1.2 버전이 마지막이었습니다. 원본 저장소([eczarny/spectacle](https://github.com/eczarny/spectacle))는 보관(archived) 상태입니다. 이 포크는 [RUNNERS-IM](https://github.com/RUNNERS-IM) 이 유지보수하며, 새 버전·버그 수정·기능 추가는 모두 여기서 진행합니다.
+Split 은 [Eric Czarny](https://github.com/eczarny) 가 만든 창 정렬 앱 Spectacle 을 RUNNERS-IM 이 이어서 만드는 앱입니다. Spectacle 은 2016년 1.2 가 마지막이고 원본 저장소([eczarny/spectacle](https://github.com/eczarny/spectacle))는 보관 상태입니다. Split 은 같은 단축키를 그대로 쓰고, 애플 실리콘 네이티브 빌드·공증된 배포·새 기능을 더합니다. 처음 켤 때 Spectacle 의 단축키와 환경설정을 한 번 복사해 옵니다.
 
 ## 설치
 
-1. [Releases](https://github.com/RUNNERS-IM/spectacle/releases) 에서 `Spectacle-1.2.pkg` 를 받아 더블클릭합니다. "확인되지 않은 개발자" 경고가 뜨면 파일을 우클릭하고 **열기**를 누릅니다.
-2. 애플 실리콘 맥에서는 처음 실행할 때 로제타 설치를 물을 수 있습니다. 설치하면 됩니다. 애플 실리콘 네이티브 빌드는 아래 로드맵에 있습니다.
-3. **시스템 설정 → 개인 정보 보호 및 보안 → 손쉬운 사용** 에서 Spectacle 을 켭니다. 이 권한이 없으면 다른 앱의 창을 움직일 수 없습니다.
+1. [Releases](https://github.com/RUNNERS-IM/split/releases) 에서 `Split-<버전>.dmg` 를 받아 열고 Split 을 응용 프로그램 폴더로 끌어 놓습니다. 서명·공증된 앱이라 경고 없이 열립니다.
+2. 처음 켜면 **시스템 설정 → 개인정보 보호 및 보안 → 손쉬운 사용** 이 자동으로 열립니다. Split 옆 스위치를 켜면 됩니다. 이 권한이 없으면 다른 앱의 창을 움직일 수 없고, 켜는 순간 안내 창이 스스로 닫힙니다.
+3. Spectacle 이 아직 켜져 있으면 Split 이 끌지 물어봅니다. 두 앱이 같은 단축키에 함께 반응하지 않게 하려는 것입니다.
 
-Homebrew 설치(`brew install --cask runners-im/tap/spectacle`)는 준비 중입니다.
+애플 실리콘·인텔 맥 모두에서 네이티브로 돌고, macOS 13 이상이 필요합니다. 업데이트는 앱 안에서 설치됩니다.
+
+Homebrew 설치(`brew install --cask runners-im/tap/split`)는 준비 중입니다.
 
 ## 기본 단축키
 
@@ -64,17 +66,22 @@ Homebrew 설치(`brew install --cask runners-im/tap/spectacle`)는 준비 중입
 
 ## 로드맵
 
-다음 버전들에서 이 순서로 진행합니다.
+끝난 것:
 
-1. 애플 실리콘 네이티브 빌드, Carthage 대신 Swift Package Manager, Sparkle 2
-2. Developer ID 서명·공증, runners.im 에서 제공하는 자동 업데이트
-3. Homebrew tap
-4. 새 비율(1/4, 2/3)과 메뉴바 격자 선택
-5. 명령줄 도구와 URL 스킴(`spectacle left`, `spectacle://center`) — Raycast·단축어·스크립트 연동
-6. 설정 JSON 내보내기·가져오기
-7. 자동 배치: 단축키 하나(⌥⌘A)로 현재 모니터의 열린 창 전부를 개수에 맞게 배치
-8. 창을 화면 가장자리로 끌면 자동 정렬(드래그 스냅)
-9. 환경설정 창 현대화와 다국어
+- 애플 실리콘 네이티브 빌드, Swift Package Manager, Sparkle 2
+- Developer ID 서명·공증, runners.im 을 거치는 자동 업데이트
+- 단계별 손쉬운 사용 권한 안내 창
+- Spectacle 단축키·환경설정 옮겨 오기
+
+다음, 이 순서로:
+
+1. Homebrew tap
+2. 새 비율(1/4, 2/3)과 메뉴바 격자 선택
+3. 명령줄 도구와 URL 스킴(`split left`, `split://center`) — Raycast·단축어·스크립트 연동
+4. 설정 JSON 내보내기·가져오기
+5. 자동 배치: 단축키 하나(⌥⌘A)로 현재 모니터의 열린 창 전부를 개수에 맞게 배치
+6. 창을 화면 가장자리로 끌면 자동 정렬(드래그 스냅)
+7. 새 아이콘, 환경설정 창 현대화와 다국어
 
 이슈와 풀 리퀘스트는 이 저장소에 올려 주세요.
 
@@ -82,33 +89,32 @@ Homebrew 설치(`brew install --cask runners-im/tap/spectacle`)는 준비 중입
 
 ### 손쉬운 사용 권한을 요구합니다
 
-Spectacle 은 macOS 의 손쉬운 사용(Accessibility) 프로토콜로 다른 앱의 창을 움직입니다. **시스템 설정 → 개인 정보 보호 및 보안 → 손쉬운 사용** 에서 허용하기 전에는 동작하지 않습니다.
+Split 은 macOS 의 손쉬운 사용(Accessibility) 프로토콜로 다른 앱의 창을 움직입니다. **시스템 설정 → 개인 정보 보호 및 보안 → 손쉬운 사용** 에서 허용하기 전에는 동작하지 않습니다.
 
 ### 창이 생각한 크기로 안 바뀝니다
 
-앱은 자기 창의 최소·최대 크기를 정해 둘 수 있습니다. Spectacle 은 그 제한을 항상 지키므로, 최소 폭이 1600px 인 창은 1440px 인 화면 절반에 들어갈 수 없습니다. 앱이 허용하는 한도 안에서 가장 가깝게 맞춥니다.
+앱은 자기 창의 최소·최대 크기를 정해 둘 수 있습니다. Split 은 그 제한을 항상 지키므로, 최소 폭이 1600px 인 창은 1440px 인 화면 절반에 들어갈 수 없습니다. 앱이 허용하는 한도 안에서 가장 가깝게 맞춥니다.
 
 ### 터미널 창이 이상하게 움직입니다
 
-터미널과 비슷한 앱(iTerm2 등)은 글자 행·열이 온전히 보이는 크기만 허용합니다. Spectacle 은 먼저 정확한 크기를 시도하고, 안 되면 들어갈 때까지 조금씩 줄입니다. 그래서 살짝 덜컹거려 보일 수 있고, 결과는 목표 영역 가운데에 놓입니다.
+터미널과 비슷한 앱(iTerm2 등)은 글자 행·열이 온전히 보이는 크기만 허용합니다. Split 은 먼저 정확한 크기를 시도하고, 안 되면 들어갈 때까지 조금씩 줄입니다. 그래서 살짝 덜컹거려 보일 수 있고, 결과는 목표 영역 가운데에 놓입니다.
 
 ### 어떤 앱은 아예 안 됩니다
 
-화면을 비표준 방식으로 그리는 앱은 손쉬운 사용 프로토콜로 창을 드러내지 않습니다. 그런 창은 Spectacle 이 움직일 수 없습니다.
+화면을 비표준 방식으로 그리는 앱은 손쉬운 사용 프로토콜로 창을 드러내지 않습니다. 그런 창은 Split 이 움직일 수 없습니다.
 
 ## 소스에서 빌드하기
 
-지금 프로젝트는 아직 [Carthage](https://github.com/Carthage/Carthage) 를 씁니다.
+Xcode 26 이상이 필요합니다. 외부 부품은 Swift Package Manager 로 Xcode 가 받아 옵니다.
 
 ```sh
-carthage bootstrap --platform Mac
-open Spectacle.xcodeproj
+open Split.xcodeproj
 ```
 
-Xcode 에서 ⌘R 로 실행합니다. 로드맵 1번(Swift Package Manager 전환)이 끝나면 Carthage 는 필요 없어집니다.
+⌘R 로 실행, ⌘U 로 테스트합니다. 배포는 `scripts/release.sh <버전>` 으로 합니다. 테스트·Developer ID 서명·공증·Sparkle 업데이트 목록까지 만들고, `--publish` 를 붙이면 GitHub Releases 에 올립니다.
 
 ## 라이선스
 
-Spectacle 은 MIT 라이선스로 배포됩니다. [LICENSE.md](LICENSE.md) 를 보세요.
+Split 은 MIT 라이선스로 배포됩니다. [LICENSE.md](LICENSE.md) 를 보세요.
 
-Copyright (c) 2017 Eric Czarny. Modifications copyright (c) 2026 RUNNERS-IM.
+Split 은 Spectacle 을 바탕으로 합니다. Copyright (c) 2017 Eric Czarny. Modifications copyright (c) 2026 RUNNERS-IM.

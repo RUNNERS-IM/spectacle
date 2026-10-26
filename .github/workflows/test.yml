@@ -1,0 +1,25 @@
+# 커밋·PR 마다 테스트만 돈다. 사무실 맥(셀프 호스티드)은 쓰지 않는다:
+# 공개 저장소라 남이 올린 PR 코드가 사무실 맥에서 실행되면 안 되기 때문.
+name: Test
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # the build number is the commit count
+      - name: Test (direct build)
+        run: xcodebuild test -project Split.xcodeproj -scheme Split -destination 'platform=macOS' CODE_SIGN_IDENTITY=- -quiet
+      - name: Build (App Store build)
+        run: xcodebuild build -project Split.xcodeproj -scheme "Split App Store" -configuration Release -destination 'generic/platform=macOS' CODE_SIGN_IDENTITY=- -quiet
