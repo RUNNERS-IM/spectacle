@@ -18,6 +18,9 @@ PUBLISH="${2:-}"
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 GITHUB_REPO="RUNNERS-IM/split"
 NOTARY_PROFILE="runners"
+# GitHub 호스팅 맥에서는 워크플로가 만든 임시 키체인에 공증 정보가 있다.
+NOTARY_ARGS=(--keychain-profile "$NOTARY_PROFILE")
+if [ -n "${NOTARY_KEYCHAIN:-}" ]; then NOTARY_ARGS+=(--keychain "$NOTARY_KEYCHAIN"); fi
 SPARKLE_KEY="$HOME/.runners/secrets/sparkle_eddsa_private.key"
 INFO_PLIST="$REPO_ROOT/Split/Supporting Files/Info.plist"
 
@@ -34,7 +37,7 @@ fail() { printf '중단: %s\n' "$*" >&2; exit 1; }
 step "준비물 확인"
 security find-identity -v -p codesigning | grep -q "Developer ID Application" \
   || fail "Developer ID Application 인증서가 없습니다. Xcode → 설정 → Accounts → Manage Certificates 에서 만드세요."
-xcrun notarytool history --keychain-profile "$NOTARY_PROFILE" >/dev/null 2>&1 \
+xcrun notarytool history "${NOTARY_ARGS[@]}" >/dev/null 2>&1 \
   || fail "공증 키체인 이름 '$NOTARY_PROFILE' 이 동작하지 않습니다. ~/claude-config/bin/split-keys 실행, 애플 약관 동의를 확인하세요."
 [ -f "$SPARKLE_KEY" ] || fail "Sparkle 서명 키가 없습니다: $SPARKLE_KEY"
 PLIST_VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$INFO_PLIST")
@@ -59,7 +62,7 @@ codesign --verify --deep --strict --verbose=2 "$APP"
 
 step "앱 공증"
 ditto -c -k --keepParent "$APP" "$OUT/notarize.zip"
-xcrun notarytool submit "$OUT/notarize.zip" --keychain-profile "$NOTARY_PROFILE" --wait
+xcrun notarytool submit "$OUT/notarize.zip" "${NOTARY_ARGS[@]}" --wait
 xcrun stapler staple "$APP"
 rm "$OUT/notarize.zip"
 ditto -c -k --sequesterRsrc --keepParent "$APP" "$ZIP"
@@ -70,7 +73,7 @@ cp -R "$APP" "$STAGE/"; ln -s /Applications "$STAGE/Applications"
 hdiutil create -volname "Split $VERSION" -srcfolder "$STAGE" -ov -format UDZO "$DMG" >/dev/null
 rm -rf "$STAGE"
 codesign --sign "Developer ID Application" --timestamp "$DMG"
-xcrun notarytool submit "$DMG" --keychain-profile "$NOTARY_PROFILE" --wait
+xcrun notarytool submit "$DMG" "${NOTARY_ARGS[@]}" --wait
 xcrun stapler staple "$DMG"
 spctl -a -t open --context context:primary-signature -v "$DMG"
 
@@ -88,8 +91,11 @@ ls -lh "$ZIP" "$DMG" "$OUT/appcast.xml"
 
 if [ "$PUBLISH" = "--publish" ]; then
   step "GitHub Releases v$VERSION 에 올리기"
-  git -C "$REPO_ROOT" tag -a "v$VERSION" -m "Split $VERSION"
-  git -C "$REPO_ROOT" push origin "v$VERSION"
+  # 태그를 올려서 시작한 경우(GitHub Actions)에는 태그가 이미 있다.
+  if ! git -C "$REPO_ROOT" rev-parse -q --verify "refs/tags/v$VERSION" >/dev/null; then
+    git -C "$REPO_ROOT" tag -a "v$VERSION" -m "Split $VERSION"
+    git -C "$REPO_ROOT" push origin "v$VERSION"
+  fi
   gh release create "v$VERSION" "$ZIP" "$DMG" "$OUT/appcast.xml" \
     --repo "$GITHUB_REPO" --title "Split $VERSION" --generate-notes --latest
 else
