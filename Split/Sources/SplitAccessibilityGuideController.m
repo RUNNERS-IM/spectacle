@@ -92,6 +92,11 @@ static NSTextField *WrappingLabel(NSString *string, CGFloat width)
 /// top of this guide. A read-only query on the Dock lists Split silently (macOS 26.1).
 + (void)registerInAccessibilityList
 {
+#if SPLIT_APP_STORE
+  // Inside the App Sandbox the silent query below does not list the app (macOS 26.1), so the
+  // App Store build asks macOS directly. This also shows the system's own permission alert.
+  AXIsProcessTrustedWithOptions((__bridge CFDictionaryRef)@{(__bridge NSString *)kAXTrustedCheckOptionPrompt: @YES});
+#else
   NSRunningApplication *dock = [NSRunningApplication runningApplicationsWithBundleIdentifier:@"com.apple.dock"].firstObject;
   if (!dock) {
     return;
@@ -103,6 +108,7 @@ static NSTextField *WrappingLabel(NSString *string, CGFloat width)
     CFRelease(value);
   }
   CFRelease(element);
+#endif
 }
 
 + (void)openAccessibilitySettings

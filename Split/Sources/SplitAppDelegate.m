@@ -1,6 +1,9 @@
 #import "SplitAppDelegate.h"
 
+// The App Store build (SPLIT_APP_STORE) is updated by the App Store and must not ship Sparkle.
+#if !SPLIT_APP_STORE
 #import <Sparkle/Sparkle.h>
+#endif
 
 #import "SplitAccessibilityElement.h"
 #import "SplitAccessibilityGuideController.h"
@@ -25,6 +28,9 @@
   SplitShortcutManager *_shortcutManager;
   SplitWindowPositionManager *_windowPositionManager;
   SplitPreferencesController *_preferencesController;
+#if !SPLIT_APP_STORE
+  SPUStandardUpdaterController *_updaterController;
+#endif
   SplitAccessibilityGuideController *_accessibilityGuideController;
   NSTimer *_disableShortcutsForAnHourTimer;
   NSSet<NSString *> *_blacklistedApplications;
@@ -117,7 +123,15 @@
   if (statusItemEnabled) {
     [self enableStatusItem];
   }
-  self.updaterController.updater.automaticallyChecksForUpdates = automaticallyChecksForUpdates;
+#if SPLIT_APP_STORE
+  (void)automaticallyChecksForUpdates;
+  self.checkForUpdatesMenuItem.hidden = YES;
+#else
+  _updaterController = [[SPUStandardUpdaterController alloc] initWithStartingUpdater:YES
+                                                                     updaterDelegate:nil
+                                                                  userDriverDelegate:nil];
+  _updaterController.updater.automaticallyChecksForUpdates = automaticallyChecksForUpdates;
+#endif
   [self updateShortcutMenuItems];
   // Ask after launch has finished; an alert run from inside applicationDidFinishLaunching
   // returned its first button straight away without the user touching it (macOS 26.1).
@@ -157,6 +171,13 @@
   [self showPreferencesWindow:self];
 
   return YES;
+}
+
+- (IBAction)checkForUpdates:(id)sender
+{
+#if !SPLIT_APP_STORE
+  [_updaterController checkForUpdates:sender];
+#endif
 }
 
 - (IBAction)showPreferencesWindow:(id)sender

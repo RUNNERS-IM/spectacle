@@ -35,11 +35,10 @@
                 <outlet property="moveToUpperRightShortcutMenuItem" destination="C7t-Sf-kOI" id="w51-Xe-ZMs"/>
                 <outlet property="redoLastMoveShortcutMenuItem" destination="187-7k-0Ct" id="TFE-uS-twj"/>
                 <outlet property="statusItemMenu" destination="KsA-8w-wcl" id="76U-gs-viQ"/>
+                <outlet property="checkForUpdatesMenuItem" destination="2sj-vF-eSL" id="Chk-Up-dt1"/>
                 <outlet property="undoLastMoveShortcutMenuItem" destination="l9O-0B-fjp" id="gns-Zw-ZVc"/>
-                <outlet property="updaterController" destination="qZ6-IG-VBZ" id="Upd-aT-er1"/>
             </connections>
         </customObject>
-        <customObject id="qZ6-IG-VBZ" customClass="SPUStandardUpdaterController"/>
         <menu title="Split Status Item" id="KsA-8w-wcl" propertyAccessControl="localizable">
             <items>
                 <menuItem title="About Split" tag="-1" id="EA9-dx-Qfg">
@@ -48,10 +47,10 @@
                         <action selector="orderFrontStandardAboutPanel:" target="-2" id="P8D-am-ldh"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Check for Updates..." tag="-1" id="2sj-vF-eSL">
+                <menuItem title="Check for Updates..." tag="-1" id="2sj-vF-eSL" userLabel="Check for Updates">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
-                        <action selector="checkForUpdates:" target="qZ6-IG-VBZ" id="cII-hj-ws3"/>
+                        <action selector="checkForUpdates:" target="tMJ-JP-XRD" id="cII-hj-ws3"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="880"/>

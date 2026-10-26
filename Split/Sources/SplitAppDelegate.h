@@ -2,11 +2,9 @@
 
 @class SplitPreferencesController;
 
-@class SPUStandardUpdaterController;
-
 @interface SplitAppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate>
 
-@property (nonatomic, strong) IBOutlet SPUStandardUpdaterController *updaterController;
+@property (nonatomic, strong) IBOutlet NSMenuItem *checkForUpdatesMenuItem;
 
 @property (nonatomic, strong) IBOutlet NSMenu *statusItemMenu;
 @property (nonatomic, strong) IBOutlet NSMenuItem *moveToCenterShortcutMenuItem;
@@ -31,6 +29,8 @@
 @property (nonatomic, strong) IBOutlet NSMenuItem *disableShortcutsForApplicationMenuItem;
 
 - (IBAction)showPreferencesWindow:(id)sender;
+
+- (IBAction)checkForUpdates:(id)sender;
 
 - (IBAction)moveFrontmostWindowToFullscreen:(id)sender;
 - (IBAction)moveFrontmostWindowToCenter:(id)sender;

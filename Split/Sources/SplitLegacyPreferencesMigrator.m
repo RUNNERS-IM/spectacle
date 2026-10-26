@@ -10,6 +10,10 @@ static NSString *const kMigrationDoneKey = @"LegacyPreferencesMigrated";
 
 + (BOOL)migrateIfNeeded
 {
+#if SPLIT_APP_STORE
+  // The sandbox keeps the App Store build out of Spectacle's preferences.
+  return NO;
+#else
   NSString *currentIdentifier = NSBundle.mainBundle.bundleIdentifier;
   if (!currentIdentifier || [currentIdentifier isEqualToString:kSplitLegacyBundleIdentifier]) {
     return NO;
@@ -17,6 +21,7 @@ static NSString *const kMigrationDoneKey = @"LegacyPreferencesMigrated";
   return [self migrateFromDomain:kSplitLegacyBundleIdentifier
                       toDefaults:NSUserDefaults.standardUserDefaults
                    currentDomain:currentIdentifier];
+#endif
 }
 
 + (BOOL)migrateFromDomain:(NSString *)legacyDomain
