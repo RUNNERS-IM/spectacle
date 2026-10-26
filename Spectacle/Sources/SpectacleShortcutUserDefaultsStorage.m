@@ -5,6 +5,7 @@
 + (void)initialize
 {
   [NSKeyedUnarchiver setClass:[SpectacleShortcut class] forClassName:@"SpectacleHotKey"];
+  [NSKeyedUnarchiver setClass:[SpectacleShortcut class] forClassName:@"SpectacleShortcut"];
   [NSKeyedUnarchiver setClass:[SpectacleShortcut class] forClassName:@"ZeroKitHotKey"];
   [NSKeyedUnarchiver setClass:[SpectacleShortcut class] forClassName:@"ZKHotKey"];
 }

@@ -54,6 +54,27 @@ static NSURL *findShortcutsFileURL(NSError **error)
   return shortcutsFileURL.URLByResolvingSymlinksInPath;
 }
 
+/// The original app kept its shortcuts in "Application Support/Spectacle". Copy that file once
+/// so people moving over keep their shortcuts. The original folder is left untouched.
+static NSString *const kLegacySpectacleDirectoryName = @"Spectacle";
+
+static void copyLegacyShortcutsIfNeeded(NSURL *applicationSupportDirectory, NSURL *currentDirectory)
+{
+  NSFileManager *fileManager = NSFileManager.defaultManager;
+  NSURL *currentFile = [currentDirectory URLByAppendingPathComponent:@"Shortcuts.json"];
+  NSURL *legacyFile = [[applicationSupportDirectory URLByAppendingPathComponent:kLegacySpectacleDirectoryName]
+                       URLByAppendingPathComponent:@"Shortcuts.json"];
+  if ([currentFile.path isEqualToString:legacyFile.path]
+      || [fileManager fileExistsAtPath:currentFile.path]
+      || ![fileManager fileExistsAtPath:legacyFile.path]) {
+    return;
+  }
+  NSError *error = nil;
+  if (![fileManager copyItemAtURL:legacyFile toURL:currentFile error:&error]) {
+    NSLog(@"Unable to copy the original shortcuts: %@", error.localizedDescription);
+  }
+}
+
 static NSURL *findOrCreateSpectacleDirectory(NSError **error)
 {
   NSURL *applicationSupportDirectory = [[NSFileManager defaultManager] URLForDirectory:NSApplicationSupportDirectory
@@ -72,6 +93,7 @@ static NSURL *findOrCreateSpectacleDirectory(NSError **error)
   if (!success) {
     return nil;
   }
+  copyLegacyShortcutsIfNeeded(applicationSupportDirectory, spectacleDirectory);
   return spectacleDirectory;
 }
 
