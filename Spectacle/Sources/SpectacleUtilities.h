@@ -9,6 +9,5 @@
 + (void)displayRunningInBackgroundAlertWithCallback:(void (^)(BOOL, BOOL))callback;
 + (void)displayRestoreDefaultsAlertWithConfirmationCallback:(void (^)(void))callback;
 
-+ (NSString *)pathForPreferencePaneNamed:(NSString *)preferencePaneName;
 
 @end
