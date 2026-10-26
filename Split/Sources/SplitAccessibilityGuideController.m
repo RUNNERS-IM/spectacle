@@ -14,9 +14,9 @@ static NSString *GuideString(NSString *key)
   return [NSBundle.mainBundle localizedStringForKey:key value:nil table:kGuideTable];
 }
 
-static NSImage *GlassesImage(void)
+static NSImage *AppIconImage(void)
 {
-  return [NSImage imageNamed:@"Split Glasses"] ?: NSApp.applicationIconImage;
+  return NSApp.applicationIconImage;
 }
 
 static NSTextField *WrappingLabel(NSString *string, CGFloat width)
@@ -243,8 +243,7 @@ static NSTextField *WrappingLabel(NSString *string, CGFloat width)
   background.state = NSVisualEffectStateFollowsWindowActiveState;
   self.window.contentView = background;
 
-  // The bare glasses artwork, without the plate macOS 26 draws around legacy app icons.
-  NSImageView *icon = [NSImageView imageViewWithImage:GlassesImage()];
+  NSImageView *icon = [NSImageView imageViewWithImage:AppIconImage()];
   icon.imageScaling = NSImageScaleProportionallyUpOrDown;
   [icon.widthAnchor constraintEqualToConstant:84.0].active = YES;
   [icon.heightAnchor constraintEqualToConstant:84.0].active = YES;
@@ -379,7 +378,7 @@ static NSTextField *WrappingLabel(NSString *string, CGFloat width)
   box.layer.borderColor = NSColor.separatorColor.CGColor;
   box.layer.backgroundColor = [NSColor.labelColor colorWithAlphaComponent:0.05].CGColor;
 
-  NSImageView *icon = [NSImageView imageViewWithImage:GlassesImage()];
+  NSImageView *icon = [NSImageView imageViewWithImage:AppIconImage()];
   icon.imageScaling = NSImageScaleProportionallyUpOrDown;
   NSTextField *name = [NSTextField labelWithString:@"Split"];
   name.font = [NSFont systemFontOfSize:13.0 weight:NSFontWeightMedium];
