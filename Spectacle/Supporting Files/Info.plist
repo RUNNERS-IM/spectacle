@@ -34,6 +34,8 @@
 	<false/>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
+	<key>SUPublicEDKey</key>
+	<string>6ZRakftZ8nsC4X0dKIhLz086/SRYn5prMraBTD3vbhw=</string>
 	<key>SUFeedURL</key>
 	<string>https://runners.im/spectacle/appcast.xml</string>
 </dict>
