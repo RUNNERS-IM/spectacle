@@ -35,5 +35,6 @@ static NSArray<SplitShortcut *> *builtinDefaultShortcuts(void)
            [[SplitShortcut alloc] initWithShortcutName:@"MakeSmaller"           shortcutKeyBinding:@"ctrl+alt+shift+left"],
            [[SplitShortcut alloc] initWithShortcutName:@"UndoLastMove"          shortcutKeyBinding:@"alt+cmd+z"],
            [[SplitShortcut alloc] initWithShortcutName:@"RedoLastMove"          shortcutKeyBinding:@"alt+shift+cmd+z"],
+           [[SplitShortcut alloc] initWithShortcutName:@"ArrangeWindows"        shortcutKeyBinding:@"alt+cmd+a"],
            ];
 }

@@ -1,0 +1,44 @@
+/* Title of the window that explains how to grant the Accessibility permission */
+"WindowTitle" = "Salli Splitin siirtää ikkunoita";
+
+/* Headline of the Accessibility permission guide */
+"Title" = "Split tarvitsee luvan ikkunoiden siirtämiseen";
+
+/* Explanation below the headline of the Accessibility permission guide */
+"Description" = "macOS kysyy ennen kuin yksi appi voi siirtää toisen apin ikkunoita. Tämä tarvitsee laittaa päälle vain kerran.";
+
+/* Step 1 of the Accessibility permission guide. Text between ** is shown in bold. */
+"Step1" = "Järjestelmäasetukset avautuu tämän ikkunan viereen. Jos ei avaudu, klikkaa **Avaa Järjestelmäasetukset**.";
+
+/* Step 2 of the Accessibility permission guide. Text between ** is shown in bold. */
+"Step2" = "Laita päälle kohdan **Split** vieressä oleva kytkin.";
+
+/* Step 3 of the Accessibility permission guide */
+"Step3" = "Tämä ikkuna sulkeutuu itsestään, ja Split on valmis käyttöön.";
+
+/* Caption under the drawn System Settings row */
+"SettingsPath" = "Järjestelmäasetukset › Tietosuoja ja turvallisuus › Käyttöapu";
+
+/* Secondary button that hides the Accessibility permission guide */
+"ButtonLater" = "Myöhemmin";
+
+/* Primary button that opens System Settings on the Accessibility pane */
+"ButtonOpenSettings" = "Avaa Järjestelmäasetukset";
+
+/* Status line while Split waits for the Accessibility permission */
+"StatusWaiting" = "Odotetaan lupaa…";
+
+/* Status line right after the Accessibility permission is granted */
+"StatusGranted" = "Lupa myönnetty. Kaikki valmista.";
+
+/* Caption under the screenshot of System Settings in the Accessibility guide */
+"ScreenshotCaption" = "Järjestelmäasetukset › Tietosuoja ja turvallisuus › Käyttöapu – laita päälle oranssilla ympyröity kytkin.";
+
+/* Caption under the live permission row in the Accessibility guide */
+"LiveStatus" = "Splitin nykyinen lupa, tarkistetaan sekunnin välein";
+
+/* Label next to the live switch when Accessibility access is granted */
+"ToggleOn" = "Päällä";
+
+/* Label next to the live switch when Accessibility access is not granted */
+"ToggleOff" = "Pois";

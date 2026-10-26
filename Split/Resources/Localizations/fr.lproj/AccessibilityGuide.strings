@@ -1,0 +1,44 @@
+/* Title of the window that explains how to grant the Accessibility permission */
+"WindowTitle" = "Autoriser Split à déplacer les fenêtres";
+
+/* Headline of the Accessibility permission guide */
+"Title" = "Split a besoin de votre autorisation pour déplacer vos fenêtres";
+
+/* Explanation below the headline of the Accessibility permission guide */
+"Description" = "macOS demande votre accord avant qu’une app puisse déplacer les fenêtres d’une autre app. Vous n’avez besoin de l’activer qu’une seule fois.";
+
+/* Step 1 of the Accessibility permission guide. Text between ** is shown in bold. */
+"Step1" = "Réglages Système s’ouvre à côté de cette fenêtre. Sinon, cliquez sur **Ouvrir Réglages Système**.";
+
+/* Step 2 of the Accessibility permission guide. Text between ** is shown in bold. */
+"Step2" = "Activez l’interrupteur à côté de **Split**.";
+
+/* Step 3 of the Accessibility permission guide */
+"Step3" = "Cette fenêtre se ferme automatiquement et Split est prêt à l’emploi.";
+
+/* Caption under the drawn System Settings row */
+"SettingsPath" = "Réglages Système › Confidentialité et sécurité › Accessibilité";
+
+/* Secondary button that hides the Accessibility permission guide */
+"ButtonLater" = "Plus tard";
+
+/* Primary button that opens System Settings on the Accessibility pane */
+"ButtonOpenSettings" = "Ouvrir Réglages Système";
+
+/* Status line while Split waits for the Accessibility permission */
+"StatusWaiting" = "En attente de l’autorisation…";
+
+/* Status line right after the Accessibility permission is granted */
+"StatusGranted" = "Autorisation accordée. Tout est prêt.";
+
+/* Caption under the screenshot of System Settings in the Accessibility guide */
+"ScreenshotCaption" = "Réglages Système › Confidentialité et sécurité › Accessibilité — activez l’interrupteur entouré en orange.";
+
+/* Caption under the live permission row in the Accessibility guide */
+"LiveStatus" = "Autorisation actuelle de Split, vérifiée chaque seconde";
+
+/* Label next to the live switch when Accessibility access is granted */
+"ToggleOn" = "Activé";
+
+/* Label next to the live switch when Accessibility access is not granted */
+"ToggleOff" = "Désactivé";

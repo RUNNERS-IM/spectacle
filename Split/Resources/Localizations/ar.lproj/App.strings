@@ -1,0 +1,94 @@
+/* Status menu: opens the About window */
+"AboutSplit" = "حول Split";
+/* Status menu: asks the update server for a newer version */
+"CheckForUpdates" = "التحقق من وجود تحديثات…";
+/* Status menu: submenu that turns shortcuts off for a while */
+"Disable" = "إيقاف الاختصارات مؤقتًا";
+/* Status menu: inside "Pause Shortcuts", for one hour */
+"DisableForAnHour" = "لمدة ساعة";
+/* Status menu: inside "Pause Shortcuts", only while the named app is in front. %@ is the app name */
+"DisableForApplication" = "أثناء وجود %@ في المقدمة";
+/* Status menu: opens the settings window */
+"Settings" = "الإعدادات…";
+/* Status menu: quits the app */
+"QuitSplit" = "إنهاء Split";
+
+/* Window actions (status menu, settings, on-screen label) */
+"MoveToCenter" = "في الوسط";
+"MoveToFullscreen" = "ملء الشاشة";
+"MoveToLeftHalf" = "النصف الأيسر";
+"MoveToRightHalf" = "النصف الأيمن";
+"MoveToTopHalf" = "النصف العلوي";
+"MoveToBottomHalf" = "النصف السفلي";
+"MoveToUpperLeft" = "أعلى اليسار";
+"MoveToLowerLeft" = "أسفل اليسار";
+"MoveToUpperRight" = "أعلى اليمين";
+"MoveToLowerRight" = "أسفل اليمين";
+"MoveToNextDisplay" = "الشاشة التالية";
+"MoveToPreviousDisplay" = "الشاشة السابقة";
+"MoveToNextThird" = "الثلث التالي";
+"MoveToPreviousThird" = "الثلث السابق";
+"MakeLarger" = "تكبير";
+"MakeSmaller" = "تصغير";
+"UndoLastMove" = "تراجع";
+"RedoLastMove" = "إعادة";
+"ArrangeWindows" = "ترتيب كل النوافذ";
+
+/* On-screen label after auto-arrange. %ld is the number of windows */
+"ArrangedCount" = "تم ترتيب النوافذ: %ld";
+/* On-screen label when auto-arrange found no window */
+"NothingToArrange" = "لا توجد نوافذ لترتيبها";
+/* On-screen label after undoing auto-arrange */
+"ArrangeUndone" = "أُعيدت النوافذ إلى أماكنها";
+
+/* Settings window */
+"SettingsWindowTitle" = "إعدادات Split";
+"TabGeneral" = "عام";
+"TabShortcuts" = "الاختصارات";
+"LaunchAtLogin" = "الفتح عند تسجيل الدخول";
+"LaunchAtLoginHint" = "يبدأ Split تلقائيًا عند تسجيل الدخول إلى هذا الـ Mac.";
+"ShowMenuBarIcon" = "الإظهار في شريط القائمة";
+"ShowMenuBarIconHint" = "عند إيقافه، افتح Split من مجلد التطبيقات للعودة إلى هذه الإعدادات.";
+"MoveFeedback" = "تمييز النوافذ المنقولة";
+"MoveFeedbackHint" = "يظهر توهج قصير والاختصار الذي ضغطته بعد نقل النافذة.";
+"AutoUpdate" = "التحقق من وجود تحديثات تلقائيًا";
+"AutoUpdateHint" = "يبحث Split عن إصدار جديد مرة يوميًا ويسألك قبل تثبيته.";
+"PermissionTitle" = "إذن تسهيلات الاستخدام";
+"PermissionOnHint" = "مفعّل. يمكن لـ Split نقل النوافذ.";
+"PermissionOffHint" = "متوقف. لا يمكن نقل النوافذ حتى تقوم بتفعيله.";
+"PermissionOpen" = "فتح الإعدادات";
+/* %@ is the version number */
+"AboutLine" = "Split %@ · مجاني ومفتوح المصدر";
+"Website" = "موقع الويب";
+"SectionBasic" = "الوسط وملء الشاشة";
+"SectionHalves" = "الأنصاف";
+"SectionCorners" = "الزوايا";
+"SectionThirds" = "الأثلاث";
+"SectionThirdsHint" = "اضغط مرة أخرى للانتقال إلى الثلث التالي.";
+"SectionDisplays" = "الشاشات";
+"SectionSize" = "الحجم";
+"SectionHistory" = "التراجع والإعادة";
+"SectionArrange" = "الترتيب";
+"SectionArrangeHint" = "يرتّب حتى 9 نوافذ ظاهرة دفعة واحدة على الشاشة الحالية: 1 بملء الشاشة، 2 جنبًا إلى جنب، 3 واحدة كبيرة واثنتان فوق بعضهما، 4 في شبكة. التراجع يعيدها كلها إلى أماكنها.";
+"RestoreDefaults" = "استعادة الإعدادات الافتراضية";
+"ShortcutsHint" = "انقر على اختصار لتغييره، أو على × لمسحه.";
+"ModifierLegend" = "⌘ Command   ⌥ Option   ⌃ Control   ⇧ Shift";
+
+/* Alerts */
+"UnexpectedError" = "حدث خطأ ما";
+"AlertMessageTextRestoreDefaults" = "هل تريد استعادة الاختصارات الافتراضية؟";
+"AlertInformativeTextRestoreDefaults" = "ستعود الاختصارات التي غيّرتها إلى ما كانت عليه في Split في الأصل.";
+"AlertMessageTextRunningInBackground" = "هل تريد إخفاء Split من شريط القائمة؟";
+"AlertInformativeTextRunningInBackground" = "ستظل الاختصارات تعمل. لفتح الإعدادات مرة أخرى، افتح Split من مجلد التطبيقات.";
+/* %@ is the shortcut, for example ⌥⌘F */
+"AlertMessageTextShortcutValidationError" = "%@ مستخدم بالفعل";
+"AlertInformativeTextShortcutAlreadyInUse" = "هناك إجراء آخر في Split يستخدم %@. اختر اختصارًا مختلفًا.";
+"AlertInformativeTextSystemWideShortcutAlreadyUsed" = "يستخدم macOS الاختصار %@ بالفعل. اختر اختصارًا مختلفًا، أو غيّره في إعدادات النظام › لوحة المفاتيح › اختصارات لوحة المفاتيح.";
+"ButtonLabelAffirmative" = "حسنًا";
+"ButtonLabelNegative" = "إلغاء";
+
+/* Shortcut recorder in the settings window */
+"ShortcutRecorderLabelClickToRecord" = "انقر للتسجيل";
+"ShortcutRecorderLabelEnterShortcut" = "اكتب الاختصار";
+"ShortcutRecorderLabelStopRecording" = "إيقاف التسجيل";
+"ShortcutRecorderLabelUseExisting" = "الإبقاء على الحالي";

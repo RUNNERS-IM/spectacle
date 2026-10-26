@@ -1,0 +1,44 @@
+/* Title of the window that explains how to grant the Accessibility permission */
+"WindowTitle" = "Split को विंडो हिलाने की अनुमति दें";
+
+/* Headline of the Accessibility permission guide */
+"Title" = "आपकी विंडो हिलाने के लिए Split को अनुमति चाहिए";
+
+/* Explanation below the headline of the Accessibility permission guide */
+"Description" = "कोई ऐप किसी दूसरे ऐप की विंडो हिला सके, इससे पहले macOS पूछता है। आपको इसे केवल एक बार चालू करना होगा।";
+
+/* Step 1 of the Accessibility permission guide. Text between ** is shown in bold. */
+"Step1" = "सिस्टम सेटिंग्ज़ इस विंडो के पास खुलती है। अगर नहीं खुलती, तो **सिस्टम सेटिंग्ज़ खोलें** पर क्लिक करें।";
+
+/* Step 2 of the Accessibility permission guide. Text between ** is shown in bold. */
+"Step2" = "**Split** के बगल वाला स्विच चालू करें।";
+
+/* Step 3 of the Accessibility permission guide */
+"Step3" = "यह विंडो अपने आप बंद हो जाती है और Split उपयोग के लिए तैयार है।";
+
+/* Caption under the drawn System Settings row */
+"SettingsPath" = "सिस्टम सेटिंग्ज़ › गोपनीयता और सुरक्षा › ऐक्सेसिबिलिटी";
+
+/* Secondary button that hides the Accessibility permission guide */
+"ButtonLater" = "बाद में";
+
+/* Primary button that opens System Settings on the Accessibility pane */
+"ButtonOpenSettings" = "सिस्टम सेटिंग्ज़ खोलें";
+
+/* Status line while Split waits for the Accessibility permission */
+"StatusWaiting" = "अनुमति की प्रतीक्षा की जा रही है…";
+
+/* Status line right after the Accessibility permission is granted */
+"StatusGranted" = "अनुमति मिल गई। सब तैयार है।";
+
+/* Caption under the screenshot of System Settings in the Accessibility guide */
+"ScreenshotCaption" = "सिस्टम सेटिंग्ज़ › गोपनीयता और सुरक्षा › ऐक्सेसिबिलिटी — नारंगी घेरे वाला स्विच चालू करें।";
+
+/* Caption under the live permission row in the Accessibility guide */
+"LiveStatus" = "Split की वर्तमान अनुमति, हर सेकंड जाँची जाती है";
+
+/* Label next to the live switch when Accessibility access is granted */
+"ToggleOn" = "चालू";
+
+/* Label next to the live switch when Accessibility access is not granted */
+"ToggleOff" = "बंद";

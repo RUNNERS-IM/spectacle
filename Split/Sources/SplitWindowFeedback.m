@@ -43,6 +43,7 @@ static NSWindow *MakeOverlayWindow(void)
   NSPanel *_labelPanel;
   NSTextField *_labelField;
   NSUInteger _labelGeneration;
+  BOOL _previewShowsTiles;
 }
 
 + (BOOL)moveFeedbackEnabled
@@ -61,11 +62,18 @@ static NSWindow *MakeOverlayWindow(void)
   }
   if (!_previewWindow) {
     _previewWindow = MakeOverlayWindow();
+    _previewShowsTiles = YES;
+  }
+  if (_previewShowsTiles) {
+    // Back to a single outline after showing auto-arrange tiles.
     CALayer *layer = _previewWindow.contentView.layer;
+    layer.sublayers = nil;
     layer.cornerRadius = kPreviewCornerRadius;
     layer.borderWidth = 2.0;
     layer.borderColor = [NSColor.systemBlueColor colorWithAlphaComponent:0.95].CGColor;
     layer.backgroundColor = [NSColor.systemBlueColor colorWithAlphaComponent:0.22].CGColor;
+    _previewShowsTiles = NO;
+    [_previewWindow orderOut:nil];
   }
   NSRect frame = CocoaRectFromAccessibilityRect(rect);
   BOOL wasVisible = _previewWindow.isVisible;
@@ -112,26 +120,31 @@ static NSWindow *MakeOverlayWindow(void)
 
 - (void)glowAtRect:(CGRect)rect
 {
+  [self glowAtRects:@[[NSValue valueWithRect:NSRectFromCGRect(rect)]]];
+}
+
+static NSRect UnionOfAccessibilityRects(NSArray<NSValue *> *rects)
+{
+  NSRect frame = NSZeroRect;
+  for (NSValue *value in rects) {
+    NSRect cocoa = CocoaRectFromAccessibilityRect(NSRectToCGRect(value.rectValue));
+    frame = NSIsEmptyRect(frame) ? cocoa : NSUnionRect(frame, cocoa);
+  }
+  return frame;
+}
+
+- (void)glowAtRects:(NSArray<NSValue *> *)rects
+{
+  if (rects.count == 0) {
+    return;
+  }
   if (!_glowWindow) {
     _glowWindow = MakeOverlayWindow();
   }
-  NSRect frame = NSInsetRect(CocoaRectFromAccessibilityRect(rect), -12.0, -12.0);
+  NSRect frame = NSInsetRect(UnionOfAccessibilityRects(rects), -12.0, -12.0);
   [_glowWindow setFrame:frame display:NO];
   CALayer *root = _glowWindow.contentView.layer;
   root.sublayers = nil;
-  CALayer *ring = [CALayer layer];
-  ring.frame = NSInsetRect(_glowWindow.contentView.bounds, 12.0, 12.0);
-  ring.cornerRadius = kPreviewCornerRadius;
-  ring.borderWidth = 2.5;
-  ring.borderColor = [NSColor colorWithSRGBRed:0.58 green:0.77 blue:0.99 alpha:1.0].CGColor;
-  ring.shadowColor = NSColor.systemBlueColor.CGColor;
-  ring.shadowRadius = 10.0;
-  ring.shadowOpacity = 0.9;
-  ring.shadowOffset = CGSizeZero;
-  [root addSublayer:ring];
-  _glowWindow.alphaValue = 1.0;
-  [_glowWindow orderFrontRegardless];
-
   CABasicAnimation *grow = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
   grow.fromValue = @1.0;
   grow.toValue = @1.03;
@@ -144,12 +157,79 @@ static NSWindow *MakeOverlayWindow(void)
   group.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
   group.fillMode = kCAFillModeForwards;
   group.removedOnCompletion = NO;
-  [ring addAnimation:group forKey:@"glow"];
+  for (NSValue *value in rects) {
+    NSRect cocoa = CocoaRectFromAccessibilityRect(NSRectToCGRect(value.rectValue));
+    CALayer *ring = [CALayer layer];
+    CGFloat inset = rects.count > 1 ? 3.0 : 0.0;
+    ring.frame = NSInsetRect(NSOffsetRect(cocoa, -NSMinX(frame), -NSMinY(frame)), inset, inset);
+    ring.cornerRadius = kPreviewCornerRadius;
+    ring.borderWidth = 2.5;
+    ring.borderColor = [NSColor colorWithSRGBRed:0.58 green:0.77 blue:0.99 alpha:1.0].CGColor;
+    ring.shadowColor = NSColor.systemBlueColor.CGColor;
+    ring.shadowRadius = 10.0;
+    ring.shadowOpacity = 0.9;
+    ring.shadowOffset = CGSizeZero;
+    [root addSublayer:ring];
+    [ring addAnimation:group forKey:@"glow"];
+  }
+  _glowWindow.alphaValue = 1.0;
+  [_glowWindow orderFrontRegardless];
 
   NSWindow *window = _glowWindow;
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kGlowDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
     [window orderOut:nil];
   });
+}
+
+- (void)showMoveFeedbackForRects:(NSArray<NSValue *> *)rects title:(NSString *)title shortcut:(NSString *)shortcut
+{
+  [self hidePreview];
+  if (!SplitWindowFeedback.moveFeedbackEnabled || rects.count == 0) {
+    return;
+  }
+  [self glowAtRects:rects];
+  [self showLabel:title shortcut:shortcut onScreenContainingRect:UnionOfAccessibilityRects(rects)];
+}
+
+- (void)showLabel:(NSString *)title shortcut:(NSString *)shortcut
+{
+  NSScreen *screen = NSScreen.mainScreen ?: NSScreen.screens.firstObject;
+  [self showLabel:title shortcut:shortcut onScreenContainingRect:screen.frame];
+}
+
+- (void)showPreviewForRects:(NSArray<NSValue *> *)rects
+{
+  if (rects.count == 0) {
+    [self hidePreview];
+    return;
+  }
+  if (rects.count == 1) {
+    [self showPreviewForRect:NSRectToCGRect(rects.firstObject.rectValue)];
+    return;
+  }
+  if (!_previewWindow) {
+    _previewWindow = MakeOverlayWindow();
+  }
+  NSRect frame = UnionOfAccessibilityRects(rects);
+  CALayer *root = _previewWindow.contentView.layer;
+  root.cornerRadius = 0;
+  root.borderWidth = 0;
+  root.backgroundColor = NSColor.clearColor.CGColor;
+  root.sublayers = nil;
+  for (NSValue *value in rects) {
+    NSRect cocoa = CocoaRectFromAccessibilityRect(NSRectToCGRect(value.rectValue));
+    CALayer *tile = [CALayer layer];
+    tile.frame = NSInsetRect(NSOffsetRect(cocoa, -NSMinX(frame), -NSMinY(frame)), 4.0, 4.0);
+    tile.cornerRadius = kPreviewCornerRadius;
+    tile.borderWidth = 2.0;
+    tile.borderColor = [NSColor.systemBlueColor colorWithAlphaComponent:0.95].CGColor;
+    tile.backgroundColor = [NSColor.systemBlueColor colorWithAlphaComponent:0.18].CGColor;
+    [root addSublayer:tile];
+  }
+  _previewShowsTiles = YES;
+  [_previewWindow setFrame:frame display:YES];
+  _previewWindow.alphaValue = 1.0;
+  [_previewWindow orderFrontRegardless];
 }
 
 - (void)showLabel:(NSString *)title shortcut:(NSString *)shortcut onScreenContainingRect:(NSRect)rect
@@ -259,8 +339,42 @@ static NSDictionary<NSString *, NSString *> *SymbolNames(void)
   };
 }
 
+static NSImage *MiniScreenImage(NSArray<NSValue *> *fractions)
+{
+  NSSize size = NSMakeSize(22.0, 15.0);
+  NSImage *image = [NSImage imageWithSize:size flipped:YES drawingHandler:^BOOL(NSRect dstRect) {
+    NSRect screen = NSInsetRect(dstRect, 0.75, 0.75);
+    NSBezierPath *outline = [NSBezierPath bezierPathWithRoundedRect:screen xRadius:2.5 yRadius:2.5];
+    outline.lineWidth = 1.3;
+    [[NSColor colorWithWhite:0 alpha:0.55] setStroke];
+    [outline stroke];
+    NSRect inner = NSInsetRect(screen, 2.0, 2.0);
+    for (NSValue *value in fractions) {
+      NSRect fraction = value.rectValue;
+      NSRect fill = NSMakeRect(NSMinX(inner) + fraction.origin.x * NSWidth(inner),
+                               NSMinY(inner) + fraction.origin.y * NSHeight(inner),
+                               fraction.size.width * NSWidth(inner),
+                               fraction.size.height * NSHeight(inner));
+      fill = NSInsetRect(fill, fractions.count > 1 ? 0.6 : 0.4, fractions.count > 1 ? 0.6 : 0.4);
+      [[NSColor blackColor] setFill];
+      [[NSBezierPath bezierPathWithRoundedRect:fill xRadius:1.2 yRadius:1.2] fill];
+    }
+    return YES;
+  }];
+  image.template = YES;
+  return image;
+}
+
 NSImage *SplitMenuImageForShortcutName(NSString *shortcutName)
 {
+  if ([shortcutName isEqualToString:@"ArrangeWindows"]) {
+    // One big window on the left and two stacked on the right, like three arranged windows.
+    return MiniScreenImage(@[
+      [NSValue valueWithRect:NSMakeRect(0, 0, 0.5, 1)],
+      [NSValue valueWithRect:NSMakeRect(0.5, 0, 0.5, 0.5)],
+      [NSValue valueWithRect:NSMakeRect(0.5, 0.5, 0.5, 0.5)],
+    ]);
+  }
   NSValue *region = ScreenRegions()[shortcutName];
   if (!region) {
     NSString *symbol = SymbolNames()[shortcutName];
@@ -281,24 +395,5 @@ NSImage *SplitMenuImageForShortcutName(NSString *shortcutName)
     image.template = YES;
     return image;
   }
-  NSRect fraction = region.rectValue;
-  NSSize size = NSMakeSize(22.0, 15.0);
-  NSImage *image = [NSImage imageWithSize:size flipped:YES drawingHandler:^BOOL(NSRect dstRect) {
-    NSRect screen = NSInsetRect(dstRect, 0.75, 0.75);
-    NSBezierPath *outline = [NSBezierPath bezierPathWithRoundedRect:screen xRadius:2.5 yRadius:2.5];
-    outline.lineWidth = 1.3;
-    [[NSColor colorWithWhite:0 alpha:0.55] setStroke];
-    [outline stroke];
-    NSRect inner = NSInsetRect(screen, 2.0, 2.0);
-    NSRect fill = NSMakeRect(NSMinX(inner) + fraction.origin.x * NSWidth(inner),
-                             NSMinY(inner) + fraction.origin.y * NSHeight(inner),
-                             fraction.size.width * NSWidth(inner),
-                             fraction.size.height * NSHeight(inner));
-    fill = NSInsetRect(fill, 0.4, 0.4);
-    [[NSColor blackColor] setFill];
-    [[NSBezierPath bezierPathWithRoundedRect:fill xRadius:1.2 yRadius:1.2] fill];
-    return YES;
-  }];
-  image.template = YES;
-  return image;
+  return MiniScreenImage(@[region]);
 }

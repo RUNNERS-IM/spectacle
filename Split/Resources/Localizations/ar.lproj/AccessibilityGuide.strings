@@ -1,0 +1,44 @@
+/* Title of the window that explains how to grant the Accessibility permission */
+"WindowTitle" = "السماح لـ Split بنقل النوافذ";
+
+/* Headline of the Accessibility permission guide */
+"Title" = "يحتاج Split إلى إذن لنقل نوافذك";
+
+/* Explanation below the headline of the Accessibility permission guide */
+"Description" = "يطلب macOS الإذن قبل أن يتمكن تطبيق من نقل نوافذ تطبيق آخر. تحتاج إلى تفعيل ذلك مرة واحدة فقط.";
+
+/* Step 1 of the Accessibility permission guide. Text between ** is shown in bold. */
+"Step1" = "تُفتح إعدادات النظام بجانب هذه النافذة. إذا لم تُفتح، انقر على **فتح إعدادات النظام**.";
+
+/* Step 2 of the Accessibility permission guide. Text between ** is shown in bold. */
+"Step2" = "شغّل المفتاح بجانب **Split**.";
+
+/* Step 3 of the Accessibility permission guide */
+"Step3" = "تُغلق هذه النافذة تلقائيًا ويصبح Split جاهزًا للاستخدام.";
+
+/* Caption under the drawn System Settings row */
+"SettingsPath" = "إعدادات النظام › الخصوصية والأمن › تسهيلات الاستخدام";
+
+/* Secondary button that hides the Accessibility permission guide */
+"ButtonLater" = "لاحقًا";
+
+/* Primary button that opens System Settings on the Accessibility pane */
+"ButtonOpenSettings" = "فتح إعدادات النظام";
+
+/* Status line while Split waits for the Accessibility permission */
+"StatusWaiting" = "في انتظار الإذن…";
+
+/* Status line right after the Accessibility permission is granted */
+"StatusGranted" = "تم منح الإذن. كل شيء جاهز.";
+
+/* Caption under the screenshot of System Settings in the Accessibility guide */
+"ScreenshotCaption" = "إعدادات النظام › الخصوصية والأمن › تسهيلات الاستخدام — شغّل المفتاح المحاط بدائرة برتقالية.";
+
+/* Caption under the live permission row in the Accessibility guide */
+"LiveStatus" = "إذن Split الحالي، يُفحص كل ثانية";
+
+/* Label next to the live switch when Accessibility access is granted */
+"ToggleOn" = "مفعّل";
+
+/* Label next to the live switch when Accessibility access is not granted */
+"ToggleOff" = "متوقف";

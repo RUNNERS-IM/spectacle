@@ -5,6 +5,9 @@
 + (SplitAccessibilityElement *)frontmostApplicationElement;
 + (SplitAccessibilityElement *)frontmostWindowElement;
 
+/// Wraps an Accessibility element someone else looked up. The element is retained.
++ (SplitAccessibilityElement *)elementWithAXUIElement:(AXUIElementRef)element;
+
 - (SplitAccessibilityElement *)elementWithAttribute:(CFStringRef)attribute;
 
 - (NSString *)stringValueOfAttribute:(CFStringRef)attribute;

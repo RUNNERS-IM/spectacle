@@ -21,8 +21,11 @@ extern SplitWindowAction *const kSplitWindowActionNextDisplay;
 extern SplitWindowAction *const kSplitWindowActionPreviousDisplay;
 extern SplitWindowAction *const kSplitWindowActionNextThird;
 extern SplitWindowAction *const kSplitWindowActionPreviousThird;
+/// Arranges every visible window on the screen at once (see SplitWindowArranger).
+extern SplitWindowAction *const kSplitWindowActionArrange;
 
 BOOL SplitIsUndoWindowAction(SplitWindowAction *action);
+BOOL SplitIsArrangeWindowAction(SplitWindowAction *action);
 BOOL SplitIsRedoWindowAction(SplitWindowAction *action);
 
 BOOL SplitIsNextDisplayWindowAction(SplitWindowAction *action);

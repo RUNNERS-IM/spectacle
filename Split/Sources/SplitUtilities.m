@@ -1,5 +1,10 @@
 #import "SplitUtilities.h"
 
+NSString *SplitLocalized(NSString *key)
+{
+  return [NSBundle.mainBundle localizedStringForKey:key value:nil table:@"App"];
+}
+
 @implementation SplitUtilities
 
 + (NSString *)applicationVersion
@@ -24,10 +29,10 @@
   NSAlert *alert = [NSAlert new];
   alert.alertStyle = NSAlertStyleInformational;
   alert.showsSuppressionButton = YES;
-  alert.messageText = NSLocalizedString(@"AlertMessageTextRunningInBackground", @"The message text of the alert displayed when prompting to run Split in the background");
-  alert.informativeText = NSLocalizedString(@"AlertInformativeTextRunningInBackground", @"The informative text of the alert displayed when prompting to run Split in the background");
-  [alert addButtonWithTitle:NSLocalizedString(@"ButtonLabelAffirmative", @"The button label used in the affirmative")];
-  [alert addButtonWithTitle:NSLocalizedString(@"ButtonLabelNegative", @"The button label used in the negative")];
+  alert.messageText = SplitLocalized(@"AlertMessageTextRunningInBackground");
+  alert.informativeText = SplitLocalized(@"AlertInformativeTextRunningInBackground");
+  [alert addButtonWithTitle:SplitLocalized(@"ButtonLabelAffirmative")];
+  [alert addButtonWithTitle:SplitLocalized(@"ButtonLabelNegative")];
   NSInteger response = [alert runModal];
   BOOL isAlertSuppressed = [alert.suppressionButton state] == NSControlStateValueOn;
   switch (response) {
@@ -45,10 +50,10 @@
 + (void)displayRestoreDefaultsAlertWithConfirmationCallback:(void (^)(void))callback
 {
   NSAlert *alert = [NSAlert new];
-  alert.messageText = NSLocalizedString(@"AlertMessageTextRestoreDefaults", @"The message text of the alert displayed when prompting to restore Split's default shortcuts");
-  alert.informativeText = NSLocalizedString(@"AlertInformativeTextRestoreDefaults", @"The informative text of the alert displayed when prompting to restore Split's default shortcuts");
-  [alert addButtonWithTitle:NSLocalizedString(@"ButtonLabelAffirmative", @"The button label used in the affirmative")];
-  [alert addButtonWithTitle:NSLocalizedString(@"ButtonLabelNegative", @"The button label used in the negative")];
+  alert.messageText = SplitLocalized(@"AlertMessageTextRestoreDefaults");
+  alert.informativeText = SplitLocalized(@"AlertInformativeTextRestoreDefaults");
+  [alert addButtonWithTitle:SplitLocalized(@"ButtonLabelAffirmative")];
+  [alert addButtonWithTitle:SplitLocalized(@"ButtonLabelNegative")];
   NSInteger response = [alert runModal];
   switch (response) {
     case NSAlertFirstButtonReturn:

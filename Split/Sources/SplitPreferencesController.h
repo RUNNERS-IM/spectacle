@@ -1,41 +1,23 @@
 #import <Cocoa/Cocoa.h>
 
 #import "SplitShortcutRecorderDelegate.h"
+#import "SplitWindowAction.h"
 
-@class SplitAppDelegate;
 @class SplitShortcutManager;
-@class SplitShortcutRecorder;
 @class SplitWindowPositionManager;
 
 @protocol SplitShortcutStorage;
 
+NS_ASSUME_NONNULL_BEGIN
+
+/// The settings window, built in code: a "General" tab (login item, menu bar icon, move
+/// highlight, updates, live Accessibility status) and a "Shortcuts" tab grouped like the status
+/// menu, each row with the same small picture the menu uses.
 @interface SplitPreferencesController : NSWindowController <SplitShortcutRecorderDelegate>
 
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *moveToCenterShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *moveToFullscreenShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *moveToLeftShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *moveToRightShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *moveToTopShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *moveToBottomShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *moveToUpperLeftShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *moveToLowerLeftShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *moveToUpperRightShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *moveToLowerRightShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *moveToNextDisplayShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *moveToPreviousDisplayShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *moveToNextThirdShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *moveToPreviousThirdShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *makeLargerShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *makeSmallerShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *undoLastMoveShortcutRecorder;
-@property (nonatomic, strong) IBOutlet SplitShortcutRecorder *redoLastMoveShortcutRecorder;
-
-@property (nonatomic, strong) IBOutlet NSView *footerView;
-@property (nonatomic, strong) IBOutlet NSView *shortcutModifierLegendFooterView;
-@property (nonatomic, strong) IBOutlet NSView *optionsFooterView;
-
-@property (nonatomic, strong) IBOutlet NSButton *loginItemEnabled;
-@property (nonatomic, strong) IBOutlet NSPopUpButton *statusItemEnabled;
+/// Runs a window action (used when a shortcut recorded here is pressed). Set by the app delegate
+/// so shortcuts behave the same everywhere, including the on-screen highlight.
+@property (nonatomic, copy, nullable) void (^windowActionHandler)(SplitWindowAction *action);
 
 - (instancetype)initWithShortcutManager:(SplitShortcutManager *)shortcutManager
                   windowPositionManager:(SplitWindowPositionManager *)windowPositionManager
@@ -43,11 +25,10 @@
 
 - (void)loadRegisteredShortcuts;
 
-- (IBAction)swapFooterViews:(id)sender;
-
-- (IBAction)restoreDefaults:(id)sender;
-
-- (IBAction)toggleLoginItem:(id)sender;
-- (IBAction)toggleStatusItem:(id)sender;
-
 @end
+
+/// Posted when "Check for updates automatically" changes. The new value is in the user default
+/// "AutomaticUpdateCheckEnabled".
+extern NSNotificationName const SplitAutomaticUpdateCheckChangedNotification;
+
+NS_ASSUME_NONNULL_END
