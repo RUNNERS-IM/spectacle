@@ -1,10 +1,10 @@
 #import "SplitAccessibilityGuideController.h"
 
 #import <ApplicationServices/ApplicationServices.h>
+#import <QuartzCore/QuartzCore.h>
 
 static NSString *const kGuideTable = @"AccessibilityGuide";
 static const NSTimeInterval kPermissionPollInterval = 1.0;
-static const NSTimeInterval kSwitchAnimationInterval = 1.2;
 static const NSTimeInterval kCloseDelayAfterGrant = 1.2;
 static const NSTimeInterval kOpenSettingsDelay = 0.6;
 static const CGFloat kContentWidth = 400.0;
@@ -68,11 +68,76 @@ static NSTextField *WrappingLabel(NSString *string, CGFloat width)
 
 @end
 
+
+/// Shows the real Accessibility permission state: red and off until access is granted, then
+/// green and on. It is not clickable; macOS only lets the user change it in System Settings.
+@interface SplitPermissionToggleView : NSView
+@property (nonatomic, assign) BOOL on;
+@end
+
+@implementation SplitPermissionToggleView
+{
+  CALayer *_knob;
+}
+
+- (instancetype)initWithFrame:(NSRect)frameRect
+{
+  self = [super initWithFrame:frameRect];
+  if (self) {
+    self.wantsLayer = YES;
+    self.layer.cornerRadius = 11.0;
+    _knob = [CALayer layer];
+    _knob.backgroundColor = NSColor.whiteColor.CGColor;
+    _knob.cornerRadius = 9.0;
+    _knob.shadowOpacity = 0.3;
+    _knob.shadowRadius = 1.5;
+    _knob.shadowOffset = CGSizeMake(0, -1);
+    [self.layer addSublayer:_knob];
+    [self applyState:NO];
+  }
+  return self;
+}
+
+- (NSSize)intrinsicContentSize
+{
+  return NSMakeSize(42.0, 22.0);
+}
+
+- (void)layout
+{
+  [super layout];
+  [self applyState:NO];
+}
+
+- (void)setOn:(BOOL)on
+{
+  if (_on == on) {
+    return;
+  }
+  _on = on;
+  [self applyState:YES];
+}
+
+- (void)applyState:(BOOL)animated
+{
+  [CATransaction begin];
+  [CATransaction setDisableActions:!animated];
+  [CATransaction setAnimationDuration:0.25];
+  self.layer.backgroundColor = (_on ? NSColor.systemGreenColor : NSColor.systemRedColor).CGColor;
+  CGFloat inset = 2.0, size = NSHeight(self.bounds) - inset * 2.0;
+  CGFloat x = _on ? NSWidth(self.bounds) - inset - size : inset;
+  _knob.frame = CGRectMake(x, inset, size, size);
+  _knob.cornerRadius = size / 2.0;
+  [CATransaction commit];
+}
+
+@end
+
 @interface SplitAccessibilityGuideController ()
 
 @property (nonatomic, strong) NSTimer *permissionTimer;
-@property (nonatomic, strong) NSTimer *switchAnimationTimer;
-@property (nonatomic, strong) NSSwitch *demoSwitch;
+@property (nonatomic, strong) SplitPermissionToggleView *demoSwitch;
+@property (nonatomic, strong) NSTextField *toggleLabel;
 @property (nonatomic, strong) NSTextField *statusLabel;
 @property (nonatomic, strong) NSView *statusDot;
 @property (nonatomic, strong) SplitStepBadgeView *lastStepBadge;
@@ -154,7 +219,6 @@ static NSTextField *WrappingLabel(NSString *string, CGFloat width)
 - (void)dealloc
 {
   [_permissionTimer invalidate];
-  [_switchAnimationTimer invalidate];
 }
 
 #pragma mark - Showing
@@ -184,33 +248,30 @@ static NSTextField *WrappingLabel(NSString *string, CGFloat width)
 - (void)startTimers
 {
   [self.permissionTimer invalidate];
-  [self.switchAnimationTimer invalidate];
   __weak typeof(self) weakSelf = self;
   self.permissionTimer = [NSTimer timerWithTimeInterval:kPermissionPollInterval repeats:YES block:^(NSTimer *timer) {
     [weakSelf checkPermission];
   }];
-  self.switchAnimationTimer = [NSTimer timerWithTimeInterval:kSwitchAnimationInterval repeats:YES block:^(NSTimer *timer) {
-    typeof(self) strongSelf = weakSelf;
-    if (!strongSelf || strongSelf.granted) {
-      return;
-    }
-    strongSelf.demoSwitch.animator.state = (strongSelf.demoSwitch.state == NSControlStateValueOn)
-      ? NSControlStateValueOff
-      : NSControlStateValueOn;
-  }];
   [NSRunLoop.mainRunLoop addTimer:self.permissionTimer forMode:NSRunLoopCommonModes];
-  [NSRunLoop.mainRunLoop addTimer:self.switchAnimationTimer forMode:NSRunLoopCommonModes];
+  [self updateToggle:[SplitAccessibilityGuideController isAccessibilityPermissionGranted]];
+}
+
+- (void)updateToggle:(BOOL)granted
+{
+  self.demoSwitch.on = granted;
+  self.toggleLabel.stringValue = GuideString(granted ? @"ToggleOn" : @"ToggleOff");
+  self.toggleLabel.textColor = granted ? NSColor.systemGreenColor : NSColor.systemRedColor;
 }
 
 - (void)checkPermission
 {
-  if (self.granted || ![SplitAccessibilityGuideController isAccessibilityPermissionGranted]) {
+  BOOL trusted = [SplitAccessibilityGuideController isAccessibilityPermissionGranted];
+  [self updateToggle:trusted];
+  if (self.granted || !trusted) {
     return;
   }
   self.granted = YES;
-  [self.switchAnimationTimer invalidate];
   [self.permissionTimer invalidate];
-  self.demoSwitch.state = NSControlStateValueOn;
   self.lastStepBadge.text = @"✓";
   self.lastStepBadge.fillColor = NSColor.systemGreenColor;
   self.statusDot.layer.backgroundColor = NSColor.systemGreenColor.CGColor;
@@ -234,8 +295,6 @@ static NSTextField *WrappingLabel(NSString *string, CGFloat width)
 
 - (void)later:(id)sender
 {
-  // Keep polling in the background: shortcuts start working the moment access is granted.
-  [self.switchAnimationTimer invalidate];
   [self.window orderOut:self];
 }
 
@@ -274,6 +333,27 @@ static NSTextField *WrappingLabel(NSString *string, CGFloat width)
 
   NSView *settingsRow = [self settingsRowMock];
 
+  // A real screenshot of the Accessibility list (only the header and the Split row), so people
+  // can see exactly which switch to turn on. English and Korean images; others use English.
+  NSImage *settingsShot = [NSBundle.mainBundle imageForResource:@"GuideSettings"];
+  NSView *screenshot = nil;
+  if (settingsShot) {
+    NSImageView *shotView = [NSImageView imageViewWithImage:settingsShot];
+    shotView.imageScaling = NSImageScaleProportionallyUpOrDown;
+    shotView.translatesAutoresizingMaskIntoConstraints = NO;
+    CGFloat ratio = settingsShot.size.height / MAX(settingsShot.size.width, 1.0);
+    [shotView.widthAnchor constraintEqualToConstant:kContentWidth].active = YES;
+    [shotView.heightAnchor constraintEqualToConstant:round(kContentWidth * ratio)].active = YES;
+    NSTextField *shotCaption = WrappingLabel(GuideString(@"ScreenshotCaption"), kContentWidth);
+    shotCaption.font = [NSFont systemFontOfSize:11.0];
+    shotCaption.textColor = NSColor.secondaryLabelColor;
+    shotCaption.alignment = NSTextAlignmentCenter;
+    NSStackView *shotStack = [NSStackView stackViewWithViews:@[shotView, shotCaption]];
+    shotStack.orientation = NSUserInterfaceLayoutOrientationVertical;
+    shotStack.spacing = 6.0;
+    screenshot = shotStack;
+  }
+
   NSButton *laterButton = [NSButton buttonWithTitle:GuideString(@"ButtonLater") target:self action:@selector(later:)];
   laterButton.controlSize = NSControlSizeLarge;
   NSButton *openButton = [NSButton buttonWithTitle:GuideString(@"ButtonOpenSettings") target:self action:@selector(openSettings:)];
@@ -295,13 +375,21 @@ static NSTextField *WrappingLabel(NSString *string, CGFloat width)
   NSStackView *status = [NSStackView stackViewWithViews:@[self.statusDot, self.statusLabel]];
   status.spacing = 6.0;
 
-  NSStackView *stack = [NSStackView stackViewWithViews:@[icon, title, description, steps, settingsRow, buttons, status]];
+  NSMutableArray<NSView *> *rows = [NSMutableArray arrayWithObjects:icon, title, description, steps, nil];
+  if (screenshot) {
+    [rows addObject:screenshot];
+  }
+  [rows addObjectsFromArray:@[settingsRow, buttons, status]];
+  NSStackView *stack = [NSStackView stackViewWithViews:rows];
   stack.orientation = NSUserInterfaceLayoutOrientationVertical;
   stack.alignment = NSLayoutAttributeCenterX;
   stack.spacing = 14.0;
   [stack setCustomSpacing:8.0 afterView:title];
   [stack setCustomSpacing:20.0 afterView:description];
   [stack setCustomSpacing:18.0 afterView:steps];
+  if (screenshot) {
+    [stack setCustomSpacing:16.0 afterView:screenshot];
+  }
   [stack setCustomSpacing:20.0 afterView:settingsRow];
   stack.translatesAutoresizingMaskIntoConstraints = NO;
   [background addSubview:stack];
@@ -388,12 +476,12 @@ static NSTextField *WrappingLabel(NSString *string, CGFloat width)
   icon.imageScaling = NSImageScaleProportionallyUpOrDown;
   NSTextField *name = [NSTextField labelWithString:@"Split"];
   name.font = [NSFont systemFontOfSize:13.0 weight:NSFontWeightMedium];
-  self.demoSwitch = [NSSwitch new];
-  self.demoSwitch.controlSize = NSControlSizeSmall;
-  self.demoSwitch.state = NSControlStateValueOff;
-  self.demoSwitch.enabled = NO;
+  self.demoSwitch = [[SplitPermissionToggleView alloc] initWithFrame:NSMakeRect(0, 0, 42, 22)];
+  self.toggleLabel = [NSTextField labelWithString:GuideString(@"ToggleOff")];
+  self.toggleLabel.font = [NSFont systemFontOfSize:12.0 weight:NSFontWeightSemibold];
+  self.toggleLabel.textColor = NSColor.systemRedColor;
 
-  for (NSView *view in @[icon, name, self.demoSwitch]) {
+  for (NSView *view in @[icon, name, self.demoSwitch, self.toggleLabel]) {
     view.translatesAutoresizingMaskIntoConstraints = NO;
     [box addSubview:view];
   }
@@ -407,9 +495,13 @@ static NSTextField *WrappingLabel(NSString *string, CGFloat width)
     [name.centerYAnchor constraintEqualToAnchor:box.centerYAnchor],
     [self.demoSwitch.trailingAnchor constraintEqualToAnchor:box.trailingAnchor constant:-14.0],
     [self.demoSwitch.centerYAnchor constraintEqualToAnchor:box.centerYAnchor],
+    [self.demoSwitch.widthAnchor constraintEqualToConstant:42.0],
+    [self.demoSwitch.heightAnchor constraintEqualToConstant:22.0],
+    [self.toggleLabel.trailingAnchor constraintEqualToAnchor:self.demoSwitch.leadingAnchor constant:-8.0],
+    [self.toggleLabel.centerYAnchor constraintEqualToAnchor:box.centerYAnchor],
   ]];
 
-  NSTextField *caption = WrappingLabel(GuideString(@"SettingsPath"), kContentWidth);
+  NSTextField *caption = WrappingLabel(GuideString(@"LiveStatus"), kContentWidth);
   caption.font = [NSFont systemFontOfSize:11.0];
   caption.textColor = NSColor.tertiaryLabelColor;
   caption.alignment = NSTextAlignmentCenter;

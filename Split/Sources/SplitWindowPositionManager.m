@@ -132,6 +132,37 @@
   }
 }
 
+- (CGRect)targetRectForFrontmostWindowElement:(SplitAccessibilityElement *)frontmostWindowElement
+                                       action:(SplitWindowAction *)action
+{
+  if (!frontmostWindowElement || SplitIsUndoWindowAction(action) || SplitIsRedoWindowAction(action)) {
+    return CGRectNull;
+  }
+  SplitScreenDetectionResult *screenDetectionResult = [_screenDetector screenWithAction:action
+                                                                     frontmostWindowElement:frontmostWindowElement
+                                                                                    screens:[NSScreen screens]
+                                                                                 mainScreen:[NSScreen mainScreen]];
+  if (!screenDetectionResult.destinationScreen || !screenDetectionResult.sourceScreen) {
+    return CGRectNull;
+  }
+  CGRect frameOfDestinationScreen = NSRectToCGRect(screenDetectionResult.destinationScreen.frame);
+  CGRect visibleFrameOfDestinationScreen = NSRectToCGRect(screenDetectionResult.destinationScreen.visibleFrame);
+  CGRect visibleFrameOfSourceScreen = NSRectToCGRect(screenDetectionResult.sourceScreen.visibleFrame);
+  CGRect windowRect = [frontmostWindowElement rectOfElement];
+  if ([frontmostWindowElement isSheet] || [frontmostWindowElement isSystemDialog] || CGRectIsNull(windowRect)) {
+    return CGRectNull;
+  }
+  windowRect = [SplitAccessibilityElement normalizeCoordinatesOfRect:windowRect frameOfScreen:frameOfDestinationScreen];
+  SplitWindowPositionCalculationResult *result = [_windowPositionCalculator calculateWindowRect:windowRect
+                                                                     visibleFrameOfSourceScreen:visibleFrameOfSourceScreen
+                                                                visibleFrameOfDestinationScreen:visibleFrameOfDestinationScreen
+                                                                                         action:action];
+  if (!result || CGRectEqualToRect(result.windowRect, windowRect)) {
+    return CGRectNull;
+  }
+  return [SplitAccessibilityElement normalizeCoordinatesOfRect:result.windowRect frameOfScreen:frameOfDestinationScreen];
+}
+
 - (void)undoLastWindowAction
 {
   [self moveWithHistoryItem:[self historyForCurrentApplication].previousHistoryItem

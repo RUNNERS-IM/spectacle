@@ -19,6 +19,7 @@
 #import "SplitUtilities.h"
 #import "SplitWindowPositionCalculator.h"
 #import "SplitWindowPositionManager.h"
+#import "SplitWindowFeedback.h"
 
 @implementation SplitAppDelegate
 {
@@ -28,6 +29,7 @@
   SplitShortcutManager *_shortcutManager;
   SplitWindowPositionManager *_windowPositionManager;
   SplitPreferencesController *_preferencesController;
+  SplitWindowFeedback *_windowFeedback;
 #if !SPLIT_APP_STORE
   SPUStandardUpdaterController *_updaterController;
 #endif
@@ -145,6 +147,8 @@ static BOOL SplitIsRunningUnitTests(void)
   _updaterController.updater.automaticallyChecksForUpdates = automaticallyChecksForUpdates;
 #endif
   [self updateShortcutMenuItems];
+  _windowFeedback = [SplitWindowFeedback new];
+  [self decorateStatusMenu];
   // Ask after launch has finished; an alert run from inside applicationDidFinishLaunching
   // returned its first button straight away without the user touching it (macOS 26.1).
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -199,98 +203,82 @@ static BOOL SplitIsRunningUnitTests(void)
 
 - (IBAction)moveFrontmostWindowToFullscreen:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionFullscreen];
+  [self performWindowAction:kSplitWindowActionFullscreen];
 }
 
 - (IBAction)moveFrontmostWindowToCenter:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionCenter];
+  [self performWindowAction:kSplitWindowActionCenter];
 }
 
 - (IBAction)moveFrontmostWindowToLeftHalf:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionLeftHalf];
+  [self performWindowAction:kSplitWindowActionLeftHalf];
 }
 
 - (IBAction)moveFrontmostWindowToRightHalf:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionRightHalf];
+  [self performWindowAction:kSplitWindowActionRightHalf];
 }
 
 - (IBAction)moveFrontmostWindowToTopHalf:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionTopHalf];
+  [self performWindowAction:kSplitWindowActionTopHalf];
 }
 
 - (IBAction)moveFrontmostWindowToBottomHalf:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionBottomHalf];
+  [self performWindowAction:kSplitWindowActionBottomHalf];
 }
 
 - (IBAction)moveFrontmostWindowToUpperLeft:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionUpperLeft];
+  [self performWindowAction:kSplitWindowActionUpperLeft];
 }
 
 - (IBAction)moveFrontmostWindowToLowerLeft:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionLowerLeft];
+  [self performWindowAction:kSplitWindowActionLowerLeft];
 }
 
 - (IBAction)moveFrontmostWindowToUpperRight:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionUpperRight];
+  [self performWindowAction:kSplitWindowActionUpperRight];
 }
 
 - (IBAction)moveFrontmostWindowToLowerRight:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionLowerRight];
+  [self performWindowAction:kSplitWindowActionLowerRight];
 }
 
 - (IBAction)moveFrontmostWindowToNextDisplay:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionNextDisplay];
+  [self performWindowAction:kSplitWindowActionNextDisplay];
 }
 
 - (IBAction)moveFrontmostWindowToPreviousDisplay:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionPreviousDisplay];
+  [self performWindowAction:kSplitWindowActionPreviousDisplay];
 }
 
 - (IBAction)moveFrontmostWindowToNextThird:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionNextThird];
+  [self performWindowAction:kSplitWindowActionNextThird];
 }
 
 - (IBAction)moveFrontmostWindowToPreviousThird:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionPreviousThird];
+  [self performWindowAction:kSplitWindowActionPreviousThird];
 }
 
 - (IBAction)makeFrontmostWindowLarger:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionLarger];
+  [self performWindowAction:kSplitWindowActionLarger];
 }
 
 - (IBAction)makeFrontmostWindowSmaller:(id)sender
 {
-  [_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                              action:kSplitWindowActionSmaller];
+  [self performWindowAction:kSplitWindowActionSmaller];
 }
 
 - (IBAction)undoLastWindowAction:(id)sender
@@ -347,8 +335,7 @@ static BOOL SplitIsRunningUnitTests(void)
 - (void)manageShortcuts
 {
   SplitShortcutAction action = ^(SplitShortcut *shortcut) {
-    [self->_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                                      action:shortcut.windowAction];
+    [self performWindowAction:shortcut.windowAction];
   };
   NSArray<SplitShortcut *> *shortcuts = [_shortcutStorage loadShortcutsWithAction:action];
   if (shortcuts.count != 0) {
@@ -431,6 +418,105 @@ static BOOL SplitIsRunningUnitTests(void)
       || [_disabledApplications containsObject:application.bundleIdentifier]) {
     [self enableShortcutsIfPermitted];
   }
+}
+
+#pragma mark - Window actions with feedback
+
+/// Shortcut names (as used by the status menu and the shortcut storage) and their window actions.
+static NSDictionary<NSString *, SplitWindowAction *> *SplitWindowActionsByShortcutName(void)
+{
+  static NSDictionary *actions;
+  static dispatch_once_t once;
+  dispatch_once(&once, ^{
+    actions = @{
+      @"MoveToCenter": kSplitWindowActionCenter,
+      @"MoveToFullscreen": kSplitWindowActionFullscreen,
+      @"MoveToLeftHalf": kSplitWindowActionLeftHalf,
+      @"MoveToRightHalf": kSplitWindowActionRightHalf,
+      @"MoveToTopHalf": kSplitWindowActionTopHalf,
+      @"MoveToBottomHalf": kSplitWindowActionBottomHalf,
+      @"MoveToUpperLeft": kSplitWindowActionUpperLeft,
+      @"MoveToLowerLeft": kSplitWindowActionLowerLeft,
+      @"MoveToUpperRight": kSplitWindowActionUpperRight,
+      @"MoveToLowerRight": kSplitWindowActionLowerRight,
+      @"MoveToNextDisplay": kSplitWindowActionNextDisplay,
+      @"MoveToPreviousDisplay": kSplitWindowActionPreviousDisplay,
+      @"MoveToNextThird": kSplitWindowActionNextThird,
+      @"MoveToPreviousThird": kSplitWindowActionPreviousThird,
+      @"MakeLarger": kSplitWindowActionLarger,
+      @"MakeSmaller": kSplitWindowActionSmaller,
+      @"UndoLastMove": kSplitWindowActionUndo,
+      @"RedoLastMove": kSplitWindowActionRedo,
+    };
+  });
+  return actions;
+}
+
+- (NSString *)shortcutNameForWindowAction:(SplitWindowAction *)action
+{
+  return [SplitWindowActionsByShortcutName() allKeysForObject:action].firstObject;
+}
+
+/// Every window action from the keyboard or the status menu goes through here so that the
+/// glow and shortcut label appear the same way for both.
+- (void)performWindowAction:(SplitWindowAction *)action
+{
+  // Without Accessibility access nothing can move; show the guide again instead of failing silently.
+  if (![SplitAccessibilityGuideController isAccessibilityPermissionGranted]) {
+    if (!_accessibilityGuideController.window.isVisible) {
+      _accessibilityGuideController = [SplitAccessibilityGuideController new];
+      [_accessibilityGuideController showGuide];
+    }
+    return;
+  }
+  SplitAccessibilityElement *element = [SplitAccessibilityElement frontmostWindowElement];
+  CGRect target = [_windowPositionManager targetRectForFrontmostWindowElement:element action:action];
+  [_windowPositionManager moveFrontmostWindowElement:element action:action];
+  if (CGRectIsNull(target)) {
+    return;
+  }
+  NSString *shortcutName = [self shortcutNameForWindowAction:action];
+  NSString *title = _shortcutMenuItems[shortcutName].title ?: @"";
+  NSString *keys = [_shortcutManager shortcutForShortcutName:shortcutName].displayString;
+  [_windowFeedback showMoveFeedbackForRect:target title:title shortcut:keys];
+}
+
+- (void)decorateStatusMenu
+{
+  for (NSString *shortcutName in _shortcutMenuItems) {
+    _shortcutMenuItems[shortcutName].image = SplitMenuImageForShortcutName(shortcutName);
+  }
+  for (NSMenuItem *item in _statusItemMenu.itemArray) {
+    NSString *symbol = nil;
+    if (item.action == @selector(showPreferencesWindow:)) {
+      symbol = @"gearshape";
+    } else if (item.submenu && item.submenu == self.disableShortcutsForAnHourMenuItem.menu) {
+      symbol = @"pause.circle";
+    }
+    if (symbol && !item.image) {
+      item.image = [NSImage imageWithSystemSymbolName:symbol accessibilityDescription:nil];
+    }
+  }
+}
+
+#pragma mark - NSMenuDelegate (preview)
+
+- (void)menu:(NSMenu *)menu willHighlightItem:(NSMenuItem *)item
+{
+  NSString *shortcutName = [_shortcutMenuItems allKeysForObject:item].firstObject;
+  SplitWindowAction *action = shortcutName ? SplitWindowActionsByShortcutName()[shortcutName] : nil;
+  if (!action || SplitIsUndoWindowAction(action) || SplitIsRedoWindowAction(action)) {
+    [_windowFeedback hidePreview];
+    return;
+  }
+  CGRect target = [_windowPositionManager targetRectForFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
+                                                                       action:action];
+  [_windowFeedback showPreviewForRect:target];
+}
+
+- (void)menuDidClose:(NSMenu *)menu
+{
+  [_windowFeedback hidePreview];
 }
 
 - (void)menuWillOpen:(NSMenu *)menu

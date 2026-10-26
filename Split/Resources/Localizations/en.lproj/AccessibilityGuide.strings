@@ -30,3 +30,15 @@
 
 /* Status line right after the Accessibility permission is granted */
 "StatusGranted" = "Permission granted. You're all set.";
+
+/* Caption under the screenshot of System Settings in the Accessibility guide */
+"ScreenshotCaption" = "System Settings › Privacy & Security › Accessibility — turn on the switch circled in orange.";
+
+/* Caption under the live permission row in the Accessibility guide */
+"LiveStatus" = "Split's current permission, checked every second";
+
+/* Label next to the live switch when Accessibility access is granted */
+"ToggleOn" = "On";
+
+/* Label next to the live switch when Accessibility access is not granted */
+"ToggleOff" = "Off";
