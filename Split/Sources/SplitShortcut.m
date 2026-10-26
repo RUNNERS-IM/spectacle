@@ -115,6 +115,8 @@
     windowAction = kSplitWindowActionUndo;
   } else if ([name isEqualToString:@"RedoLastMove"]) {
     windowAction = kSplitWindowActionRedo;
+  } else if ([name isEqualToString:@"ArrangeWindows"]) {
+    windowAction = kSplitWindowActionArrange;
   }
 
   return windowAction;

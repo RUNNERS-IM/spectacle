@@ -41,6 +41,13 @@
   return frontmostWindowElement;
 }
 
++ (SplitAccessibilityElement *)elementWithAXUIElement:(AXUIElementRef)element
+{
+  SplitAccessibilityElement *wrapped = [SplitAccessibilityElement new];
+  wrapped.underlyingElement = element;
+  return wrapped;
+}
+
 - (SplitAccessibilityElement *)elementWithAttribute:(CFStringRef)attribute
 {
   SplitAccessibilityElement *newElement = nil;

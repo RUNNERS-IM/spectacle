@@ -17,6 +17,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)showMoveFeedbackForRect:(CGRect)rect title:(NSString *)title shortcut:(nullable NSString *)shortcut;
 
+/// Several outlines at once, for auto-arrange.
+- (void)showPreviewForRects:(NSArray<NSValue *> *)rects;
+- (void)showMoveFeedbackForRects:(NSArray<NSValue *> *)rects title:(NSString *)title shortcut:(nullable NSString *)shortcut;
+
+/// Only the heads-up label, for example when there was nothing to arrange.
+- (void)showLabel:(NSString *)title shortcut:(nullable NSString *)shortcut;
+
 @end
 
 /// Small template images that show where a window goes, for the status menu.

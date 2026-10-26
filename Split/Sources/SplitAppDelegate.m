@@ -20,6 +20,7 @@
 #import "SplitWindowPositionCalculator.h"
 #import "SplitWindowPositionManager.h"
 #import "SplitWindowFeedback.h"
+#import "SplitWindowArranger.h"
 
 @implementation SplitAppDelegate
 {
@@ -30,6 +31,8 @@
   SplitWindowPositionManager *_windowPositionManager;
   SplitPreferencesController *_preferencesController;
   SplitWindowFeedback *_windowFeedback;
+  SplitWindowArranger *_windowArranger;
+  NSMenuItem *_arrangeWindowsMenuItem;
 #if !SPLIT_APP_STORE
   SPUStandardUpdaterController *_updaterController;
 #endif
@@ -109,6 +112,7 @@ static BOOL SplitIsRunningUnitTests(void)
                          @"MakeSmaller": _makeSmallerShortcutMenuItem,
                          @"UndoLastMove": _undoLastMoveShortcutMenuItem,
                          @"RedoLastMove": _redoLastMoveShortcutMenuItem,
+                         @"ArrangeWindows": [self insertArrangeWindowsMenuItem],
                          };
   NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
   _blacklistedApplications = [NSSet setWithArray:[userDefaults objectForKey:@"BlacklistedApplications"]];
@@ -119,7 +123,7 @@ static BOOL SplitIsRunningUnitTests(void)
   SplitWindowPositionCalculator *windowPositionCalculator = [[SplitWindowPositionCalculator alloc] initWithErrorHandler:^(NSString *errorMessage) {
     NSAlert *alert = [NSAlert new];
     alert.alertStyle = NSAlertStyleWarning;
-    alert.messageText = @"Encountered an unexpected error";
+    alert.messageText = SplitLocalized(@"UnexpectedError");
     alert.informativeText = errorMessage;
     [alert runModal];
   }];
@@ -129,6 +133,14 @@ static BOOL SplitIsRunningUnitTests(void)
   _preferencesController = [[SplitPreferencesController alloc] initWithShortcutManager:_shortcutManager
                                                                      windowPositionManager:_windowPositionManager
                                                                            shortcutStorage:_shortcutStorage];
+  __weak typeof(self) weakSelf = self;
+  _preferencesController.windowActionHandler = ^(SplitWindowAction *action) {
+    [weakSelf performWindowAction:action];
+  };
+  [notificationCenter addObserver:self
+                         selector:@selector(automaticUpdateCheckChanged)
+                             name:SplitAutomaticUpdateCheckChangedNotification
+                           object:nil];
   _shortcutsAreDisabledForAnHour = NO;
   [self manageShortcuts];
   [self disableShortcutsIfFrontmostApplicationIsBlacklistedOrDisabled];
@@ -148,6 +160,8 @@ static BOOL SplitIsRunningUnitTests(void)
 #endif
   [self updateShortcutMenuItems];
   _windowFeedback = [SplitWindowFeedback new];
+  _windowArranger = [SplitWindowArranger new];
+  [self localizeStatusMenu];
   [self decorateStatusMenu];
   // Ask after launch has finished; an alert run from inside applicationDidFinishLaunching
   // returned its first button straight away without the user touching it (macOS 26.1).
@@ -283,12 +297,17 @@ static BOOL SplitIsRunningUnitTests(void)
 
 - (IBAction)undoLastWindowAction:(id)sender
 {
-  [_windowPositionManager undoLastWindowAction];
+  [self performWindowAction:kSplitWindowActionUndo];
 }
 
 - (IBAction)redoLastWindowAction:(id)sender
 {
-  [_windowPositionManager redoLastWindowAction];
+  [self performWindowAction:kSplitWindowActionRedo];
+}
+
+- (IBAction)arrangeWindows:(id)sender
+{
+  [self performWindowAction:kSplitWindowActionArrange];
 }
 
 - (IBAction)disableOrEnableShortcutsForAnHour:(id)sender
@@ -339,10 +358,43 @@ static BOOL SplitIsRunningUnitTests(void)
   };
   NSArray<SplitShortcut *> *shortcuts = [_shortcutStorage loadShortcutsWithAction:action];
   if (shortcuts.count != 0) {
-    [_shortcutManager manageShortcuts:shortcuts];
+    [_shortcutManager manageShortcuts:SplitShortcutsAddingNewDefaults(shortcuts, action)];
   } else {
     [_shortcutManager manageShortcuts:SplitDefaultShortcutsWithAction(action)];
   }
+}
+
+/// Shortcuts saved by an older version do not know about actions added since (auto-arrange in
+/// 1.1). Add those with their default keys, unless the key is already taken.
+static NSArray<SplitShortcut *> *SplitShortcutsAddingNewDefaults(NSArray<SplitShortcut *> *saved, SplitShortcutAction action)
+{
+  NSMutableArray<SplitShortcut *> *result = [saved mutableCopy];
+  NSMutableSet<NSString *> *names = [NSMutableSet new];
+  NSMutableSet<NSString *> *bindings = [NSMutableSet new];
+  for (SplitShortcut *shortcut in saved) {
+    [names addObject:shortcut.shortcutName];
+    if (shortcut.shortcutKeyBinding) {
+      [bindings addObject:shortcut.shortcutKeyBinding];
+    }
+  }
+  for (SplitShortcut *shortcut in SplitDefaultShortcutsWithAction(action)) {
+    if ([names containsObject:shortcut.shortcutName]) {
+      continue;
+    }
+    if (shortcut.shortcutKeyBinding && [bindings containsObject:shortcut.shortcutKeyBinding]) {
+      [result addObject:[[SplitShortcut alloc] initWithShortcutName:shortcut.shortcutName shortcutKeyBinding:nil shortcutAction:action]];
+    } else {
+      [result addObject:shortcut];
+    }
+  }
+  return result;
+}
+
+- (void)automaticUpdateCheckChanged
+{
+#if !SPLIT_APP_STORE
+  _updaterController.updater.automaticallyChecksForUpdates = [NSUserDefaults.standardUserDefaults boolForKey:@"AutomaticUpdateCheckEnabled"];
+#endif
 }
 
 - (void)enableStatusItem
@@ -447,6 +499,7 @@ static NSDictionary<NSString *, SplitWindowAction *> *SplitWindowActionsByShortc
       @"MakeSmaller": kSplitWindowActionSmaller,
       @"UndoLastMove": kSplitWindowActionUndo,
       @"RedoLastMove": kSplitWindowActionRedo,
+      @"ArrangeWindows": kSplitWindowActionArrange,
     };
   });
   return actions;
@@ -469,16 +522,76 @@ static NSDictionary<NSString *, SplitWindowAction *> *SplitWindowActionsByShortc
     }
     return;
   }
+  NSString *shortcutName = [self shortcutNameForWindowAction:action];
+  NSString *title = SplitLocalized(shortcutName ?: @"");
+  NSString *keys = [_shortcutManager shortcutForShortcutName:shortcutName].displayString;
+  if (SplitIsArrangeWindowAction(action)) {
+    NSArray<NSValue *> *rects = [_windowArranger arrangeWindows];
+    if (rects.count == 0) {
+      NSBeep();
+      if (SplitWindowFeedback.moveFeedbackEnabled) {
+        [_windowFeedback showLabel:SplitLocalized(@"NothingToArrange") shortcut:keys];
+      }
+      return;
+    }
+    title = [NSString localizedStringWithFormat:SplitLocalized(@"ArrangedCount"), (long)rects.count];
+    [_windowFeedback showMoveFeedbackForRects:rects title:title shortcut:keys];
+    return;
+  }
+  // One undo after auto-arrange puts every window back, not just the frontmost one.
+  if (SplitIsUndoWindowAction(action) && _windowArranger.canUndo) {
+    [_windowArranger undoLastArrangement];
+    if (SplitWindowFeedback.moveFeedbackEnabled) {
+      [_windowFeedback showLabel:SplitLocalized(@"ArrangeUndone") shortcut:keys];
+    }
+    return;
+  }
+  [_windowArranger forgetLastArrangement];
   SplitAccessibilityElement *element = [SplitAccessibilityElement frontmostWindowElement];
   CGRect target = [_windowPositionManager targetRectForFrontmostWindowElement:element action:action];
   [_windowPositionManager moveFrontmostWindowElement:element action:action];
   if (CGRectIsNull(target)) {
     return;
   }
-  NSString *shortcutName = [self shortcutNameForWindowAction:action];
-  NSString *title = _shortcutMenuItems[shortcutName].title ?: @"";
-  NSString *keys = [_shortcutManager shortcutForShortcutName:shortcutName].displayString;
   [_windowFeedback showMoveFeedbackForRect:target title:title shortcut:keys];
+}
+
+/// The arrange item is new in 1.1 and not in the menu file; it goes right after Full Screen.
+- (NSMenuItem *)insertArrangeWindowsMenuItem
+{
+  if (_arrangeWindowsMenuItem) {
+    return _arrangeWindowsMenuItem;
+  }
+  _arrangeWindowsMenuItem = [[NSMenuItem alloc] initWithTitle:SplitLocalized(@"ArrangeWindows")
+                                                       action:@selector(arrangeWindows:)
+                                                keyEquivalent:@""];
+  _arrangeWindowsMenuItem.target = self;
+  NSInteger index = [_statusItemMenu indexOfItem:_moveToFullscreenShortcutMenuItem];
+  [_statusItemMenu insertItem:_arrangeWindowsMenuItem atIndex:index >= 0 ? index + 1 : _statusItemMenu.numberOfItems];
+  return _arrangeWindowsMenuItem;
+}
+
+/// Menu titles come from App.strings so every language Split ships is covered, not only the
+/// few the original menu file was translated into.
+- (void)localizeStatusMenu
+{
+  for (NSString *shortcutName in _shortcutMenuItems) {
+    _shortcutMenuItems[shortcutName].title = SplitLocalized(shortcutName);
+  }
+  self.checkForUpdatesMenuItem.title = SplitLocalized(@"CheckForUpdates");
+  self.disableShortcutsForAnHourMenuItem.title = SplitLocalized(@"DisableForAnHour");
+  for (NSMenuItem *item in _statusItemMenu.itemArray) {
+    if (item.submenu && item.submenu == self.disableShortcutsForAnHourMenuItem.menu) {
+      item.title = SplitLocalized(@"Disable");
+      item.submenu.title = item.title;
+    } else if (item.action == @selector(showPreferencesWindow:)) {
+      item.title = SplitLocalized(@"Settings");
+    } else if (item.action == @selector(terminate:)) {
+      item.title = SplitLocalized(@"QuitSplit");
+    } else if (item.action == @selector(orderFrontStandardAboutPanel:)) {
+      item.title = SplitLocalized(@"AboutSplit");
+    }
+  }
 }
 
 - (void)decorateStatusMenu
@@ -505,6 +618,10 @@ static NSDictionary<NSString *, SplitWindowAction *> *SplitWindowActionsByShortc
 {
   NSString *shortcutName = [_shortcutMenuItems allKeysForObject:item].firstObject;
   SplitWindowAction *action = shortcutName ? SplitWindowActionsByShortcutName()[shortcutName] : nil;
+  if (action && SplitIsArrangeWindowAction(action)) {
+    [_windowFeedback showPreviewForRects:[_windowArranger plannedRects]];
+    return;
+  }
   if (!action || SplitIsUndoWindowAction(action) || SplitIsRedoWindowAction(action)) {
     [_windowFeedback hidePreview];
     return;
@@ -527,7 +644,7 @@ static NSDictionary<NSString *, SplitWindowAction *> *SplitWindowActionsByShortc
     self.disableShortcutsForApplicationMenuItem.hidden = YES;
   } else {
     self.disableShortcutsForApplicationMenuItem.title =
-      [NSString stringWithFormat:NSLocalizedString(@"MenuItemTitleDisableShortcutsForApplication", @"The menu item title that displays the application to disable shortcuts for"), frontmostApplication.localizedName];
+      [NSString stringWithFormat:SplitLocalized(@"DisableForApplication"), frontmostApplication.localizedName];
   }
   if ([_disabledApplications containsObject:frontmostApplication.bundleIdentifier]) {
     self.disableShortcutsForApplicationMenuItem.state = NSControlStateValueOn;

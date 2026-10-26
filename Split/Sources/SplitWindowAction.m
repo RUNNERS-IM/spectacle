@@ -19,10 +19,16 @@ SplitWindowAction *const kSplitWindowActionNextDisplay = @"SplitWindowActionNext
 SplitWindowAction *const kSplitWindowActionPreviousDisplay = @"SplitWindowActionPreviousDisplay";
 SplitWindowAction *const kSplitWindowActionNextThird = @"SplitWindowActionNextThird";
 SplitWindowAction *const kSplitWindowActionPreviousThird = @"SplitWindowActionPreviousThird";
+SplitWindowAction *const kSplitWindowActionArrange = @"SplitWindowActionArrange";
 
 BOOL SplitIsUndoWindowAction(SplitWindowAction *action)
 {
   return [action isEqualToString:kSplitWindowActionUndo];
+}
+
+BOOL SplitIsArrangeWindowAction(SplitWindowAction *action)
+{
+  return [action isEqualToString:kSplitWindowActionArrange];
 }
 
 BOOL SplitIsRedoWindowAction(SplitWindowAction *action)

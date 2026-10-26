@@ -1,5 +1,7 @@
 #import "SplitShortcutRecorder.h"
 
+#import "SplitUtilities.h"
+
 #import <Carbon/Carbon.h>
 
 #import "SplitShortcut.h"
@@ -140,11 +142,17 @@ static const NSEventModifierFlags kCocoaModifierFlagsMask = (NSEventModifierFlag
   [self setNeedsDisplay:YES];
 }
 
-- (void)drawRect:(NSRect)rect
+- (BOOL)clipsToBounds
 {
-  CGFloat radius = NSHeight(rect) / 2.0f;
-  [self _drawBorderInRect:rect withRadius:radius];
-  [self _drawBackgroundInRect:rect withRadius:radius];
+  return YES;
+}
+
+- (void)drawRect:(NSRect)dirtyRect
+{
+  // Always draw in the view's own bounds. The dirty rect can be larger than the view on
+  // macOS 14 and later, which drew a huge pill over the settings window.
+  NSRect rect = self.bounds;
+  [self _drawBackgroundInRect:rect withRadius:6.0];
   [self _drawBadgeInRect:rect];
   [self _drawLabelInRect:rect];
 }
@@ -193,40 +201,28 @@ static const NSEventModifierFlags kCocoaModifierFlagsMask = (NSEventModifierFlag
   }
 }
 
-- (void)_drawBorderInRect:(NSRect)rect withRadius:(CGFloat)radius
-{
-  NSBezierPath *roundedPath = [NSBezierPath bezierPathWithRoundedRect:rect xRadius:radius yRadius:radius];
-  [NSGraphicsContext.currentContext saveGraphicsState];
-  [roundedPath addClip];
-  [[NSColor separatorColor] set];
-  [NSBezierPath fillRect:rect];
-  [NSGraphicsContext.currentContext restoreGraphicsState];
-}
-
+/// A rounded field like the ones in System Settings: a soft fill, a thin border, and the accent
+/// color while recording.
 - (void)_drawBackgroundInRect:(NSRect)rect withRadius:(CGFloat)radius
 {
-  NSBezierPath *roundedPath = [NSBezierPath bezierPathWithRoundedRect:NSInsetRect(rect, 1.0f, 1.0f)
-                                                              xRadius:radius
-                                                              yRadius:radius];
-  NSColor *gradientStartingColor = nil;
-  NSColor *gradientEndingColor = nil;
-  NSGradient *gradient = nil;
-  [NSGraphicsContext.currentContext saveGraphicsState];
-  [roundedPath addClip];
+  NSRect inner = NSInsetRect(rect, 0.5, 0.5);
+  NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:inner xRadius:radius yRadius:radius];
+  NSColor *fill = nil;
+  NSColor *stroke = nil;
   if (_isRecording) {
-    gradientStartingColor = [NSColor colorWithDeviceRed:0.784f green:0.953f blue:1.0f alpha:1.0f];
-    gradientEndingColor = [NSColor colorWithDeviceRed:0.694f green:0.859f blue:1.0f alpha:1.0f];
+    fill = [NSColor.controlAccentColor colorWithAlphaComponent:0.16];
+    stroke = NSColor.controlAccentColor;
   } else {
-    gradientStartingColor = [[[NSColor whiteColor] shadowWithLevel:0.2f] colorWithAlphaComponent:0.9f];
-    gradientEndingColor = [[[NSColor whiteColor] highlightWithLevel:0.2f] colorWithAlphaComponent:0.9f];
+    BOOL dark = [self.effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]] == NSAppearanceNameDarkAqua;
+    BOOL pressed = _isMouseDown && !_isMouseAboveBadge;
+    fill = dark ? [NSColor colorWithWhite:1.0 alpha:pressed ? 0.14 : 0.07] : [NSColor colorWithWhite:pressed ? 0.90 : 1.0 alpha:1.0];
+    stroke = dark ? [NSColor colorWithWhite:1.0 alpha:0.12] : [NSColor colorWithWhite:0.0 alpha:0.14];
   }
-  if (!_isRecording && _isMouseDown && !_isMouseAboveBadge) {
-    gradient = [[NSGradient alloc] initWithStartingColor:gradientEndingColor endingColor:gradientStartingColor];
-  } else {
-    gradient = [[NSGradient alloc] initWithStartingColor:gradientStartingColor endingColor:gradientEndingColor];
-  }
-  [gradient drawInRect:rect angle:90.0f];
-  [NSGraphicsContext.currentContext restoreGraphicsState];
+  [fill setFill];
+  [path fill];
+  path.lineWidth = _isRecording ? 1.5 : 1.0;
+  [stroke setStroke];
+  [path stroke];
 }
 
 - (void)_drawBadgeInRect:(NSRect)rect
@@ -244,9 +240,9 @@ static const NSEventModifierFlags kCocoaModifierFlagsMask = (NSEventModifierFlag
   CGFloat horizontalScale = (rect.size.width / 13.0f);
   CGFloat verticalScale = (rect.size.height / 13.0f);
   [NSGraphicsContext.currentContext saveGraphicsState];
-  [[NSColor colorWithCalibratedWhite:0.0f alpha:opacity] setFill];
+  [[NSColor.secondaryLabelColor colorWithAlphaComponent:MIN(1.0, opacity * 2.4)] setFill];
   [[NSBezierPath bezierPathWithOvalInRect:rect] fill];
-  [[NSColor whiteColor] setStroke];
+  [NSColor.windowBackgroundColor setStroke];
   NSBezierPath *cross = [NSBezierPath new];
   [cross setLineWidth:horizontalScale * 1.4f];
   [cross moveToPoint:relativePointInRect(4.0f, 4.0f, rect, horizontalScale, verticalScale)];
@@ -280,6 +276,7 @@ static const NSEventModifierFlags kCocoaModifierFlagsMask = (NSEventModifierFlag
          controlPoint1:relativePointInRect(0.7383412f, 0.4930328f, rect, horizontalScale, verticalScale)
          controlPoint2:relativePointInRect(0.4085750f, 0.5154130f, rect, horizontalScale, verticalScale)];
   [swoosh lineToPoint:relativePointInRect(0.4085750f, 0.2654000f, rect, horizontalScale, verticalScale)];
+  [NSColor.secondaryLabelColor setFill];
   [swoosh fill];
   [NSGraphicsContext.currentContext restoreGraphicsState];
 }
@@ -288,15 +285,15 @@ static const NSEventModifierFlags kCocoaModifierFlagsMask = (NSEventModifierFlag
 {
   NSString *label = nil;
   if (_isRecording && !_isMouseAboveBadge) {
-    label = NSLocalizedString(@"ShortcutRecorderLabelEnterShortcut", @"The shortcut recorder label displayed when the shorcut recorder is recording a shortcut");
+    label = SplitLocalized(@"ShortcutRecorderLabelEnterShortcut");
   } else if (_isRecording && _isMouseAboveBadge && !_shortcut) {
-    label = NSLocalizedString(@"ShortcutRecorderLabelStopRecording", @"The shortcut recorder label displayed when the shorcut recorder is recording a shortcut and the shortcut recorder does not have a previously recorded shortcut");
+    label = SplitLocalized(@"ShortcutRecorderLabelStopRecording");
   } else if (_isRecording && _isMouseAboveBadge) {
-    label = NSLocalizedString(@"ShortcutRecorderLabelUseExisting", "The shortcut recorder label displayed when the shorcut recorder is recording a shortcut and the shortcut recorder does have a previously recorded shortcut");
+    label = SplitLocalized(@"ShortcutRecorderLabelUseExisting");
   } else if (_shortcut) {
     label = _shortcut.displayString;
   } else {
-    label = NSLocalizedString(@"ShortcutRecorderLabelClickToRecord", @"The shortcut recorder label displayed when the shorcut recorder is cleared and ready to record a new shortcut");
+    label = SplitLocalized(@"ShortcutRecorderLabelClickToRecord");
   }
   NSEventModifierFlags modifierFlags = [NSEvent modifierFlags] & kCocoaModifierFlagsMask;
   if (_isRecording && modifierFlags) {
@@ -310,7 +307,8 @@ static const NSEventModifierFlags kCocoaModifierFlagsMask = (NSEventModifierFlag
   NSMutableDictionary<NSString *, id> *attributes = stringAttributesWithShadow();
   NSRect labelRect = rect;
   attributes[NSFontAttributeName] = [NSFont systemFontOfSize:NSFont.smallSystemFontSize];
-  attributes[NSForegroundColorAttributeName] = [NSColor blackColor];
+  attributes[NSForegroundColorAttributeName] = (_shortcut || _isRecording) ? NSColor.labelColor : NSColor.secondaryLabelColor;
+  [attributes removeObjectForKey:NSShadowAttributeName];
   labelRect.origin.y = -(NSMidY(rect) - [string sizeWithAttributes:attributes].height / 2.0f);
   [string drawInRect:labelRect withAttributes:attributes];
 }

@@ -1,0 +1,94 @@
+/* Status menu: opens the About window */
+"AboutSplit" = "About Split";
+/* Status menu: asks the update server for a newer version */
+"CheckForUpdates" = "Check for Updates…";
+/* Status menu: submenu that turns shortcuts off for a while */
+"Disable" = "Pause Shortcuts";
+/* Status menu: inside "Pause Shortcuts", for one hour */
+"DisableForAnHour" = "For an Hour";
+/* Status menu: inside "Pause Shortcuts", only while the named app is in front. %@ is the app name */
+"DisableForApplication" = "While %@ Is in Front";
+/* Status menu: opens the settings window */
+"Settings" = "Settings…";
+/* Status menu: quits the app */
+"QuitSplit" = "Quit Split";
+
+/* Window actions (status menu, settings, on-screen label) */
+"MoveToCenter" = "Center";
+"MoveToFullscreen" = "Full Screen";
+"MoveToLeftHalf" = "Left Half";
+"MoveToRightHalf" = "Right Half";
+"MoveToTopHalf" = "Top Half";
+"MoveToBottomHalf" = "Bottom Half";
+"MoveToUpperLeft" = "Top Left";
+"MoveToLowerLeft" = "Bottom Left";
+"MoveToUpperRight" = "Top Right";
+"MoveToLowerRight" = "Bottom Right";
+"MoveToNextDisplay" = "Next Display";
+"MoveToPreviousDisplay" = "Previous Display";
+"MoveToNextThird" = "Next Third";
+"MoveToPreviousThird" = "Previous Third";
+"MakeLarger" = "Larger";
+"MakeSmaller" = "Smaller";
+"UndoLastMove" = "Undo";
+"RedoLastMove" = "Redo";
+"ArrangeWindows" = "Arrange All Windows";
+
+/* On-screen label after auto-arrange. %ld is the number of windows */
+"ArrangedCount" = "%ld windows arranged";
+/* On-screen label when auto-arrange found no window */
+"NothingToArrange" = "No windows to arrange";
+/* On-screen label after undoing auto-arrange */
+"ArrangeUndone" = "Windows put back";
+
+/* Settings window */
+"SettingsWindowTitle" = "Split Settings";
+"TabGeneral" = "General";
+"TabShortcuts" = "Shortcuts";
+"LaunchAtLogin" = "Open at login";
+"LaunchAtLoginHint" = "Split starts by itself when you log in to this Mac.";
+"ShowMenuBarIcon" = "Show in menu bar";
+"ShowMenuBarIconHint" = "When off, open Split from the Applications folder to get back to these settings.";
+"MoveFeedback" = "Highlight moved windows";
+"MoveFeedbackHint" = "A short glow and the shortcut you pressed appear after a window moves.";
+"AutoUpdate" = "Check for updates automatically";
+"AutoUpdateHint" = "Split looks for a new version once a day and asks before installing it.";
+"PermissionTitle" = "Accessibility permission";
+"PermissionOnHint" = "On. Split can move windows.";
+"PermissionOffHint" = "Off. Windows can't move until you turn it on.";
+"PermissionOpen" = "Open Settings";
+/* %@ is the version number */
+"AboutLine" = "Split %@ · free and open source";
+"Website" = "Website";
+"SectionBasic" = "Center and full screen";
+"SectionHalves" = "Halves";
+"SectionCorners" = "Corners";
+"SectionThirds" = "Thirds";
+"SectionThirdsHint" = "Press again to go to the next third.";
+"SectionDisplays" = "Displays";
+"SectionSize" = "Size";
+"SectionHistory" = "Undo and redo";
+"SectionArrange" = "Arrange";
+"SectionArrangeHint" = "Places up to 9 visible windows on the current screen at once: 1 full, 2 side by side, 3 one big and two stacked, 4 a grid. Undo puts them all back.";
+"RestoreDefaults" = "Restore Defaults";
+"ShortcutsHint" = "Click a shortcut to change it, or × to clear it.";
+"ModifierLegend" = "⌘ Command   ⌥ Option   ⌃ Control   ⇧ Shift";
+
+/* Alerts */
+"UnexpectedError" = "Something went wrong";
+"AlertMessageTextRestoreDefaults" = "Restore the default shortcuts?";
+"AlertInformativeTextRestoreDefaults" = "Shortcuts you changed will go back to how Split came.";
+"AlertMessageTextRunningInBackground" = "Hide Split from the menu bar?";
+"AlertInformativeTextRunningInBackground" = "Shortcuts keep working. To open settings again, open Split from the Applications folder.";
+/* %@ is the shortcut, for example ⌥⌘F */
+"AlertMessageTextShortcutValidationError" = "%@ is already in use";
+"AlertInformativeTextShortcutAlreadyInUse" = "Another Split action uses %@. Choose a different shortcut.";
+"AlertInformativeTextSystemWideShortcutAlreadyUsed" = "macOS already uses %@. Choose a different shortcut, or change it in System Settings › Keyboard › Keyboard Shortcuts.";
+"ButtonLabelAffirmative" = "OK";
+"ButtonLabelNegative" = "Cancel";
+
+/* Shortcut recorder in the settings window */
+"ShortcutRecorderLabelClickToRecord" = "Click to record";
+"ShortcutRecorderLabelEnterShortcut" = "Type shortcut";
+"ShortcutRecorderLabelStopRecording" = "Stop recording";
+"ShortcutRecorderLabelUseExisting" = "Keep current";

@@ -14,7 +14,15 @@ Split is the RUNNERS-IM continuation of Spectacle, the window manager created by
 
 Split runs natively on Apple silicon and Intel Macs with macOS 13 or later. Updates are installed from within the app.
 
-Homebrew installation (`brew install --cask runners-im/tap/split`) is planned.
+With Homebrew:
+
+```sh
+brew tap runners-im/tap
+brew trust runners-im/tap   # recent Homebrew asks you to trust third-party taps once
+brew install --cask split
+```
+
+Split speaks Arabic, Chinese (Simplified), Dutch, English, Finnish, French, German, Hindi, Indonesian, Italian, Japanese, Korean, Polish, Portuguese, Russian, Spanish, Thai and Vietnamese. It follows the language set for your Mac.
 
 ## Default keyboard shortcuts
 
@@ -25,7 +33,7 @@ Homebrew installation (`brew install --cask runners-im/tap/split`) is planned.
 | ⌥ | Option |
 | ⇧ | Shift |
 
-All shortcuts can be changed or cleared in Preferences.
+All shortcuts can be changed or cleared in Settings → Shortcuts.
 
 ### Basic window actions
 
@@ -41,6 +49,24 @@ All shortcuts can be changed or cleared in Preferences.
 - Lower right — ⌃⇧⌘→
 
 Pressing a half or corner shortcut repeatedly cycles the window between 1/2, 1/3 and 2/3 of that region.
+
+### Auto arrange
+
+- Arrange all windows — ⌥⌘A
+
+Places up to 9 visible windows on the display with the frontmost window, most recently used first:
+
+| Windows | Layout |
+|:---:|:---|
+| 1 | Full screen |
+| 2 | Left and right halves |
+| 3 | Left half, right side split top and bottom |
+| 4 | 2 × 2 grid |
+| 5 | 2 × 2 grid, the front window floating in the middle at 60% |
+| 6 | 3 × 2 grid |
+| 7–9 | 3 × 2 grid, the rest stacked in the middle at 60%, 30 points apart |
+
+Minimized windows, windows in full screen and windows of hidden apps are left alone. One undo (⌥⌘Z) puts every arranged window back where it was. Hovering the menu item shows where each window will go.
 
 ### Thirds
 
@@ -72,16 +98,17 @@ Done:
 - Developer ID signing, notarization and automatic updates (served through runners.im)
 - A step-by-step Accessibility permission guide
 - Copying shortcuts and preferences from Spectacle
+- Homebrew tap
+- New icon, a picture menu with a live preview, and a glow after each move
+- Auto arrange (⌥⌘A)
+- A new settings window and 18 languages
 
 Next, in this order:
 
-1. Homebrew tap
-2. New ratios (1/4, 2/3) and a grid picker in the menu bar
-3. Command line tool and URL scheme (`split left`, `split://center`) for Raycast, Shortcuts and scripts
-4. Export and import of settings as JSON
-5. Auto arrange: one shortcut (⌥⌘A) lays out every open window on the current display by count
-6. Drag to snap at screen edges
-7. New icon and a modernized preferences window with localization
+1. New ratios (1/4, 2/3) and a grid picker in the menu bar
+2. Command line tool and URL scheme (`split left`, `split://center`) for Raycast, Shortcuts and scripts
+3. Export and import of settings as JSON
+4. Drag to snap at screen edges
 
 Issues and pull requests are welcome in this repository.
 

@@ -1,5 +1,8 @@
 #import <Cocoa/Cocoa.h>
 
+/// A user-facing string from App.strings in the current language (English when missing).
+NSString *SplitLocalized(NSString *key);
+
 @interface SplitUtilities : NSObject
 
 + (NSString *)applicationVersion;

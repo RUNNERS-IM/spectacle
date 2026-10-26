@@ -1,0 +1,94 @@
+/* Status menu: opens the About window */
+"AboutSplit" = "Tietoja Splitistä";
+/* Status menu: asks the update server for a newer version */
+"CheckForUpdates" = "Tarkista päivitykset…";
+/* Status menu: submenu that turns shortcuts off for a while */
+"Disable" = "Keskeytä oikotiet";
+/* Status menu: inside "Pause Shortcuts", for one hour */
+"DisableForAnHour" = "Tunnin ajaksi";
+/* Status menu: inside "Pause Shortcuts", only while the named app is in front. %@ is the app name */
+"DisableForApplication" = "Kun %@ on edessä";
+/* Status menu: opens the settings window */
+"Settings" = "Asetukset…";
+/* Status menu: quits the app */
+"QuitSplit" = "Lopeta Split";
+
+/* Window actions (status menu, settings, on-screen label) */
+"MoveToCenter" = "Keskelle";
+"MoveToFullscreen" = "Koko näyttö";
+"MoveToLeftHalf" = "Vasen puolisko";
+"MoveToRightHalf" = "Oikea puolisko";
+"MoveToTopHalf" = "Yläpuolisko";
+"MoveToBottomHalf" = "Alapuolisko";
+"MoveToUpperLeft" = "Vasen yläkulma";
+"MoveToLowerLeft" = "Vasen alakulma";
+"MoveToUpperRight" = "Oikea yläkulma";
+"MoveToLowerRight" = "Oikea alakulma";
+"MoveToNextDisplay" = "Seuraava näyttö";
+"MoveToPreviousDisplay" = "Edellinen näyttö";
+"MoveToNextThird" = "Seuraava kolmannes";
+"MoveToPreviousThird" = "Edellinen kolmannes";
+"MakeLarger" = "Suuremmaksi";
+"MakeSmaller" = "Pienemmäksi";
+"UndoLastMove" = "Kumoa";
+"RedoLastMove" = "Tee uudelleen";
+"ArrangeWindows" = "Järjestä kaikki ikkunat";
+
+/* On-screen label after auto-arrange. %ld is the number of windows */
+"ArrangedCount" = "Ikkunoita järjestetty: %ld";
+/* On-screen label when auto-arrange found no window */
+"NothingToArrange" = "Ei järjestettäviä ikkunoita";
+/* On-screen label after undoing auto-arrange */
+"ArrangeUndone" = "Ikkunat palautettu";
+
+/* Settings window */
+"SettingsWindowTitle" = "Splitin asetukset";
+"TabGeneral" = "Yleiset";
+"TabShortcuts" = "Oikotiet";
+"LaunchAtLogin" = "Avaa kirjauduttaessa";
+"LaunchAtLoginHint" = "Split käynnistyy itsestään, kun kirjaudut tähän Maciin.";
+"ShowMenuBarIcon" = "Näytä valikkorivillä";
+"ShowMenuBarIconHint" = "Kun tämä on pois päältä, avaa Split Ohjelmat-kansiosta palataksesi näihin asetuksiin.";
+"MoveFeedback" = "Korosta siirretyt ikkunat";
+"MoveFeedbackHint" = "Ikkunan siirron jälkeen näkyy lyhyt hehku ja painamasi oikotie.";
+"AutoUpdate" = "Tarkista päivitykset automaattisesti";
+"AutoUpdateHint" = "Split etsii uutta versiota kerran päivässä ja kysyy ennen asentamista.";
+"PermissionTitle" = "Käyttöapulupa";
+"PermissionOnHint" = "Päällä. Split voi siirtää ikkunoita.";
+"PermissionOffHint" = "Pois. Ikkunoita ei voi siirtää, ennen kuin laitat sen päälle.";
+"PermissionOpen" = "Avaa asetukset";
+/* %@ is the version number */
+"AboutLine" = "Split %@ · ilmainen ja avointa lähdekoodia";
+"Website" = "Verkkosivusto";
+"SectionBasic" = "Keskelle ja koko näyttö";
+"SectionHalves" = "Puoliskot";
+"SectionCorners" = "Kulmat";
+"SectionThirds" = "Kolmannekset";
+"SectionThirdsHint" = "Paina uudelleen siirtyäksesi seuraavaan kolmannekseen.";
+"SectionDisplays" = "Näytöt";
+"SectionSize" = "Koko";
+"SectionHistory" = "Kumoa ja tee uudelleen";
+"SectionArrange" = "Järjestä";
+"SectionArrangeHint" = "Asettelee kerralla enintään 9 näkyvää ikkunaa nykyiselle näytölle: 1 koko näytölle, 2 rinnakkain, 3 yksi iso ja kaksi päällekkäin, 4 ruudukkoon. Kumoa palauttaa ne kaikki.";
+"RestoreDefaults" = "Palauta oletukset";
+"ShortcutsHint" = "Muuta oikotietä klikkaamalla sitä tai tyhjennä se klikkaamalla ×.";
+"ModifierLegend" = "⌘ Command   ⌥ Option   ⌃ Control   ⇧ Shift";
+
+/* Alerts */
+"UnexpectedError" = "Jokin meni pieleen";
+"AlertMessageTextRestoreDefaults" = "Palautetaanko oletusoikotiet?";
+"AlertInformativeTextRestoreDefaults" = "Muuttamasi oikotiet palautetaan Splitin alkuperäisiin.";
+"AlertMessageTextRunningInBackground" = "Kätketäänkö Split valikkoriviltä?";
+"AlertInformativeTextRunningInBackground" = "Oikotiet toimivat edelleen. Avaa asetukset uudelleen avaamalla Split Ohjelmat-kansiosta.";
+/* %@ is the shortcut, for example ⌥⌘F */
+"AlertMessageTextShortcutValidationError" = "%@ on jo käytössä";
+"AlertInformativeTextShortcutAlreadyInUse" = "Toinen Splitin toiminto käyttää oikotietä %@. Valitse toinen oikotie.";
+"AlertInformativeTextSystemWideShortcutAlreadyUsed" = "macOS käyttää jo oikotietä %@. Valitse toinen oikotie tai muuta sitä kohdassa Järjestelmäasetukset › Näppäimistö › Näppäinoikotiet.";
+"ButtonLabelAffirmative" = "OK";
+"ButtonLabelNegative" = "Peruuta";
+
+/* Shortcut recorder in the settings window */
+"ShortcutRecorderLabelClickToRecord" = "Tallenna klikkaamalla";
+"ShortcutRecorderLabelEnterShortcut" = "Kirjoita oikotie";
+"ShortcutRecorderLabelStopRecording" = "Lopeta tallennus";
+"ShortcutRecorderLabelUseExisting" = "Pidä nykyinen";

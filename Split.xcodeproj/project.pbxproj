@@ -14,6 +14,7 @@
 		0955722C0E9432458D00D5DE /* OCMockito in Frameworks */ = {isa = PBXBuildFile; productRef = E569C9A7F6EA69ABC932FC1A /* OCMockito */; };
 		0976BF750689F6EAC866BCBD /* EXPMatchers+beLessThan.m in Sources */ = {isa = PBXBuildFile; fileRef = A0F8C6FC86A58FF40E33A1AB /* EXPMatchers+beLessThan.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		0B94306F5A8BCD8FA9445C92 /* EXPMatchers+beSubclassOf.m in Sources */ = {isa = PBXBuildFile; fileRef = 87EC019C21B706393C4F6E0C /* EXPMatchers+beSubclassOf.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
+		0DDCE63CCEACBA39CBD43528 /* App.strings in Resources */ = {isa = PBXBuildFile; fileRef = 254BDC24569365EE8D8EA7DC /* App.strings */; };
 		0F08ACFDF7A9C63EA5D75077 /* SPTSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F349DC6B4A170C05A1D0B3F5 /* SPTSpec.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		0F2184C701B17AA74DBA043B /* EXPMatchers+beInstanceOf.m in Sources */ = {isa = PBXBuildFile; fileRef = F4EE5189285797A235B8138B /* EXPMatchers+beInstanceOf.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		15360BDDCDB985CD35E5A9C4 /* SplitWindowPositionCalculationRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D0759A61C71746500A17E80 /* SplitWindowPositionCalculationRegistry.m */; };
@@ -68,7 +69,6 @@
 		2D5A830F1CDC475B00EBE80A /* SplitDefaultShortcutHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5A830E1CDC475B00EBE80A /* SplitDefaultShortcutHelpers.m */; };
 		2D768E8D147ED51A00901E76 /* SplitAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D768E8C147ED51A00901E76 /* SplitAppDelegate.m */; };
 		2D7752101B83E94C00C022EE /* Split.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DC4E3D01AD84E5C0022ABF0 /* Split.xib */; };
-		2D7752111B83E95000C022EE /* SplitPreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DC4E3D21AD84E5C0022ABF0 /* SplitPreferencesWindow.xib */; };
 		2D7C114A1B86C7CD00B81E11 /* SplitShortcutUserDefaultsStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D7C11491B86C7CD00B81E11 /* SplitShortcutUserDefaultsStorage.m */; };
 		2D7CF9EB1C6FED50004DC708 /* SplitWindowPositionCalculator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D7CF9EA1C6FED50004DC708 /* SplitWindowPositionCalculator.m */; };
 		2D8DA04D147E0FA0003BE1D3 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0706C0431191092B0068F04B /* Defaults.plist */; };
@@ -84,19 +84,18 @@
 		2DAC59F31BB23BE200C660ED /* SplitBestEffortWindowMover.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DAC59F21BB23BE200C660ED /* SplitBestEffortWindowMover.m */; };
 		2DC4E3D41AD84E5C0022ABF0 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2DC4E3CA1AD84E5C0022ABF0 /* Credits.rtf */; };
 		2DC4E3D51AD84E5C0022ABF0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2DC4E3CC1AD84E5C0022ABF0 /* InfoPlist.strings */; };
-		2DC4E3D61AD84E5C0022ABF0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2DC4E3CE1AD84E5C0022ABF0 /* Localizable.strings */; };
 		2DC8A0171B85097900ABEBD5 /* SplitLoginItemHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC8A0161B85097900ABEBD5 /* SplitLoginItemHelper.m */; };
 		2DE03E481D7B8F5A004E80D6 /* SplitShortcutKeyBindingsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE03E471D7B8F5A004E80D6 /* SplitShortcutKeyBindingsSpec.m */; };
 		2DE03E4B1D7B98D6004E80D6 /* SplitShortcutKeyBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE03E4A1D7B98D6004E80D6 /* SplitShortcutKeyBindings.m */; };
 		2EAD885EB893017814F4FCBA /* EXPMatchers+beLessThanOrEqualTo.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F2E4F3DE47414DA4059A63 /* EXPMatchers+beLessThanOrEqualTo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		38B1D16369C353014636C072 /* SplitQuantizedWindowMover.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DAC59EF1BB238D900C660ED /* SplitQuantizedWindowMover.m */; };
-		41CD6A06A969B5D0B6F79B6D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2DC4E3CE1AD84E5C0022ABF0 /* Localizable.strings */; };
 		42063CE06B051B436DB2220B /* Window Position Calculations in Resources */ = {isa = PBXBuildFile; fileRef = 2D58CC381C7030B800E3DC74 /* Window Position Calculations */; };
 		422B22910DA6F3ACBE53E94A /* EXPMatchers+beGreaterThan.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BE33F77436E4199311E84AA /* EXPMatchers+beGreaterThan.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		4309EE4BE634D0857FF6B387 /* EXPMatchers+beIdenticalTo.m in Sources */ = {isa = PBXBuildFile; fileRef = 9421C250C48F6B78C3FF44F9 /* EXPMatchers+beIdenticalTo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		438D22AB601D1CB492ECDBA3 /* EXPMatchers+beInTheRangeOf.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5E98EA755BB26715F66B7 /* EXPMatchers+beInTheRangeOf.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		47F036B9275B7FA4FCAAE92E /* EXPUnsupportedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA9E46E0F21396D067AF2C0 /* EXPUnsupportedObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		48123D3A2D1B8EC3D23563DC /* SplitPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07838602148BD517001E7BD7 /* SplitPreferencesController.m */; };
+		4E36CBE01D1E2E432937AAAA /* SplitWindowArranger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6769045AD7FE70F66EBE97EB /* SplitWindowArranger.m */; };
 		4E60D62FDEE6846BCB8624AC /* SplitRegisteredShortcutValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D1AE52415D715F400EAC5BD /* SplitRegisteredShortcutValidator.m */; };
 		564CEF444C2834203CBEAD58 /* Split.icon in Resources */ = {isa = PBXBuildFile; fileRef = 47DCCDDAD963C84430ED5B8A /* Split.icon */; };
 		578ECE39F8F8044B3A996DAC /* EXPBlockDefinedMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDD940B4072FD97E1F13DB5 /* EXPBlockDefinedMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
@@ -124,15 +123,16 @@
 		8C74B701E1E110B02AE3DE60 /* EXPMatchers+beKindOf.m in Sources */ = {isa = PBXBuildFile; fileRef = 64686CFA6AB1AB662904BB30 /* EXPMatchers+beKindOf.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		93DFA59ADA568EBADA21D88F /* SPTSharedExampleGroups.m in Sources */ = {isa = PBXBuildFile; fileRef = 6793FC6AD4BC6A8105EF1779 /* SPTSharedExampleGroups.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		9A02515C7AC9B0FAEFE63F44 /* EXPMatchers+respondTo.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F9D696C6F218BF721D2407 /* EXPMatchers+respondTo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
+		9B1A6349E15456BC72B69A08 /* App.strings in Resources */ = {isa = PBXBuildFile; fileRef = 254BDC24569365EE8D8EA7DC /* App.strings */; };
 		9C971EFD2EE4326C34CACBE6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2DA23EFB1B7D736100C9E8EF /* Images.xcassets */; };
 		9DAB282770BC2A8F0A766444 /* SplitScreenDetectionResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D2629451CCECB9E009D1ED0 /* SplitScreenDetectionResult.m */; };
 		A208BDF7A741D8506E7DE86D /* SplitWindowAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D24ACB31CC723F600AB3984 /* SplitWindowAction.m */; };
 		A305FFB7C13EC17872225957 /* EXPMatchers+contain.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB9B7453275086651C6C017 /* EXPMatchers+contain.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		A6D253B41B309B02E8FF9F47 /* EXPMatchers+beGreaterThanOrEqualTo.m in Sources */ = {isa = PBXBuildFile; fileRef = C6361AB2EDE2EA1744BF363E /* EXPMatchers+beGreaterThanOrEqualTo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		A6DED8596B997C026A4E4B8F /* AccessibilityGuide.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9B6AA3E747837D486CFE15C7 /* AccessibilityGuide.strings */; };
-		A8911F5F389B538B6143FD33 /* SplitPreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DC4E3D21AD84E5C0022ABF0 /* SplitPreferencesWindow.xib */; };
 		AA59983004197316E0D63A32 /* SplitMigratingShortcutStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5A83081CDB020A00EBE80A /* SplitMigratingShortcutStorage.m */; };
 		AB89F5DA0B59184AF6C6F1A5 /* EXPDoubleTuple.m in Sources */ = {isa = PBXBuildFile; fileRef = C36B43AAEA54FD70DB0E3393 /* EXPDoubleTuple.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
+		AC3B53FBE271E92356834B3D /* SplitWindowArrangerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B5CC84D6D72BC60CBC71FA21 /* SplitWindowArrangerSpec.m */; };
 		ACF04A46600D8D7EE60C1B68 /* SplitShortcutRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A0502194956E100CD96E7 /* SplitShortcutRecorder.m */; };
 		AD26B9F242DA9737C58E061C /* SPTCallSite.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F96DE561233EBD6BCAF3B81 /* SPTCallSite.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		AD360235E4F87184D75F1BC8 /* SplitWindowPositionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 072EACFF118A4D5A0015FC8A /* SplitWindowPositionManager.m */; };
@@ -148,6 +148,7 @@
 		C3E1274A2FF0B9816A37D6D6 /* EXPMatcherHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65660ABD7BE3F6A31982FF72 /* EXPMatcherHelpers.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		C6979D2BC6ECD5EF23603B2F /* SplitLegacyPreferencesMigrator.m in Sources */ = {isa = PBXBuildFile; fileRef = EF951751B9EE5204F49F7ACB /* SplitLegacyPreferencesMigrator.m */; };
 		C85C9B9248E1272F0D4BDA30 /* SplitShortcutTranslations.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A0507194956E100CD96E7 /* SplitShortcutTranslations.m */; };
+		CAA869F1B8390993CCFAA4D8 /* SplitWindowArranger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6769045AD7FE70F66EBE97EB /* SplitWindowArranger.m */; };
 		D127B468DDCF76A268E08614 /* SplitShortcutUserDefaultsStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D7C11491B86C7CD00B81E11 /* SplitShortcutUserDefaultsStorage.m */; };
 		D4EB9D697AB0F8AFF85375A1 /* SplitBestEffortWindowMover.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DAC59F21BB23BE200C660ED /* SplitBestEffortWindowMover.m */; };
 		D4FAC730840F1BA9B242942B /* SplitLegacyPreferencesMigrator.m in Sources */ = {isa = PBXBuildFile; fileRef = EF951751B9EE5204F49F7ACB /* SplitLegacyPreferencesMigrator.m */; };
@@ -185,6 +186,7 @@
 /* Begin PBXFileReference section */
 		004DD7A92E8C5ED6CFC1AD8D /* EXPMatchers+beSupersetOf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beSupersetOf.h"; sourceTree = "<group>"; };
 		02F9D696C6F218BF721D2407 /* EXPMatchers+respondTo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+respondTo.m"; sourceTree = "<group>"; };
+		041E3B1A250EFDC215EA11A6 /* de */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = de; path = Split/Resources/Localizations/de.lproj/App.strings; sourceTree = "<group>"; };
 		04270D86D2663AC054785BA5 /* EXPExpect.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EXPExpect.m; sourceTree = "<group>"; };
 		0706C0431191092B0068F04B /* Defaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Defaults.plist; path = "Split/Resources/Property Lists/Defaults.plist"; sourceTree = "<group>"; };
 		072EACFE118A4D5A0015FC8A /* SplitWindowPositionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SplitWindowPositionManager.h; path = Split/Sources/SplitWindowPositionManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -204,19 +206,26 @@
 		092EAFC43C229453DCF304CD /* NSObject+Expecta.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "NSObject+Expecta.h"; sourceTree = "<group>"; };
 		098A65257D1C16C6E1735FAB /* en */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = en; path = Split/Resources/Localizations/en.lproj/AccessibilityGuide.strings; sourceTree = SOURCE_ROOT; };
 		09B97146CED27639CE8D3DDC /* EXPMatchers+beSubclassOf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beSubclassOf.h"; sourceTree = "<group>"; };
+		0AD89C6B9E72906711C14B59 /* id */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = id; path = Split/Resources/Localizations/id.lproj/App.strings; sourceTree = "<group>"; };
 		0B8242351BA6FAB59F1BBCF8 /* XCTestCase+Specta.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "XCTestCase+Specta.m"; sourceTree = "<group>"; };
 		0BB5E98EA755BB26715F66B7 /* EXPMatchers+beInTheRangeOf.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beInTheRangeOf.m"; sourceTree = "<group>"; };
 		0BF0989FCE5683D6C2FD65FB /* EXPMatchers+beIdenticalTo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beIdenticalTo.h"; sourceTree = "<group>"; };
+		0BF3AEE510A44388D79606EC /* ar */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ar; path = Split/Resources/Localizations/ar.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
 		0D19412F7CB148FAF367BD9B /* EXPMatchers+beSupersetOf.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beSupersetOf.m"; sourceTree = "<group>"; };
 		0D22456C4F53D55B4A94FE6D /* EXPMatchers+beGreaterThan.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beGreaterThan.h"; sourceTree = "<group>"; };
+		0E35BB96702A2BEAE0B831EE /* es */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = es; path = Split/Resources/Localizations/es.lproj/Migration.strings; sourceTree = "<group>"; };
 		0E7A3509B9A558A640897D32 /* EXPMatchers+raise.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+raise.m"; sourceTree = "<group>"; };
 		0F2DFAFE7BA52FB51782CE57 /* EXPFloatTuple.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPFloatTuple.h; sourceTree = "<group>"; };
 		141C05A24DB0C7780F6C0FF5 /* EXPMatchers+raise.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+raise.h"; sourceTree = "<group>"; };
 		164864B64C01889D1668C0F7 /* EXPMatchers+beLessThan.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beLessThan.h"; sourceTree = "<group>"; };
 		1686D648CE109B811154B763 /* en */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = en; path = Split/Resources/Localizations/en.lproj/Migration.strings; sourceTree = SOURCE_ROOT; };
+		169A40E14F8304F159805252 /* ru */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ru; path = Split/Resources/Localizations/ru.lproj/App.strings; sourceTree = "<group>"; };
 		17DBA649C7B8936134232F20 /* EXPMatchers+beginWith.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beginWith.h"; sourceTree = "<group>"; };
+		183A79BF8BE49FEA6BD3699E /* pl */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = pl; path = Split/Resources/Localizations/pl.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
 		1A3CAAEF1191D6ECB5994F7C /* SplitLegacyPreferencesMigrator.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SplitLegacyPreferencesMigrator.h; path = Split/Sources/SplitLegacyPreferencesMigrator.h; sourceTree = SOURCE_ROOT; };
+		1AE1378956EFB672AE43F41F /* vi */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = vi; path = Split/Resources/Localizations/vi.lproj/Migration.strings; sourceTree = "<group>"; };
 		1BF3DACDDA704F3A00054B31 /* EXPMatchers+equal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+equal.h"; sourceTree = "<group>"; };
+		202F99881A34279BC0CAC9C5 /* vi */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = vi; path = Split/Resources/Localizations/vi.lproj/App.strings; sourceTree = "<group>"; };
 		256D63048AF859DB77287D44 /* EXPMatchers+beTruthy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beTruthy.m"; sourceTree = "<group>"; };
 		27F03975476C37951A2DD1D5 /* SplitWindowFeedback.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SplitWindowFeedback.h; path = Split/Sources/SplitWindowFeedback.h; sourceTree = SOURCE_ROOT; };
 		286718822DF8D6ACED9FFD61 /* EXPDoubleTuple.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPDoubleTuple.h; sourceTree = "<group>"; };
@@ -244,10 +253,8 @@
 		2D20F0171CD18ED7003DDA5B /* SplitUpperRightWindowCalculationSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SplitUpperRightWindowCalculationSpec.m; path = Sources/SplitUpperRightWindowCalculationSpec.m; sourceTree = "<group>"; };
 		2D20F0281CD1969D003DDA5B /* SplitWindowPositionManagerSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SplitWindowPositionManagerSpec.m; path = Sources/SplitWindowPositionManagerSpec.m; sourceTree = "<group>"; };
 		2D2490DF1C7A5BD900A4282B /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = Split/Resources/Localizations/fi.lproj/Split.strings; sourceTree = "<group>"; };
-		2D2490E01C7A5BD900A4282B /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = Split/Resources/Localizations/fi.lproj/SplitPreferencesWindow.strings; sourceTree = "<group>"; };
 		2D2490E11C7A5BD900A4282B /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fi; path = Split/Resources/Localizations/fi.lproj/Credits.rtf; sourceTree = "<group>"; };
 		2D2490E21C7A5BD900A4282B /* fi */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = fi; path = Split/Resources/Localizations/fi.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		2D2490E31C7A5BD900A4282B /* fi */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = fi; path = Split/Resources/Localizations/fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2D24ACB31CC723F600AB3984 /* SplitWindowAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SplitWindowAction.m; path = Split/Sources/SplitWindowAction.m; sourceTree = "<group>"; };
 		2D24ACB51CC8728E00AB3984 /* SplitShortcutHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SplitShortcutHolder.h; path = Split/Sources/SplitShortcutHolder.h; sourceTree = "<group>"; };
 		2D24ACB61CC8728E00AB3984 /* SplitShortcutHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = SplitShortcutHolder.m; path = Split/Sources/SplitShortcutHolder.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -256,10 +263,8 @@
 		2D279ED216BB4A7800F6894A /* SplitHistory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SplitHistory.h; path = Split/Sources/SplitHistory.h; sourceTree = "<group>"; };
 		2D279ED316BB4A7800F6894A /* SplitHistory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = SplitHistory.m; path = Split/Sources/SplitHistory.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2D2A61A31DC2CD9C00D86193 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Split/Resources/Localizations/es.lproj/Split.strings; sourceTree = "<group>"; };
-		2D2A61A41DC2CD9C00D86193 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Split/Resources/Localizations/es.lproj/SplitPreferencesWindow.strings; sourceTree = "<group>"; };
 		2D2A61A51DC2CD9C00D86193 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = es; path = Split/Resources/Localizations/es.lproj/Credits.rtf; sourceTree = "<group>"; };
 		2D2A61A61DC2CD9C00D86193 /* es */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = es; path = Split/Resources/Localizations/es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		2D2A61A71DC2CD9C00D86193 /* es */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = es; path = Split/Resources/Localizations/es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2D3A04FC194956E100CD96E7 /* SplitAccessibilityElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SplitAccessibilityElement.h; path = Split/Sources/SplitAccessibilityElement.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		2D3A04FD194956E100CD96E7 /* SplitAccessibilityElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = SplitAccessibilityElement.m; path = Split/Sources/SplitAccessibilityElement.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2D3A04FF194956E100CD96E7 /* SplitShortcut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = SplitShortcut.h; path = Split/Sources/SplitShortcut.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -296,18 +301,14 @@
 		2D8E2C621C7AAD5A0074129C /* SplitJavaScriptEnvironment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SplitJavaScriptEnvironment.h; path = Split/Sources/SplitJavaScriptEnvironment.h; sourceTree = "<group>"; };
 		2D8E2C631C7AAD5A0074129C /* SplitJavaScriptEnvironment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SplitJavaScriptEnvironment.m; path = Split/Sources/SplitJavaScriptEnvironment.m; sourceTree = "<group>"; };
 		2D98D72C1ADDBBF6007AD995 /* fr */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = fr; path = Split/Resources/Localizations/fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		2D98D72D1ADDBBF6007AD995 /* fr */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = fr; path = Split/Resources/Localizations/fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2D98D72E1ADDBBF6007AD995 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = fr; path = Split/Resources/Localizations/fr.lproj/Credits.rtf; sourceTree = "<group>"; };
 		2D98D72F1AE064B7007AD995 /* SplitWindowPositionCalculationResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SplitWindowPositionCalculationResult.h; path = Split/Sources/SplitWindowPositionCalculationResult.h; sourceTree = "<group>"; };
 		2D98D7301AE064B7007AD995 /* SplitWindowPositionCalculationResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = SplitWindowPositionCalculationResult.m; path = Split/Sources/SplitWindowPositionCalculationResult.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2DA23EFB1B7D736100C9E8EF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Split/Resources/Images.xcassets; sourceTree = "<group>"; };
 		2DA23EFD1B80FB6400C9E8EF /* it */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = it; path = Split/Resources/Localizations/it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2DA23EFE1B80FF6F00C9E8EF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Split/Resources/Localizations/Base.lproj/Split.xib; sourceTree = "<group>"; };
-		2DA23EFF1B80FF6F00C9E8EF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Split/Resources/Localizations/Base.lproj/SplitPreferencesWindow.xib; sourceTree = "<group>"; };
 		2DA23F031B81016B00C9E8EF /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = Split/Resources/Localizations/fr.lproj/Split.strings; sourceTree = "<group>"; };
-		2DA23F051B81017000C9E8EF /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = Split/Resources/Localizations/fr.lproj/SplitPreferencesWindow.strings; sourceTree = "<group>"; };
 		2DA23F071B8109D400C9E8EF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = Split/Resources/Localizations/it.lproj/Split.strings; sourceTree = "<group>"; };
-		2DA23F091B8109D900C9E8EF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = Split/Resources/Localizations/it.lproj/SplitPreferencesWindow.strings; sourceTree = "<group>"; };
 		2DA5B7C619F8BA79007EDE8E /* SplitSpecs.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SplitSpecs.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DA5B7C919F8BA79007EDE8E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "Supporting Files/Info.plist"; sourceTree = "<group>"; };
 		2DAC59E81BB234F500C660ED /* SplitWindowMover.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SplitWindowMover.h; path = Split/Sources/SplitWindowMover.h; sourceTree = "<group>"; };
@@ -319,8 +320,6 @@
 		2DB075441CD041A5001CE204 /* SplitMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SplitMacros.h; path = Split/Sources/SplitMacros.h; sourceTree = "<group>"; };
 		2DC4E3CB1AD84E5C0022ABF0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = Split/Resources/Localizations/en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		2DC4E3CD1AD84E5C0022ABF0 /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = Split/Resources/Localizations/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		2DC4E3CF1AD84E5C0022ABF0 /* en */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = en; path = Split/Resources/Localizations/en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		2DC4E3D91AD84E7F0022ABF0 /* it */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = it; path = Split/Resources/Localizations/it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2DC4E3DA1AD84E7F0022ABF0 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = it; path = Split/Resources/Localizations/it.lproj/Credits.rtf; sourceTree = "<group>"; };
 		2DC8A0151B85097900ABEBD5 /* SplitLoginItemHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SplitLoginItemHelper.h; path = Split/Sources/SplitLoginItemHelper.h; sourceTree = "<group>"; };
 		2DC8A0161B85097900ABEBD5 /* SplitLoginItemHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SplitLoginItemHelper.m; path = Split/Sources/SplitLoginItemHelper.m; sourceTree = "<group>"; };
@@ -332,32 +331,42 @@
 		2E5A7A4A35DDE176F517B34E /* EXPMatchers+beCloseTo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beCloseTo.m"; sourceTree = "<group>"; };
 		3676E2C618CC67C8D802DFFE /* EXPMatchers+beNil.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beNil.m"; sourceTree = "<group>"; };
 		3B347D59818F0228FD4F67CF /* Lucide-LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; name = "Lucide-LICENSE.txt"; path = "Split/Resources/Lucide-LICENSE.txt"; sourceTree = SOURCE_ROOT; };
+		3B4FD3D0D9C5000C9EA68F0F /* it */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = it; path = Split/Resources/Localizations/it.lproj/App.strings; sourceTree = "<group>"; };
 		3C8BEF4738550CA3035CA819 /* EXPFloatTuple.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EXPFloatTuple.m; sourceTree = "<group>"; };
 		3F096B5341B9DC6C41DEDD07 /* EXPMatchers+contain.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+contain.h"; sourceTree = "<group>"; };
+		3F4B552160406D8BA50787C7 /* pt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = pt; path = Split/Resources/Localizations/pt.lproj/Migration.strings; sourceTree = "<group>"; };
+		4383E3857C65AD6A8F8007CF /* id */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = id; path = Split/Resources/Localizations/id.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
+		46F5E2DA94D5544C3A5E806E /* de */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = de; path = Split/Resources/Localizations/de.lproj/Migration.strings; sourceTree = "<group>"; };
 		4753409D825C546B91779729 /* SPTCompiledExample.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SPTCompiledExample.h; sourceTree = "<group>"; };
 		47DCCDDAD963C84430ED5B8A /* Split.icon */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.iconcomposer.icon; name = Split.icon; path = Split/Resources/Split.icon; sourceTree = SOURCE_ROOT; };
 		48FAC3AF7698D914D40FF951 /* EXPMatcherHelpers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPMatcherHelpers.h; sourceTree = "<group>"; };
 		49B469AF6FCABC66B324271A /* EXPMatchers+postNotification.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+postNotification.m"; sourceTree = "<group>"; };
 		4B327DDEC1BB8958A5ABFD44 /* EXPMatchers+raiseWithReason.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+raiseWithReason.h"; sourceTree = "<group>"; };
+		4C79F21945F3BEB899EDEB8A /* es */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = es; path = Split/Resources/Localizations/es.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
+		4ED452E7A5F6671D80307C56 /* it */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = it; path = Split/Resources/Localizations/it.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
 		5065BDA581DF5745FE00618E /* SplitAccessibilityGuideController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SplitAccessibilityGuideController.m; path = Split/Sources/SplitAccessibilityGuideController.m; sourceTree = SOURCE_ROOT; };
 		50C7E6063401C26AB69D2680 /* SplitWindowFeedback.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SplitWindowFeedback.m; path = Split/Sources/SplitWindowFeedback.m; sourceTree = SOURCE_ROOT; };
 		538EF7A71956CFA6456E20B4 /* EXPMatchers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPMatchers.h; sourceTree = "<group>"; };
+		53A347AE7DB63335ABF9A3D0 /* SplitWindowArranger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SplitWindowArranger.h; path = Split/Sources/SplitWindowArranger.h; sourceTree = "<group>"; };
 		57468B1AAF052486F47D37FF /* SPTCompiledExample.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SPTCompiledExample.m; sourceTree = "<group>"; };
 		574F6A1A1C57BE40001A5679 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = Split/Resources/Localizations/pt.lproj/Split.strings; sourceTree = "<group>"; };
-		574F6A1B1C57BE40001A5679 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = Split/Resources/Localizations/pt.lproj/SplitPreferencesWindow.strings; sourceTree = "<group>"; };
 		574F6A1C1C57BE40001A5679 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = pt; path = Split/Resources/Localizations/pt.lproj/Credits.rtf; sourceTree = "<group>"; };
 		574F6A1D1C57BE40001A5679 /* pt */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = pt; path = Split/Resources/Localizations/pt.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		574F6A1E1C57BE40001A5679 /* pt */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = pt; path = Split/Resources/Localizations/pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5AF7408AC552B8A10F2E87D9 /* ko */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = ko; path = Split/Resources/Localizations/ko.lproj/GuideSettings.png; sourceTree = SOURCE_ROOT; };
+		5B68FC031689DC4856E13F58 /* ru */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ru; path = Split/Resources/Localizations/ru.lproj/Migration.strings; sourceTree = "<group>"; };
 		5CB9B7453275086651C6C017 /* EXPMatchers+contain.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+contain.m"; sourceTree = "<group>"; };
+		5E28A31F41A5814969329B36 /* fr */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = fr; path = Split/Resources/Localizations/fr.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
 		5FCAF0339C7EEDEF18F28FBB /* EXPMatchers+beKindOf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beKindOf.h"; sourceTree = "<group>"; };
 		6012EEE1544968DFB467F0BD /* XCTest+Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "XCTest+Private.h"; sourceTree = "<group>"; };
+		606999D42236EA780E0BC7AF /* id */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = id; path = Split/Resources/Localizations/id.lproj/Migration.strings; sourceTree = "<group>"; };
 		634709720ED97DB77BBB39A4 /* EXPExpect.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPExpect.h; sourceTree = "<group>"; };
 		64686CFA6AB1AB662904BB30 /* EXPMatchers+beKindOf.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beKindOf.m"; sourceTree = "<group>"; };
 		64AB9F70A73E78DA2DF55A1A /* EXPMatchers+beGreaterThanOrEqualTo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beGreaterThanOrEqualTo.h"; sourceTree = "<group>"; };
+		6565587B3BF401AF76F03098 /* es */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = es; path = Split/Resources/Localizations/es.lproj/App.strings; sourceTree = "<group>"; };
 		65660ABD7BE3F6A31982FF72 /* EXPMatcherHelpers.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EXPMatcherHelpers.m; sourceTree = "<group>"; };
 		65BED5ED122130E14424977F /* ko */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ko; path = Split/Resources/Localizations/ko.lproj/Migration.strings; sourceTree = SOURCE_ROOT; };
 		668DEE43698FB9D9575627E6 /* EXPMatchers+haveCountOf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+haveCountOf.h"; sourceTree = "<group>"; };
+		6769045AD7FE70F66EBE97EB /* SplitWindowArranger.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SplitWindowArranger.m; path = Split/Sources/SplitWindowArranger.m; sourceTree = "<group>"; };
 		6793FC6AD4BC6A8105EF1779 /* SPTSharedExampleGroups.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SPTSharedExampleGroups.m; sourceTree = "<group>"; };
 		6812F86DB4E4CADC42087170 /* EXPMatchers+conformTo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+conformTo.h"; sourceTree = "<group>"; };
 		69FF7531831CF4188EFA9895 /* EXPMatchers+beFalsy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beFalsy.h"; sourceTree = "<group>"; };
@@ -366,10 +375,13 @@
 		6E186E3BED7840E60454EE8B /* EXPMatchers+beginWith.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beginWith.m"; sourceTree = "<group>"; };
 		6ED4AD29826F184DAF566AF5 /* EXPMatchers+beCloseTo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beCloseTo.h"; sourceTree = "<group>"; };
 		6EFD96A3EF0D48B450120BD1 /* SPTSharedExampleGroups.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SPTSharedExampleGroups.h; sourceTree = "<group>"; };
+		7209712CB8624FC8D8D1998E /* en */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = en; path = Split/Resources/Localizations/en.lproj/App.strings; sourceTree = "<group>"; };
 		7320F8C6DDA5FFF2DE8A2B55 /* SPTCallSite.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SPTCallSite.h; sourceTree = "<group>"; };
 		75CC01C878738F2FB4C6672D /* SpectaUtility.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SpectaUtility.m; sourceTree = "<group>"; };
 		7BE33F77436E4199311E84AA /* EXPMatchers+beGreaterThan.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beGreaterThan.m"; sourceTree = "<group>"; };
 		7DAC58246631D40068CFF3A2 /* EXPMatchers+beNil.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beNil.h"; sourceTree = "<group>"; };
+		81B276ED4E89559B360B2CDC /* pl */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = pl; path = Split/Resources/Localizations/pl.lproj/Migration.strings; sourceTree = "<group>"; };
+		824AC9C0002A24E51865C274 /* ko */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ko; path = Split/Resources/Localizations/ko.lproj/App.strings; sourceTree = "<group>"; };
 		843415BF7FCFE6CAC211E024 /* SpectaDSL.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SpectaDSL.m; sourceTree = "<group>"; };
 		863C0FFF45455DDB074D591F /* EXPMatchers+conformTo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+conformTo.m"; sourceTree = "<group>"; };
 		86F2E4F3DE47414DA4059A63 /* EXPMatchers+beLessThanOrEqualTo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beLessThanOrEqualTo.m"; sourceTree = "<group>"; };
@@ -377,32 +389,49 @@
 		87EC019C21B706393C4F6E0C /* EXPMatchers+beSubclassOf.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beSubclassOf.m"; sourceTree = "<group>"; };
 		8A6E75630F747CCFE565BB92 /* SPTExample.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SPTExample.h; sourceTree = "<group>"; };
 		8C2C065A38BFE6F1B8DF8764 /* EXPUnsupportedObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPUnsupportedObject.h; sourceTree = "<group>"; };
+		8CD5F4A2E9DC31E04227B4FF /* de */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = de; path = Split/Resources/Localizations/de.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
 		8EB149351A71A00F195B2D08 /* EXPDefines.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPDefines.h; sourceTree = "<group>"; };
+		8F0F0AB8D9AD2545858ECDE5 /* fi */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = fi; path = Split/Resources/Localizations/fi.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
 		8F1ECADCF2C5155045991EBF /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		8F88476968525E92D4D83098 /* EXPMatchers+haveCountOf.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+haveCountOf.m"; sourceTree = "<group>"; };
 		8F96DE561233EBD6BCAF3B81 /* SPTCallSite.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SPTCallSite.m; sourceTree = "<group>"; };
 		8FF065ABABA5B5C858675F0E /* EXPMatchers+beLessThanOrEqualTo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beLessThanOrEqualTo.h"; sourceTree = "<group>"; };
 		9421C250C48F6B78C3FF44F9 /* EXPMatchers+beIdenticalTo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beIdenticalTo.m"; sourceTree = "<group>"; };
+		94BB03D59744CC960D88F452 /* pt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = pt; path = Split/Resources/Localizations/pt.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
+		971EAD0CA9B533196D5DB7EF /* th */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = th; path = Split/Resources/Localizations/th.lproj/App.strings; sourceTree = "<group>"; };
+		98E1D62C2DAB63EC50EAE4BE /* it */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = it; path = Split/Resources/Localizations/it.lproj/Migration.strings; sourceTree = "<group>"; };
 		990CC051C4280DD7083BF0B2 /* EXPMatchers+beInTheRangeOf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beInTheRangeOf.h"; sourceTree = "<group>"; };
 		9B6AB547188B509BD71CB1D9 /* ExpectaObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ExpectaObject.m; sourceTree = "<group>"; };
+		9BB91239EC5144A7BFA7E454 /* nl */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = nl; path = Split/Resources/Localizations/nl.lproj/App.strings; sourceTree = "<group>"; };
 		9BDD940B4072FD97E1F13DB5 /* EXPBlockDefinedMatcher.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EXPBlockDefinedMatcher.m; sourceTree = "<group>"; };
 		9D491F89B65570BB9E2467B5 /* SPTTestSuite.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SPTTestSuite.m; sourceTree = "<group>"; };
+		9F892199F9BF9F40C6625263 /* hi */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = hi; path = Split/Resources/Localizations/hi.lproj/Migration.strings; sourceTree = "<group>"; };
 		A0F8C6FC86A58FF40E33A1AB /* EXPMatchers+beLessThan.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beLessThan.m"; sourceTree = "<group>"; };
+		A229D494C103DB475ED34F35 /* ja */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ja; path = Split/Resources/Localizations/ja.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
 		A3EA10783878F8B3DA14496D /* en */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; name = en; path = Split/Resources/Localizations/en.lproj/GuideSettings.png; sourceTree = SOURCE_ROOT; };
 		A4801B0FC0E67D42A50E5AFE /* ko */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ko; path = Split/Resources/Localizations/ko.lproj/AccessibilityGuide.strings; sourceTree = SOURCE_ROOT; };
 		A4A2464379F970C3E2865452 /* SPTExcludeGlobalBeforeAfterEach.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SPTExcludeGlobalBeforeAfterEach.h; sourceTree = "<group>"; };
 		A4C5DC6D70469C46E1DBB244 /* EXPMatchers+match.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+match.h"; sourceTree = "<group>"; };
+		A505A5CFA82424480893463F /* ja */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ja; path = Split/Resources/Localizations/ja.lproj/Migration.strings; sourceTree = "<group>"; };
 		A52B7C1732B10715DC50A415 /* SpectaTypes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SpectaTypes.h; sourceTree = "<group>"; };
 		A69BD8E75667A147437555C6 /* EXPMatchers+beInstanceOf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beInstanceOf.h"; sourceTree = "<group>"; };
 		A773C1D36450337259995E81 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		A8A1361E547BE6C5B8EBF382 /* ja */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ja; path = Split/Resources/Localizations/ja.lproj/App.strings; sourceTree = "<group>"; };
+		AD5137443E0F23CDDFAA7C5E /* zh-Hans */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "Split/Resources/Localizations/zh-Hans.lproj/Migration.strings"; sourceTree = "<group>"; };
 		AE480D933A418ADCFE2B3E39 /* EXPMatchers+endWith.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+endWith.h"; sourceTree = "<group>"; };
 		AE54ECDA1CB7CCB59B149457 /* EXPMatcher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPMatcher.h; sourceTree = "<group>"; };
 		B0386F604232A1796BD24322 /* Expecta.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = Expecta.h; sourceTree = "<group>"; };
 		B1CA7C1C43BC4954C1568C02 /* SpectaDSL.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SpectaDSL.h; sourceTree = "<group>"; };
+		B325D593CAA07D7DFD7623A9 /* fr */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = fr; path = Split/Resources/Localizations/fr.lproj/Migration.strings; sourceTree = "<group>"; };
+		B4BFAD5F80CA86D2B48799ED /* pt */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = pt; path = Split/Resources/Localizations/pt.lproj/App.strings; sourceTree = "<group>"; };
 		B55BC2DA058B01C1D0D40AAE /* EXPMatchers+beTruthy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beTruthy.h"; sourceTree = "<group>"; };
+		B5CC84D6D72BC60CBC71FA21 /* SplitWindowArrangerSpec.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SplitWindowArrangerSpec.m; path = Sources/SplitWindowArrangerSpec.m; sourceTree = "<group>"; };
 		B9359D4507AD305619832423 /* EXPMatchers+endWith.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+endWith.m"; sourceTree = "<group>"; };
+		BB501CEFB50C2DC24640A8F3 /* fi */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = fi; path = Split/Resources/Localizations/fi.lproj/App.strings; sourceTree = "<group>"; };
+		BBD711027C5AC955F4D92C31 /* ar */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ar; path = Split/Resources/Localizations/ar.lproj/Migration.strings; sourceTree = "<group>"; };
 		BE12FC294AB0CA06F54C169F /* SPTTestSuite.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SPTTestSuite.h; sourceTree = "<group>"; };
 		C2423D5C1572E52B8AAECF97 /* XCTestCase+Specta.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "XCTestCase+Specta.h"; sourceTree = "<group>"; };
+		C247DF8B43D811EF136FCCF7 /* zh-Hans */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "Split/Resources/Localizations/zh-Hans.lproj/App.strings"; sourceTree = "<group>"; };
 		C36B43AAEA54FD70DB0E3393 /* EXPDoubleTuple.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EXPDoubleTuple.m; sourceTree = "<group>"; };
 		C591AC63B56EC48C1E1B2D88 /* EXPMatchers+match.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+match.m"; sourceTree = "<group>"; };
 		C6361AB2EDE2EA1744BF363E /* EXPMatchers+beGreaterThanOrEqualTo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beGreaterThanOrEqualTo.m"; sourceTree = "<group>"; };
@@ -411,10 +440,23 @@
 		CDC4D5BE8AA1D2D6E7776CCD /* Split-AppStore.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; name = "Split-AppStore.entitlements"; path = "Split/Supporting Files/Split-AppStore.entitlements"; sourceTree = SOURCE_ROOT; };
 		D0B230D1039C021B5282505D /* EXPBlockDefinedMatcher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPBlockDefinedMatcher.h; sourceTree = "<group>"; };
 		D0CC6E77F16E8453C6C1D41F /* SplitAccessibilityGuideController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SplitAccessibilityGuideController.h; path = Split/Sources/SplitAccessibilityGuideController.h; sourceTree = SOURCE_ROOT; };
+		D1659CB137379F1729EC0B54 /* th */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = th; path = Split/Resources/Localizations/th.lproj/Migration.strings; sourceTree = "<group>"; };
+		D37B12D01A87AEC4D4197C6A /* ar */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ar; path = Split/Resources/Localizations/ar.lproj/App.strings; sourceTree = "<group>"; };
+		D6998ABC57604A676176F75A /* zh-Hans */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "Split/Resources/Localizations/zh-Hans.lproj/AccessibilityGuide.strings"; sourceTree = "<group>"; };
+		D71901CD60B366888F00C330 /* ru */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ru; path = Split/Resources/Localizations/ru.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
 		DAA9E46E0F21396D067AF2C0 /* EXPUnsupportedObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EXPUnsupportedObject.m; sourceTree = "<group>"; };
 		DBC856E9F5CB29EBAA5BB497 /* SplitLegacyPreferencesMigratorSpec.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SplitLegacyPreferencesMigratorSpec.m; path = SplitSpecs/Sources/SplitLegacyPreferencesMigratorSpec.m; sourceTree = SOURCE_ROOT; };
+		E1301F01942D0DC326C83501 /* th */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = th; path = Split/Resources/Localizations/th.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
+		E194C6D04F954F006B9D5EF4 /* hi */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = hi; path = Split/Resources/Localizations/hi.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
+		E23FD6E2FF7DEAC5EEF8F572 /* nl */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = nl; path = Split/Resources/Localizations/nl.lproj/Migration.strings; sourceTree = "<group>"; };
+		E276EC33F5ECEB35881D18A7 /* nl */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = nl; path = Split/Resources/Localizations/nl.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
+		E97F027435E3D83BFBC6577F /* pl */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = pl; path = Split/Resources/Localizations/pl.lproj/App.strings; sourceTree = "<group>"; };
+		EB0F40EA4B23EB7931A6A2B7 /* hi */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = hi; path = Split/Resources/Localizations/hi.lproj/App.strings; sourceTree = "<group>"; };
+		EC5388ED3BA6060F8C7A25CC /* vi */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = vi; path = Split/Resources/Localizations/vi.lproj/AccessibilityGuide.strings; sourceTree = "<group>"; };
+		EE44AB5D964E1930A64B9011 /* fi */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = fi; path = Split/Resources/Localizations/fi.lproj/Migration.strings; sourceTree = "<group>"; };
 		EF951751B9EE5204F49F7ACB /* SplitLegacyPreferencesMigrator.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SplitLegacyPreferencesMigrator.m; path = Split/Sources/SplitLegacyPreferencesMigrator.m; sourceTree = SOURCE_ROOT; };
 		EFA817848F8B65B3EA866395 /* ExpectaSupport.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ExpectaSupport.m; sourceTree = "<group>"; };
+		F0DA10B67480120F66740A90 /* fr */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = fr; path = Split/Resources/Localizations/fr.lproj/App.strings; sourceTree = "<group>"; };
 		F1D80FFE37BD32330D7E6F42 /* ExpectaObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ExpectaObject.h; sourceTree = "<group>"; };
 		F349DC6B4A170C05A1D0B3F5 /* SPTSpec.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SPTSpec.m; sourceTree = "<group>"; };
 		F4C2AA8509517939709EEBD4 /* EXPMatchers+respondTo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+respondTo.h"; sourceTree = "<group>"; };
@@ -478,6 +520,8 @@
 				EF951751B9EE5204F49F7ACB /* SplitLegacyPreferencesMigrator.m */,
 				27F03975476C37951A2DD1D5 /* SplitWindowFeedback.h */,
 				50C7E6063401C26AB69D2680 /* SplitWindowFeedback.m */,
+				53A347AE7DB63335ABF9A3D0 /* SplitWindowArranger.h */,
+				6769045AD7FE70F66EBE97EB /* SplitWindowArranger.m */,
 			);
 			name = "Accessibility API";
 			sourceTree = "<group>";
@@ -517,14 +561,13 @@
 				2DC4E3CA1AD84E5C0022ABF0 /* Credits.rtf */,
 				2DA23EFB1B7D736100C9E8EF /* Images.xcassets */,
 				2DC4E3CC1AD84E5C0022ABF0 /* InfoPlist.strings */,
-				2DC4E3CE1AD84E5C0022ABF0 /* Localizable.strings */,
 				2DC4E3D01AD84E5C0022ABF0 /* Split.xib */,
-				2DC4E3D21AD84E5C0022ABF0 /* SplitPreferencesWindow.xib */,
 				9B6AA3E747837D486CFE15C7 /* AccessibilityGuide.strings */,
 				86846CAC882D84270EB65140 /* Migration.strings */,
 				47DCCDDAD963C84430ED5B8A /* Split.icon */,
 				3B347D59818F0228FD4F67CF /* Lucide-LICENSE.txt */,
 				25055C81ABA059FC8A1449E7 /* GuideSettings.png */,
+				254BDC24569365EE8D8EA7DC /* App.strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -674,6 +717,7 @@
 				2D20F0171CD18ED7003DDA5B /* SplitUpperRightWindowCalculationSpec.m */,
 				2D20F0281CD1969D003DDA5B /* SplitWindowPositionManagerSpec.m */,
 				DBC856E9F5CB29EBAA5BB497 /* SplitLegacyPreferencesMigratorSpec.m */,
+				B5CC84D6D72BC60CBC71FA21 /* SplitWindowArrangerSpec.m */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -987,14 +1031,25 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 1;
 			knownRegions = (
-				en,
-				it,
-				fr,
 				Base,
-				pt,
-				fi,
+				ar,
+				de,
+				en,
 				es,
+				fi,
+				fr,
+				hi,
+				id,
+				it,
+				ja,
 				ko,
+				nl,
+				pl,
+				pt,
+				ru,
+				th,
+				vi,
+				"zh-Hans",
 			);
 			mainGroup = 089C166AFE841209C02AAC07;
 			packageReferences = (
@@ -1022,15 +1077,14 @@
 				2D8DA04D147E0FA0003BE1D3 /* Defaults.plist in Resources */,
 				2DA23EFC1B7D736100C9E8EF /* Images.xcassets in Resources */,
 				2DC4E3D51AD84E5C0022ABF0 /* InfoPlist.strings in Resources */,
-				2DC4E3D61AD84E5C0022ABF0 /* Localizable.strings in Resources */,
 				2D7752101B83E94C00C022EE /* Split.xib in Resources */,
-				2D7752111B83E95000C022EE /* SplitPreferencesWindow.xib in Resources */,
 				2D58CC391C7030B800E3DC74 /* Window Position Calculations in Resources */,
 				A6DED8596B997C026A4E4B8F /* AccessibilityGuide.strings in Resources */,
 				8A98A894217D367E28C5C57E /* Migration.strings in Resources */,
 				F1ED7133286CAAEF207CD96B /* Split.icon in Resources */,
 				8412BEEA9C2734C7923D9E44 /* Lucide-LICENSE.txt in Resources */,
 				E86B4FBF2D82BD7E7C4FED40 /* GuideSettings.png in Resources */,
+				0DDCE63CCEACBA39CBD43528 /* App.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1049,15 +1103,14 @@
 				E7F4F5563A977DA666DC069A /* Defaults.plist in Resources */,
 				9C971EFD2EE4326C34CACBE6 /* Images.xcassets in Resources */,
 				D67B951CDCDD718F2F18424F /* InfoPlist.strings in Resources */,
-				41CD6A06A969B5D0B6F79B6D /* Localizable.strings in Resources */,
 				1CFE19271B41E2A5737FDFC1 /* Split.xib in Resources */,
-				A8911F5F389B538B6143FD33 /* SplitPreferencesWindow.xib in Resources */,
 				42063CE06B051B436DB2220B /* Window Position Calculations in Resources */,
 				6949917BE888B37463015EB2 /* AccessibilityGuide.strings in Resources */,
 				F0EA6BC6DEB8E7F223AB6AE5 /* Migration.strings in Resources */,
 				564CEF444C2834203CBEAD58 /* Split.icon in Resources */,
 				64E38CEE98F1B0C35A2A9F7C /* Lucide-LICENSE.txt in Resources */,
 				E3E3C3017EE5A0CE5B6A8562 /* GuideSettings.png in Resources */,
+				9B1A6349E15456BC72B69A08 /* App.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1137,6 +1190,7 @@
 				29E7A007E570EC7E35FFAF73 /* SplitAccessibilityGuideController.m in Sources */,
 				D4FAC730840F1BA9B242942B /* SplitLegacyPreferencesMigrator.m in Sources */,
 				8820D26FFADE74ABDC864625 /* SplitWindowFeedback.m in Sources */,
+				4E36CBE01D1E2E432937AAAA /* SplitWindowArranger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1178,6 +1232,7 @@
 				EB5BAFE2C2709FE7136A6EE5 /* SplitAccessibilityGuideController.m in Sources */,
 				C6979D2BC6ECD5EF23603B2F /* SplitLegacyPreferencesMigrator.m in Sources */,
 				DDB9772D404A034F016C3B5E /* SplitWindowFeedback.m in Sources */,
+				CAA869F1B8390993CCFAA4D8 /* SplitWindowArranger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1250,6 +1305,7 @@
 				878D649559670C9CDD510855 /* ExpectaSupport.m in Sources */,
 				283919772D47341B79B96822 /* NSValue+Expecta.m in Sources */,
 				AFD6F6EF5B566093B8D15DC2 /* SplitLegacyPreferencesMigratorSpec.m in Sources */,
+				AC3B53FBE271E92356834B3D /* SplitWindowArrangerSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1271,6 +1327,31 @@
 				5AF7408AC552B8A10F2E87D9 /* ko */,
 			);
 			name = GuideSettings.png;
+			sourceTree = "<group>";
+		};
+		254BDC24569365EE8D8EA7DC /* App.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D37B12D01A87AEC4D4197C6A /* ar */,
+				041E3B1A250EFDC215EA11A6 /* de */,
+				7209712CB8624FC8D8D1998E /* en */,
+				6565587B3BF401AF76F03098 /* es */,
+				BB501CEFB50C2DC24640A8F3 /* fi */,
+				F0DA10B67480120F66740A90 /* fr */,
+				EB0F40EA4B23EB7931A6A2B7 /* hi */,
+				0AD89C6B9E72906711C14B59 /* id */,
+				3B4FD3D0D9C5000C9EA68F0F /* it */,
+				A8A1361E547BE6C5B8EBF382 /* ja */,
+				824AC9C0002A24E51865C274 /* ko */,
+				9BB91239EC5144A7BFA7E454 /* nl */,
+				E97F027435E3D83BFBC6577F /* pl */,
+				B4BFAD5F80CA86D2B48799ED /* pt */,
+				169A40E14F8304F159805252 /* ru */,
+				971EAD0CA9B533196D5DB7EF /* th */,
+				202F99881A34279BC0CAC9C5 /* vi */,
+				C247DF8B43D811EF136FCCF7 /* zh-Hans */,
+			);
+			name = App.strings;
 			sourceTree = "<group>";
 		};
 		2DC4E3CA1AD84E5C0022ABF0 /* Credits.rtf */ = {
@@ -1299,19 +1380,6 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		2DC4E3CE1AD84E5C0022ABF0 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2DC4E3CF1AD84E5C0022ABF0 /* en */,
-				2D98D72D1ADDBBF6007AD995 /* fr */,
-				2DC4E3D91AD84E7F0022ABF0 /* it */,
-				574F6A1E1C57BE40001A5679 /* pt */,
-				2D2490E31C7A5BD900A4282B /* fi */,
-				2D2A61A71DC2CD9C00D86193 /* es */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
 		2DC4E3D01AD84E5C0022ABF0 /* Split.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1325,24 +1393,27 @@
 			name = Split.xib;
 			sourceTree = "<group>";
 		};
-		2DC4E3D21AD84E5C0022ABF0 /* SplitPreferencesWindow.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2DA23EFF1B80FF6F00C9E8EF /* Base */,
-				2DA23F051B81017000C9E8EF /* fr */,
-				2DA23F091B8109D900C9E8EF /* it */,
-				574F6A1B1C57BE40001A5679 /* pt */,
-				2D2490E01C7A5BD900A4282B /* fi */,
-				2D2A61A41DC2CD9C00D86193 /* es */,
-			);
-			name = SplitPreferencesWindow.xib;
-			sourceTree = "<group>";
-		};
 		86846CAC882D84270EB65140 /* Migration.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				1686D648CE109B811154B763 /* en */,
 				65BED5ED122130E14424977F /* ko */,
+				BBD711027C5AC955F4D92C31 /* ar */,
+				46F5E2DA94D5544C3A5E806E /* de */,
+				0E35BB96702A2BEAE0B831EE /* es */,
+				EE44AB5D964E1930A64B9011 /* fi */,
+				B325D593CAA07D7DFD7623A9 /* fr */,
+				9F892199F9BF9F40C6625263 /* hi */,
+				606999D42236EA780E0BC7AF /* id */,
+				98E1D62C2DAB63EC50EAE4BE /* it */,
+				A505A5CFA82424480893463F /* ja */,
+				E23FD6E2FF7DEAC5EEF8F572 /* nl */,
+				81B276ED4E89559B360B2CDC /* pl */,
+				3F4B552160406D8BA50787C7 /* pt */,
+				5B68FC031689DC4856E13F58 /* ru */,
+				D1659CB137379F1729EC0B54 /* th */,
+				1AE1378956EFB672AE43F41F /* vi */,
+				AD5137443E0F23CDDFAA7C5E /* zh-Hans */,
 			);
 			name = Migration.strings;
 			sourceTree = "<group>";
@@ -1352,6 +1423,22 @@
 			children = (
 				098A65257D1C16C6E1735FAB /* en */,
 				A4801B0FC0E67D42A50E5AFE /* ko */,
+				0BF3AEE510A44388D79606EC /* ar */,
+				8CD5F4A2E9DC31E04227B4FF /* de */,
+				4C79F21945F3BEB899EDEB8A /* es */,
+				8F0F0AB8D9AD2545858ECDE5 /* fi */,
+				5E28A31F41A5814969329B36 /* fr */,
+				E194C6D04F954F006B9D5EF4 /* hi */,
+				4383E3857C65AD6A8F8007CF /* id */,
+				4ED452E7A5F6671D80307C56 /* it */,
+				A229D494C103DB475ED34F35 /* ja */,
+				E276EC33F5ECEB35881D18A7 /* nl */,
+				183A79BF8BE49FEA6BD3699E /* pl */,
+				94BB03D59744CC960D88F452 /* pt */,
+				D71901CD60B366888F00C330 /* ru */,
+				E1301F01942D0DC326C83501 /* th */,
+				EC5388ED3BA6060F8C7A25CC /* vi */,
+				D6998ABC57604A676176F75A /* zh-Hans */,
 			);
 			name = AccessibilityGuide.strings;
 			sourceTree = "<group>";

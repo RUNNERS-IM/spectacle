@@ -1,0 +1,94 @@
+/* Status menu: opens the About window */
+"AboutSplit" = "Tentang Split";
+/* Status menu: asks the update server for a newer version */
+"CheckForUpdates" = "Periksa Pembaruan…";
+/* Status menu: submenu that turns shortcuts off for a while */
+"Disable" = "Jeda Pintasan";
+/* Status menu: inside "Pause Shortcuts", for one hour */
+"DisableForAnHour" = "Selama Satu Jam";
+/* Status menu: inside "Pause Shortcuts", only while the named app is in front. %@ is the app name */
+"DisableForApplication" = "Saat %@ Ada di Depan";
+/* Status menu: opens the settings window */
+"Settings" = "Pengaturan…";
+/* Status menu: quits the app */
+"QuitSplit" = "Keluar dari Split";
+
+/* Window actions (status menu, settings, on-screen label) */
+"MoveToCenter" = "Tengah";
+"MoveToFullscreen" = "Layar Penuh";
+"MoveToLeftHalf" = "Separuh Kiri";
+"MoveToRightHalf" = "Separuh Kanan";
+"MoveToTopHalf" = "Separuh Atas";
+"MoveToBottomHalf" = "Separuh Bawah";
+"MoveToUpperLeft" = "Kiri Atas";
+"MoveToLowerLeft" = "Kiri Bawah";
+"MoveToUpperRight" = "Kanan Atas";
+"MoveToLowerRight" = "Kanan Bawah";
+"MoveToNextDisplay" = "Layar Berikutnya";
+"MoveToPreviousDisplay" = "Layar Sebelumnya";
+"MoveToNextThird" = "Sepertiga Berikutnya";
+"MoveToPreviousThird" = "Sepertiga Sebelumnya";
+"MakeLarger" = "Perbesar";
+"MakeSmaller" = "Perkecil";
+"UndoLastMove" = "Urungkan";
+"RedoLastMove" = "Ulangi";
+"ArrangeWindows" = "Atur Semua Jendela";
+
+/* On-screen label after auto-arrange. %ld is the number of windows */
+"ArrangedCount" = "%ld jendela diatur";
+/* On-screen label when auto-arrange found no window */
+"NothingToArrange" = "Tidak ada jendela untuk diatur";
+/* On-screen label after undoing auto-arrange */
+"ArrangeUndone" = "Jendela dikembalikan";
+
+/* Settings window */
+"SettingsWindowTitle" = "Pengaturan Split";
+"TabGeneral" = "Umum";
+"TabShortcuts" = "Pintasan";
+"LaunchAtLogin" = "Buka saat masuk";
+"LaunchAtLoginHint" = "Split mulai sendiri saat Anda masuk ke Mac ini.";
+"ShowMenuBarIcon" = "Tampilkan di bar menu";
+"ShowMenuBarIconHint" = "Jika nonaktif, buka Split dari folder Aplikasi untuk kembali ke pengaturan ini.";
+"MoveFeedback" = "Sorot jendela yang dipindahkan";
+"MoveFeedbackHint" = "Cahaya singkat dan pintasan yang Anda tekan muncul setelah jendela berpindah.";
+"AutoUpdate" = "Periksa pembaruan secara otomatis";
+"AutoUpdateHint" = "Split mencari versi baru sekali sehari dan bertanya sebelum menginstalnya.";
+"PermissionTitle" = "Izin aksesibilitas";
+"PermissionOnHint" = "Aktif. Split dapat memindahkan jendela.";
+"PermissionOffHint" = "Nonaktif. Jendela tidak dapat dipindahkan hingga Anda mengaktifkannya.";
+"PermissionOpen" = "Buka Pengaturan";
+/* %@ is the version number */
+"AboutLine" = "Split %@ · gratis dan sumber terbuka";
+"Website" = "Situs Web";
+"SectionBasic" = "Tengah dan layar penuh";
+"SectionHalves" = "Separuh";
+"SectionCorners" = "Sudut";
+"SectionThirds" = "Sepertiga";
+"SectionThirdsHint" = "Tekan lagi untuk pindah ke sepertiga berikutnya.";
+"SectionDisplays" = "Layar";
+"SectionSize" = "Ukuran";
+"SectionHistory" = "Urungkan dan ulangi";
+"SectionArrange" = "Atur";
+"SectionArrangeHint" = "Menata hingga 9 jendela yang terlihat sekaligus di layar saat ini: 1 penuh, 2 berdampingan, 3 satu besar dan dua bertumpuk, 4 berbentuk kisi. Urungkan mengembalikan semuanya.";
+"RestoreDefaults" = "Kembalikan ke Default";
+"ShortcutsHint" = "Klik pintasan untuk mengubahnya, atau × untuk menghapusnya.";
+"ModifierLegend" = "⌘ Command   ⌥ Option   ⌃ Control   ⇧ Shift";
+
+/* Alerts */
+"UnexpectedError" = "Terjadi kesalahan";
+"AlertMessageTextRestoreDefaults" = "Kembalikan pintasan default?";
+"AlertInformativeTextRestoreDefaults" = "Pintasan yang Anda ubah akan kembali seperti bawaan Split.";
+"AlertMessageTextRunningInBackground" = "Sembunyikan Split dari bar menu?";
+"AlertInformativeTextRunningInBackground" = "Pintasan tetap berfungsi. Untuk membuka pengaturan lagi, buka Split dari folder Aplikasi.";
+/* %@ is the shortcut, for example ⌥⌘F */
+"AlertMessageTextShortcutValidationError" = "%@ sudah digunakan";
+"AlertInformativeTextShortcutAlreadyInUse" = "Tindakan Split lain menggunakan %@. Pilih pintasan lain.";
+"AlertInformativeTextSystemWideShortcutAlreadyUsed" = "macOS sudah menggunakan %@. Pilih pintasan lain, atau ubah di Pengaturan Sistem › Papan Ketik › Pintasan Papan Ketik.";
+"ButtonLabelAffirmative" = "OK";
+"ButtonLabelNegative" = "Batalkan";
+
+/* Shortcut recorder in the settings window */
+"ShortcutRecorderLabelClickToRecord" = "Klik untuk merekam";
+"ShortcutRecorderLabelEnterShortcut" = "Ketik pintasan";
+"ShortcutRecorderLabelStopRecording" = "Hentikan perekaman";
+"ShortcutRecorderLabelUseExisting" = "Pertahankan saat ini";

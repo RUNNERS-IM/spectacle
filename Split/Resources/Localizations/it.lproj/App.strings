@@ -1,0 +1,94 @@
+/* Status menu: opens the About window */
+"AboutSplit" = "Informazioni su Split";
+/* Status menu: asks the update server for a newer version */
+"CheckForUpdates" = "Verifica aggiornamenti…";
+/* Status menu: submenu that turns shortcuts off for a while */
+"Disable" = "Sospendi abbreviazioni";
+/* Status menu: inside "Pause Shortcuts", for one hour */
+"DisableForAnHour" = "Per un’ora";
+/* Status menu: inside "Pause Shortcuts", only while the named app is in front. %@ is the app name */
+"DisableForApplication" = "Mentre %@ è in primo piano";
+/* Status menu: opens the settings window */
+"Settings" = "Impostazioni…";
+/* Status menu: quits the app */
+"QuitSplit" = "Esci da Split";
+
+/* Window actions (status menu, settings, on-screen label) */
+"MoveToCenter" = "Centra";
+"MoveToFullscreen" = "Schermo intero";
+"MoveToLeftHalf" = "Metà sinistra";
+"MoveToRightHalf" = "Metà destra";
+"MoveToTopHalf" = "Metà superiore";
+"MoveToBottomHalf" = "Metà inferiore";
+"MoveToUpperLeft" = "In alto a sinistra";
+"MoveToLowerLeft" = "In basso a sinistra";
+"MoveToUpperRight" = "In alto a destra";
+"MoveToLowerRight" = "In basso a destra";
+"MoveToNextDisplay" = "Monitor successivo";
+"MoveToPreviousDisplay" = "Monitor precedente";
+"MoveToNextThird" = "Terzo successivo";
+"MoveToPreviousThird" = "Terzo precedente";
+"MakeLarger" = "Più grande";
+"MakeSmaller" = "Più piccola";
+"UndoLastMove" = "Annulla";
+"RedoLastMove" = "Ripristina";
+"ArrangeWindows" = "Disponi tutte le finestre";
+
+/* On-screen label after auto-arrange. %ld is the number of windows */
+"ArrangedCount" = "Finestre disposte: %ld";
+/* On-screen label when auto-arrange found no window */
+"NothingToArrange" = "Nessuna finestra da disporre";
+/* On-screen label after undoing auto-arrange */
+"ArrangeUndone" = "Finestre riportate com’erano";
+
+/* Settings window */
+"SettingsWindowTitle" = "Impostazioni di Split";
+"TabGeneral" = "Generali";
+"TabShortcuts" = "Abbreviazioni";
+"LaunchAtLogin" = "Apri al login";
+"LaunchAtLoginHint" = "Split si avvia da solo quando esegui il login su questo Mac.";
+"ShowMenuBarIcon" = "Mostra nella barra dei menu";
+"ShowMenuBarIconHint" = "Se disattivato, apri Split dalla cartella Applicazioni per tornare a queste impostazioni.";
+"MoveFeedback" = "Evidenzia le finestre spostate";
+"MoveFeedbackHint" = "Dopo lo spostamento di una finestra compaiono un breve bagliore e l’abbreviazione premuta.";
+"AutoUpdate" = "Verifica automaticamente gli aggiornamenti";
+"AutoUpdateHint" = "Split cerca una nuova versione una volta al giorno e chiede conferma prima di installarla.";
+"PermissionTitle" = "Permesso di accessibilità";
+"PermissionOnHint" = "Attivo. Split può spostare le finestre.";
+"PermissionOffHint" = "Non attivo. Le finestre non possono essere spostate finché non lo attivi.";
+"PermissionOpen" = "Apri Impostazioni";
+/* %@ is the version number */
+"AboutLine" = "Split %@ · gratuito e open source";
+"Website" = "Sito web";
+"SectionBasic" = "Centro e schermo intero";
+"SectionHalves" = "Metà";
+"SectionCorners" = "Angoli";
+"SectionThirds" = "Terzi";
+"SectionThirdsHint" = "Premi di nuovo per passare al terzo successivo.";
+"SectionDisplays" = "Monitor";
+"SectionSize" = "Dimensioni";
+"SectionHistory" = "Annulla e ripristina";
+"SectionArrange" = "Disponi";
+"SectionArrangeHint" = "Dispone in un colpo fino a 9 finestre visibili sullo schermo attuale: 1 a schermo intero, 2 affiancate, 3 con una grande e due impilate, 4 a griglia. Annulla le riporta tutte com’erano.";
+"RestoreDefaults" = "Ripristina predefiniti";
+"ShortcutsHint" = "Fai clic su un’abbreviazione per modificarla, oppure su × per cancellarla.";
+"ModifierLegend" = "⌘ Command   ⌥ Option   ⌃ Control   ⇧ Shift";
+
+/* Alerts */
+"UnexpectedError" = "Si è verificato un problema";
+"AlertMessageTextRestoreDefaults" = "Ripristinare le abbreviazioni predefinite?";
+"AlertInformativeTextRestoreDefaults" = "Le abbreviazioni che hai modificato torneranno come erano all’inizio in Split.";
+"AlertMessageTextRunningInBackground" = "Nascondere Split dalla barra dei menu?";
+"AlertInformativeTextRunningInBackground" = "Le abbreviazioni continuano a funzionare. Per riaprire le impostazioni, apri Split dalla cartella Applicazioni.";
+/* %@ is the shortcut, for example ⌥⌘F */
+"AlertMessageTextShortcutValidationError" = "%@ è già in uso";
+"AlertInformativeTextShortcutAlreadyInUse" = "Un’altra azione di Split usa %@. Scegli un’abbreviazione diversa.";
+"AlertInformativeTextSystemWideShortcutAlreadyUsed" = "macOS usa già %@. Scegli un’abbreviazione diversa o modificala in Impostazioni di Sistema › Tastiera › Abbreviazioni da tastiera.";
+"ButtonLabelAffirmative" = "OK";
+"ButtonLabelNegative" = "Annulla";
+
+/* Shortcut recorder in the settings window */
+"ShortcutRecorderLabelClickToRecord" = "Fai clic per registrare";
+"ShortcutRecorderLabelEnterShortcut" = "Digita l’abbreviazione";
+"ShortcutRecorderLabelStopRecording" = "Interrompi registrazione";
+"ShortcutRecorderLabelUseExisting" = "Mantieni l’attuale";

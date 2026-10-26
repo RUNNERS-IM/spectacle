@@ -1,8 +1,6 @@
 #import "SplitPreferencesController.h"
 
-#import <QuartzCore/QuartzCore.h>
-
-#import "SplitAccessibilityElement.h"
+#import "SplitAccessibilityGuideController.h"
 #import "SplitDefaultShortcutHelpers.h"
 #import "SplitLoginItemHelper.h"
 #import "SplitRegisteredShortcutValidator.h"
@@ -12,176 +10,563 @@
 #import "SplitShortcutStorage.h"
 #import "SplitShortcutValidation.h"
 #import "SplitUtilities.h"
+#import "SplitWindowFeedback.h"
 #import "SplitWindowPositionManager.h"
+
+NSNotificationName const SplitAutomaticUpdateCheckChangedNotification = @"SplitAutomaticUpdateCheckChangedNotification";
+
+static NSString *const kWebsiteURL = @"https://runners.im/tools/split";
+static NSString *const kGitHubURL = @"https://github.com/RUNNERS-IM/split";
+
+static const CGFloat kContentWidth = 560.0;
+static const CGFloat kOuterPadding = 20.0;
+static const CGFloat kRowHorizontalPadding = 14.0;
+static const CGFloat kRecorderWidth = 168.0;
+
+/// Shortcut groups in the order the status menu shows them. Each entry: section title key,
+/// optional hint key, shortcut names.
+static NSArray<NSArray *> *ShortcutSections(void)
+{
+  return @[
+    @[@"SectionBasic", @"", @[@"MoveToCenter", @"MoveToFullscreen"]],
+    @[@"SectionArrange", @"SectionArrangeHint", @[@"ArrangeWindows"]],
+    @[@"SectionHalves", @"", @[@"MoveToLeftHalf", @"MoveToRightHalf", @"MoveToTopHalf", @"MoveToBottomHalf"]],
+    @[@"SectionCorners", @"", @[@"MoveToUpperLeft", @"MoveToUpperRight", @"MoveToLowerLeft", @"MoveToLowerRight"]],
+    @[@"SectionThirds", @"SectionThirdsHint", @[@"MoveToPreviousThird", @"MoveToNextThird"]],
+    @[@"SectionDisplays", @"", @[@"MoveToPreviousDisplay", @"MoveToNextDisplay"]],
+    @[@"SectionSize", @"", @[@"MakeLarger", @"MakeSmaller"]],
+    @[@"SectionHistory", @"", @[@"UndoLastMove", @"RedoLastMove"]],
+  ];
+}
+
+#pragma mark - Small view helpers
+
+/// Lays out its subviews from the top, so a scroll view starts at the first section.
+@interface SplitFlippedView : NSView
+@end
+
+@implementation SplitFlippedView
+- (BOOL)isFlipped
+{
+  return YES;
+}
+@end
+
+static NSTextField *Label(NSString *text, CGFloat size, NSFontWeight weight, NSColor *color)
+{
+  NSTextField *label = [NSTextField labelWithString:text ?: @""];
+  label.font = [NSFont systemFontOfSize:size weight:weight];
+  label.textColor = color;
+  label.translatesAutoresizingMaskIntoConstraints = NO;
+  return label;
+}
+
+static NSTextField *WrappingLabel(NSString *text, CGFloat size, NSColor *color, CGFloat width)
+{
+  NSTextField *label = [NSTextField wrappingLabelWithString:text ?: @""];
+  label.font = [NSFont systemFontOfSize:size];
+  label.textColor = color;
+  label.selectable = NO;
+  label.preferredMaxLayoutWidth = width;
+  label.translatesAutoresizingMaskIntoConstraints = NO;
+  [label.widthAnchor constraintEqualToConstant:width].active = YES;
+  return label;
+}
+
+static NSStackView *VerticalStack(NSArray<NSView *> *views, CGFloat spacing)
+{
+  NSStackView *stack = [NSStackView stackViewWithViews:views];
+  stack.orientation = NSUserInterfaceLayoutOrientationVertical;
+  stack.alignment = NSLayoutAttributeLeading;
+  stack.spacing = spacing;
+  stack.translatesAutoresizingMaskIntoConstraints = NO;
+  return stack;
+}
+
+static NSStackView *HorizontalStack(NSArray<NSView *> *views, CGFloat spacing)
+{
+  NSStackView *stack = [NSStackView stackViewWithViews:views];
+  stack.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+  stack.alignment = NSLayoutAttributeCenterY;
+  stack.spacing = spacing;
+  stack.translatesAutoresizingMaskIntoConstraints = NO;
+  return stack;
+}
+
+static NSView *FlexibleSpace(void)
+{
+  NSView *space = [NSView new];
+  space.translatesAutoresizingMaskIntoConstraints = NO;
+  [space setContentHuggingPriority:1 forOrientation:NSLayoutConstraintOrientationHorizontal];
+  [space setContentCompressionResistancePriority:1 forOrientation:NSLayoutConstraintOrientationHorizontal];
+  return space;
+}
+
+static NSColor *CardFillColor(void)
+{
+  return [NSColor colorWithName:nil dynamicProvider:^NSColor *(NSAppearance *appearance) {
+    BOOL dark = [appearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]] == NSAppearanceNameDarkAqua;
+    return dark ? [NSColor colorWithWhite:1.0 alpha:0.05] : [NSColor colorWithWhite:1.0 alpha:0.85];
+  }];
+}
+
+/// A rounded group like the ones in System Settings. Rows are separated by thin lines.
+static NSBox *Card(NSArray<NSView *> *rows, CGFloat width)
+{
+  NSMutableArray<NSView *> *views = [NSMutableArray new];
+  [rows enumerateObjectsUsingBlock:^(NSView *row, NSUInteger index, BOOL *stop) {
+    if (index > 0) {
+      NSBox *separator = [NSBox new];
+      separator.boxType = NSBoxSeparator;
+      separator.translatesAutoresizingMaskIntoConstraints = NO;
+      [separator.widthAnchor constraintEqualToConstant:width - 2 * kRowHorizontalPadding].active = YES;
+      [views addObject:separator];
+    }
+    [views addObject:row];
+  }];
+  NSStackView *stack = VerticalStack(views, 0);
+  stack.alignment = NSLayoutAttributeCenterX;
+  NSBox *box = [NSBox new];
+  box.boxType = NSBoxCustom;
+  box.titlePosition = NSNoTitle;
+  box.cornerRadius = 10.0;
+  box.borderWidth = 0.5;
+  box.borderColor = NSColor.separatorColor;
+  box.fillColor = CardFillColor();
+  box.contentViewMargins = NSZeroSize;
+  box.translatesAutoresizingMaskIntoConstraints = NO;
+  [box.contentView addSubview:stack];
+  [NSLayoutConstraint activateConstraints:@[
+    [box.widthAnchor constraintEqualToConstant:width],
+    [stack.topAnchor constraintEqualToAnchor:box.contentView.topAnchor],
+    [stack.bottomAnchor constraintEqualToAnchor:box.contentView.bottomAnchor],
+    [stack.leadingAnchor constraintEqualToAnchor:box.contentView.leadingAnchor],
+    [stack.trailingAnchor constraintEqualToAnchor:box.contentView.trailingAnchor],
+  ]];
+  return box;
+}
+
+/// One row inside a card: text on the left, a control on the right.
+static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalPadding)
+{
+  NSView *row = [NSView new];
+  row.translatesAutoresizingMaskIntoConstraints = NO;
+  NSStackView *line = HorizontalStack(right ? @[left, FlexibleSpace(), right] : @[left, FlexibleSpace()], 12);
+  [row addSubview:line];
+  [NSLayoutConstraint activateConstraints:@[
+    [row.widthAnchor constraintEqualToConstant:width],
+    [line.topAnchor constraintEqualToAnchor:row.topAnchor constant:verticalPadding],
+    [line.bottomAnchor constraintEqualToAnchor:row.bottomAnchor constant:-verticalPadding],
+    [line.leadingAnchor constraintEqualToAnchor:row.leadingAnchor constant:kRowHorizontalPadding],
+    [line.trailingAnchor constraintEqualToAnchor:row.trailingAnchor constant:-kRowHorizontalPadding],
+  ]];
+  return row;
+}
+
+#pragma mark -
+
+@interface SplitPreferencesController () <NSWindowDelegate>
+@end
 
 @implementation SplitPreferencesController
 {
   SplitShortcutManager *_shortcutManager;
   SplitWindowPositionManager *_windowPositionManager;
   id<SplitShortcutStorage> _shortcutStorage;
-  NSDictionary<NSString *, SplitShortcutRecorder *> *_shortcutRecorders;
+  NSMutableDictionary<NSString *, SplitShortcutRecorder *> *_shortcutRecorders;
+  NSTabViewController *_tabViewController;
+  NSSwitch *_loginItemSwitch;
+  NSSwitch *_statusItemSwitch;
+  NSSwitch *_moveFeedbackSwitch;
+  NSSwitch *_automaticUpdateSwitch;
+  NSView *_permissionDot;
+  NSTextField *_permissionHint;
+  NSButton *_permissionButton;
+  NSTimer *_permissionTimer;
 }
 
 - (instancetype)initWithShortcutManager:(SplitShortcutManager *)shortcutManager
                   windowPositionManager:(SplitWindowPositionManager *)windowPositionManager
                         shortcutStorage:(id<SplitShortcutStorage>)shortcutStorage
 {
-  if (self = [super initWithWindowNibName:@"SplitPreferencesWindow"]) {
+  if (self = [super initWithWindow:nil]) {
     _shortcutManager = shortcutManager;
     _windowPositionManager = windowPositionManager;
     _shortcutStorage = shortcutStorage;
+    _shortcutRecorders = [NSMutableDictionary new];
   }
   return self;
 }
 
-- (void)windowDidLoad
+/// NSWindowController only calls -loadWindow when it has a nib name, and this window has none,
+/// so the window is built here the first time it is shown.
+- (void)buildWindowIfNeeded
 {
-  NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-  NSInteger loginItemEnabledState = NSControlStateValueOff;
-  BOOL isStatusItemEnabled = [NSUserDefaults.standardUserDefaults boolForKey:@"StatusItemEnabled"];
-  _shortcutRecorders = @{
-                         @"MoveToCenter": _moveToCenterShortcutRecorder,
-                         @"MoveToFullscreen": _moveToFullscreenShortcutRecorder,
-                         @"MoveToLeftHalf": _moveToLeftShortcutRecorder,
-                         @"MoveToRightHalf": _moveToRightShortcutRecorder,
-                         @"MoveToTopHalf": _moveToTopShortcutRecorder,
-                         @"MoveToBottomHalf": _moveToBottomShortcutRecorder,
-                         @"MoveToUpperLeft": _moveToUpperLeftShortcutRecorder,
-                         @"MoveToLowerLeft": _moveToLowerLeftShortcutRecorder,
-                         @"MoveToUpperRight": _moveToUpperRightShortcutRecorder,
-                         @"MoveToLowerRight": _moveToLowerRightShortcutRecorder,
-                         @"MoveToNextDisplay": _moveToNextDisplayShortcutRecorder,
-                         @"MoveToPreviousDisplay": _moveToPreviousDisplayShortcutRecorder,
-                         @"MoveToNextThird": _moveToNextThirdShortcutRecorder,
-                         @"MoveToPreviousThird": _moveToPreviousThirdShortcutRecorder,
-                         @"MakeLarger": _makeLargerShortcutRecorder,
-                         @"MakeSmaller": _makeSmallerShortcutRecorder,
-                         @"UndoLastMove": _undoLastMoveShortcutRecorder,
-                         @"RedoLastMove": _redoLastMoveShortcutRecorder,
-                         };
-  [self loadRegisteredShortcuts];
-  [notificationCenter addObserver:self
-                         selector:@selector(loadRegisteredShortcuts)
-                             name:@"SplitShortcutChangedNotification"
-                           object:nil];
-  [notificationCenter addObserver:self
-                         selector:@selector(loadRegisteredShortcuts)
-                             name:@"SplitRestoreDefaultShortcutsNotification"
-                           object:nil];
-  if ([SplitLoginItemHelper isLoginItemEnabledForBundle:NSBundle.mainBundle]) {
-    loginItemEnabledState = NSControlStateValueOn;
+  if (_tabViewController) {
+    return;
   }
-  self.loginItemEnabled.state = loginItemEnabledState;
-  [self.statusItemEnabled selectItemWithTag:isStatusItemEnabled ? 0 : 1];
-  self.window.title = [@"Split " stringByAppendingString:SplitUtilities.applicationVersion];
-  self.footerView.wantsLayer = YES;
+  _tabViewController = [NSTabViewController new];
+  _tabViewController.tabStyle = NSTabViewControllerTabStyleToolbar;
+  _tabViewController.transitionOptions = NSViewControllerTransitionCrossfade | NSViewControllerTransitionAllowUserInteraction;
+  [_tabViewController addTabViewItem:[self tabItemWithView:[self makeGeneralView]
+                                                     title:SplitLocalized(@"TabGeneral")
+                                                    symbol:@"gearshape"]];
+  [_tabViewController addTabViewItem:[self tabItemWithView:[self makeShortcutsView]
+                                                     title:SplitLocalized(@"TabShortcuts")
+                                                    symbol:@"keyboard"]];
+  NSWindow *window = [NSWindow windowWithContentViewController:_tabViewController];
+  window.styleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable;
+  window.toolbarStyle = NSWindowToolbarStylePreference;
+  window.delegate = self;
+  window.releasedWhenClosed = NO;
+  self.window = window;
+  [window center];
+
+  NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+  [center addObserver:self selector:@selector(loadRegisteredShortcuts) name:@"SplitShortcutChangedNotification" object:nil];
+  [center addObserver:self selector:@selector(loadRegisteredShortcuts) name:@"SplitRestoreDefaultShortcutsNotification" object:nil];
+  [self loadRegisteredShortcuts];
 }
 
-- (void)shortcutRecorder:(SplitShortcutRecorder *)shortcutRecorder
-   didReceiveNewShortcut:(SplitShortcut *)shortcut
+- (NSTabViewItem *)tabItemWithView:(NSView *)view title:(NSString *)title symbol:(NSString *)symbol
 {
-  [_shortcutManager updateShortcut:[shortcut copyWithShortcutAction:^(SplitShortcut *shortcut) {
-    [self->_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                                      action:shortcut.windowAction];
-  }]];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SplitShortcutChangedNotification" object:self];
+  NSViewController *controller = [NSViewController new];
+  controller.view = view;
+  controller.title = title;
+  controller.preferredContentSize = view.fittingSize;
+  NSTabViewItem *item = [NSTabViewItem tabViewItemWithViewController:controller];
+  item.label = title;
+  item.image = [NSImage imageWithSystemSymbolName:symbol accessibilityDescription:title];
+  return item;
 }
 
-- (void)shortcutRecorder:(SplitShortcutRecorder *)shortcutRecorder
-didClearExistingShortcut:(SplitShortcut *)shortcut
+- (void)showWindow:(id)sender
 {
-  [_shortcutManager clearShortcut:shortcut];
-  [[NSNotificationCenter defaultCenter] postNotificationName:@"SplitShortcutChangedNotification" object:self];
+  [self buildWindowIfNeeded];
+  [super showWindow:sender];
+  [self refreshGeneralState];
+  [self startPermissionPolling];
+  [NSApp activateIgnoringOtherApps:YES];
+}
+
+#pragma mark - General tab
+
+- (NSSwitch *)switchWithAction:(SEL)action
+{
+  NSSwitch *control = [NSSwitch new];
+  control.target = self;
+  control.action = action;
+  control.controlSize = NSControlSizeSmall;
+  control.translatesAutoresizingMaskIntoConstraints = NO;
+  return control;
+}
+
+- (NSView *)textBlockWithTitle:(NSString *)title hint:(NSString *)hint width:(CGFloat)width
+{
+  NSMutableArray *views = [NSMutableArray arrayWithObject:Label(title, 13, NSFontWeightRegular, NSColor.labelColor)];
+  if (hint.length > 0) {
+    [views addObject:WrappingLabel(hint, 11, NSColor.secondaryLabelColor, width)];
+  }
+  return VerticalStack(views, 2);
+}
+
+- (NSView *)makeGeneralView
+{
+  CGFloat cardWidth = kContentWidth - 2 * kOuterPadding;
+  CGFloat textWidth = cardWidth - 2 * kRowHorizontalPadding - 70;
+
+  _loginItemSwitch = [self switchWithAction:@selector(toggleLoginItem:)];
+  _statusItemSwitch = [self switchWithAction:@selector(toggleStatusItem:)];
+  _moveFeedbackSwitch = [self switchWithAction:@selector(toggleMoveFeedback:)];
+  NSMutableArray<NSView *> *rows = [NSMutableArray arrayWithArray:@[
+    Row([self textBlockWithTitle:SplitLocalized(@"LaunchAtLogin") hint:SplitLocalized(@"LaunchAtLoginHint") width:textWidth], _loginItemSwitch, cardWidth, 10),
+    Row([self textBlockWithTitle:SplitLocalized(@"ShowMenuBarIcon") hint:SplitLocalized(@"ShowMenuBarIconHint") width:textWidth], _statusItemSwitch, cardWidth, 10),
+    Row([self textBlockWithTitle:SplitLocalized(@"MoveFeedback") hint:SplitLocalized(@"MoveFeedbackHint") width:textWidth], _moveFeedbackSwitch, cardWidth, 10),
+  ]];
+#if !SPLIT_APP_STORE
+  _automaticUpdateSwitch = [self switchWithAction:@selector(toggleAutomaticUpdates:)];
+  [rows addObject:Row([self textBlockWithTitle:SplitLocalized(@"AutoUpdate") hint:SplitLocalized(@"AutoUpdateHint") width:textWidth], _automaticUpdateSwitch, cardWidth, 10)];
+#endif
+  NSBox *optionsCard = Card(rows, cardWidth);
+
+  // Accessibility permission, refreshed every second while the window is open.
+  _permissionDot = [NSView new];
+  _permissionDot.wantsLayer = YES;
+  _permissionDot.layer.cornerRadius = 5.0;
+  _permissionDot.translatesAutoresizingMaskIntoConstraints = NO;
+  [NSLayoutConstraint activateConstraints:@[
+    [_permissionDot.widthAnchor constraintEqualToConstant:10],
+    [_permissionDot.heightAnchor constraintEqualToConstant:10],
+  ]];
+  _permissionHint = Label(@"", 11, NSFontWeightRegular, NSColor.secondaryLabelColor);
+  NSStackView *permissionText = VerticalStack(@[
+    Label(SplitLocalized(@"PermissionTitle"), 13, NSFontWeightRegular, NSColor.labelColor),
+    HorizontalStack(@[_permissionDot, _permissionHint], 6),
+  ], 3);
+  _permissionButton = [NSButton buttonWithTitle:SplitLocalized(@"PermissionOpen") target:self action:@selector(openAccessibilitySettings:)];
+  _permissionButton.controlSize = NSControlSizeSmall;
+  NSBox *permissionCard = Card(@[Row(permissionText, _permissionButton, cardWidth, 10)], cardWidth);
+
+  // About line with links.
+  NSImageView *icon = [NSImageView imageViewWithImage:NSApp.applicationIconImage ?: [NSImage new]];
+  icon.translatesAutoresizingMaskIntoConstraints = NO;
+  [NSLayoutConstraint activateConstraints:@[
+    [icon.widthAnchor constraintEqualToConstant:40],
+    [icon.heightAnchor constraintEqualToConstant:40],
+  ]];
+  NSStackView *aboutText = VerticalStack(@[
+    Label(@"Split", 13, NSFontWeightSemibold, NSColor.labelColor),
+    Label([NSString stringWithFormat:SplitLocalized(@"AboutLine"), SplitUtilities.applicationVersion], 11, NSFontWeightRegular, NSColor.secondaryLabelColor),
+  ], 1);
+  NSButton *website = [NSButton buttonWithTitle:SplitLocalized(@"Website") target:self action:@selector(openWebsite:)];
+  NSButton *github = [NSButton buttonWithTitle:@"GitHub" target:self action:@selector(openGitHub:)];
+  website.controlSize = NSControlSizeSmall;
+  github.controlSize = NSControlSizeSmall;
+  NSStackView *about = HorizontalStack(@[icon, aboutText, FlexibleSpace(), website, github], 10);
+  [about.widthAnchor constraintEqualToConstant:cardWidth].active = YES;
+
+  NSStackView *content = VerticalStack(@[optionsCard, permissionCard, about], 16);
+  NSView *container = [NSView new];
+  [container addSubview:content];
+  [NSLayoutConstraint activateConstraints:@[
+    [container.widthAnchor constraintEqualToConstant:kContentWidth],
+    [content.topAnchor constraintEqualToAnchor:container.topAnchor constant:kOuterPadding],
+    [content.bottomAnchor constraintEqualToAnchor:container.bottomAnchor constant:-kOuterPadding],
+    [content.leadingAnchor constraintEqualToAnchor:container.leadingAnchor constant:kOuterPadding],
+  ]];
+  return container;
+}
+
+- (void)refreshGeneralState
+{
+  NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
+  _loginItemSwitch.state = [SplitLoginItemHelper isLoginItemEnabledForBundle:NSBundle.mainBundle] ? NSControlStateValueOn : NSControlStateValueOff;
+  _statusItemSwitch.state = [defaults boolForKey:@"StatusItemEnabled"] ? NSControlStateValueOn : NSControlStateValueOff;
+  _moveFeedbackSwitch.state = SplitWindowFeedback.moveFeedbackEnabled ? NSControlStateValueOn : NSControlStateValueOff;
+  _automaticUpdateSwitch.state = [defaults boolForKey:@"AutomaticUpdateCheckEnabled"] ? NSControlStateValueOn : NSControlStateValueOff;
+  [self refreshPermission];
+}
+
+- (void)refreshPermission
+{
+  BOOL granted = [SplitAccessibilityGuideController isAccessibilityPermissionGranted];
+  _permissionDot.layer.backgroundColor = (granted ? NSColor.systemGreenColor : NSColor.systemRedColor).CGColor;
+  _permissionHint.stringValue = SplitLocalized(granted ? @"PermissionOnHint" : @"PermissionOffHint");
+  _permissionButton.hidden = granted;
+}
+
+- (void)startPermissionPolling
+{
+  [_permissionTimer invalidate];
+  _permissionTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(refreshPermission) userInfo:nil repeats:YES];
+}
+
+- (void)windowWillClose:(NSNotification *)notification
+{
+  [_permissionTimer invalidate];
+  _permissionTimer = nil;
+}
+
+- (void)toggleLoginItem:(NSSwitch *)sender
+{
+  if (sender.state == NSControlStateValueOn) {
+    [SplitLoginItemHelper enableLoginItemForBundle:NSBundle.mainBundle];
+  } else {
+    [SplitLoginItemHelper disableLoginItemForBundle:NSBundle.mainBundle];
+  }
+}
+
+- (void)toggleStatusItem:(NSSwitch *)sender
+{
+  NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
+  BOOL enable = sender.state == NSControlStateValueOn;
+  if (enable == [defaults boolForKey:@"StatusItemEnabled"]) {
+    return;
+  }
+  if (!enable && ![defaults boolForKey:@"BackgroundAlertSuppressed"]) {
+    __block BOOL confirmed = YES;
+    [SplitUtilities displayRunningInBackgroundAlertWithCallback:^(BOOL isConfirmed, BOOL isSuppressed) {
+      confirmed = isConfirmed;
+      [defaults setBool:isSuppressed forKey:@"BackgroundAlertSuppressed"];
+    }];
+    if (!confirmed) {
+      sender.state = NSControlStateValueOn;
+      return;
+    }
+  }
+  [defaults setBool:enable forKey:@"StatusItemEnabled"];
+  [NSNotificationCenter.defaultCenter postNotificationName:enable ? @"SplitStatusItemEnabledNotification" : @"SplitStatusItemDisabledNotification"
+                                                    object:self];
+}
+
+- (void)toggleMoveFeedback:(NSSwitch *)sender
+{
+  [NSUserDefaults.standardUserDefaults setBool:sender.state == NSControlStateValueOn forKey:@"MoveFeedbackEnabled"];
+}
+
+- (void)toggleAutomaticUpdates:(NSSwitch *)sender
+{
+  [NSUserDefaults.standardUserDefaults setBool:sender.state == NSControlStateValueOn forKey:@"AutomaticUpdateCheckEnabled"];
+  [NSNotificationCenter.defaultCenter postNotificationName:SplitAutomaticUpdateCheckChangedNotification object:self];
+}
+
+- (void)openAccessibilitySettings:(id)sender
+{
+  [SplitAccessibilityGuideController openAccessibilitySettings];
+}
+
+- (void)openWebsite:(id)sender
+{
+  [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:kWebsiteURL]];
+}
+
+- (void)openGitHub:(id)sender
+{
+  [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:kGitHubURL]];
+}
+
+#pragma mark - Shortcuts tab
+
+- (NSView *)shortcutRowForName:(NSString *)shortcutName width:(CGFloat)width
+{
+  NSImageView *picture = [NSImageView imageViewWithImage:SplitMenuImageForShortcutName(shortcutName) ?: [NSImage new]];
+  picture.contentTintColor = NSColor.secondaryLabelColor;
+  picture.imageScaling = NSImageScaleProportionallyUpOrDown;
+  picture.translatesAutoresizingMaskIntoConstraints = NO;
+  [NSLayoutConstraint activateConstraints:@[
+    [picture.widthAnchor constraintEqualToConstant:22],
+    [picture.heightAnchor constraintEqualToConstant:16],
+  ]];
+  SplitShortcutRecorder *recorder = [[SplitShortcutRecorder alloc] initWithFrame:NSMakeRect(0, 0, kRecorderWidth, 24)];
+  recorder.translatesAutoresizingMaskIntoConstraints = NO;
+  [NSLayoutConstraint activateConstraints:@[
+    [recorder.widthAnchor constraintEqualToConstant:kRecorderWidth],
+    [recorder.heightAnchor constraintEqualToConstant:24],
+  ]];
+  _shortcutRecorders[shortcutName] = recorder;
+  NSStackView *left = HorizontalStack(@[picture, Label(SplitLocalized(shortcutName), 13, NSFontWeightRegular, NSColor.labelColor)], 10);
+  return Row(left, recorder, width, 6);
+}
+
+- (NSView *)makeShortcutsView
+{
+  CGFloat cardWidth = kContentWidth - 2 * kOuterPadding;
+  NSMutableArray<NSView *> *sections = [NSMutableArray new];
+  for (NSArray *section in ShortcutSections()) {
+    NSMutableArray<NSView *> *header = [NSMutableArray arrayWithObject:Label(SplitLocalized(section[0]), 11, NSFontWeightSemibold, NSColor.secondaryLabelColor)];
+    if ([section[1] length] > 0) {
+      [header addObject:WrappingLabel(SplitLocalized(section[1]), 11, NSColor.tertiaryLabelColor, cardWidth - 8)];
+    }
+    NSStackView *headerStack = VerticalStack(header, 2);
+    NSMutableArray<NSView *> *rows = [NSMutableArray new];
+    for (NSString *shortcutName in section[2]) {
+      [rows addObject:[self shortcutRowForName:shortcutName width:cardWidth]];
+    }
+    NSStackView *sectionStack = VerticalStack(@[headerStack, Card(rows, cardWidth)], 6);
+    [sectionStack setCustomSpacing:6 afterView:headerStack];
+    [sections addObject:sectionStack];
+  }
+  NSStackView *list = VerticalStack(sections, 18);
+
+  SplitFlippedView *document = [SplitFlippedView new];
+  document.translatesAutoresizingMaskIntoConstraints = NO;
+  [document addSubview:list];
+  [NSLayoutConstraint activateConstraints:@[
+    [list.topAnchor constraintEqualToAnchor:document.topAnchor constant:kOuterPadding],
+    [list.bottomAnchor constraintEqualToAnchor:document.bottomAnchor constant:-kOuterPadding],
+    [list.leadingAnchor constraintEqualToAnchor:document.leadingAnchor constant:kOuterPadding],
+    [document.widthAnchor constraintEqualToConstant:kContentWidth],
+  ]];
+
+  NSScrollView *scrollView = [NSScrollView new];
+  scrollView.hasVerticalScroller = YES;
+  scrollView.autohidesScrollers = YES;
+  scrollView.drawsBackground = NO;
+  scrollView.borderType = NSNoBorder;
+  scrollView.documentView = document;
+  scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+  [document.topAnchor constraintEqualToAnchor:scrollView.contentView.topAnchor].active = YES;
+  [document.leadingAnchor constraintEqualToAnchor:scrollView.contentView.leadingAnchor].active = YES;
+
+  NSBox *divider = [NSBox new];
+  divider.boxType = NSBoxSeparator;
+  divider.translatesAutoresizingMaskIntoConstraints = NO;
+
+  NSStackView *hints = VerticalStack(@[
+    Label(SplitLocalized(@"ShortcutsHint"), 11, NSFontWeightRegular, NSColor.secondaryLabelColor),
+    Label(SplitLocalized(@"ModifierLegend"), 11, NSFontWeightRegular, NSColor.tertiaryLabelColor),
+  ], 2);
+  NSButton *restore = [NSButton buttonWithTitle:SplitLocalized(@"RestoreDefaults") target:self action:@selector(restoreDefaults:)];
+  NSStackView *footer = HorizontalStack(@[hints, FlexibleSpace(), restore], 12);
+
+  NSView *container = [NSView new];
+  [container addSubview:scrollView];
+  [container addSubview:divider];
+  [container addSubview:footer];
+  [NSLayoutConstraint activateConstraints:@[
+    [container.widthAnchor constraintEqualToConstant:kContentWidth],
+    [scrollView.topAnchor constraintEqualToAnchor:container.topAnchor],
+    [scrollView.leadingAnchor constraintEqualToAnchor:container.leadingAnchor],
+    [scrollView.trailingAnchor constraintEqualToAnchor:container.trailingAnchor],
+    [scrollView.heightAnchor constraintEqualToConstant:480],
+    [divider.topAnchor constraintEqualToAnchor:scrollView.bottomAnchor],
+    [divider.leadingAnchor constraintEqualToAnchor:container.leadingAnchor],
+    [divider.trailingAnchor constraintEqualToAnchor:container.trailingAnchor],
+    [footer.topAnchor constraintEqualToAnchor:divider.bottomAnchor constant:12],
+    [footer.leadingAnchor constraintEqualToAnchor:container.leadingAnchor constant:kOuterPadding],
+    [footer.trailingAnchor constraintEqualToAnchor:container.trailingAnchor constant:-kOuterPadding],
+    [footer.bottomAnchor constraintEqualToAnchor:container.bottomAnchor constant:-14],
+  ]];
+  return container;
 }
 
 - (void)loadRegisteredShortcuts
 {
-  for (NSString *shortcutName in _shortcutRecorders.allKeys) {
-    SplitShortcutRecorder *shortcutRecorder = _shortcutRecorders[shortcutName];
-    SplitShortcut *shortcut = [_shortcutManager shortcutForShortcutName:shortcutName];
-    shortcutRecorder.shortcutName = shortcutName;
-    shortcutRecorder.shortcut = shortcut;
-    shortcutRecorder.delegate = self;
-    shortcutRecorder.shortcutValidation =
-    [[SplitShortcutValidation alloc] initWithShortcutManager:_shortcutManager
-                                                      validators:@[
-                                                                   [SplitRegisteredShortcutValidator new],
-                                                                   ]];
+  for (NSString *shortcutName in _shortcutRecorders) {
+    SplitShortcutRecorder *recorder = _shortcutRecorders[shortcutName];
+    recorder.shortcutName = shortcutName;
+    recorder.shortcut = [_shortcutManager shortcutForShortcutName:shortcutName];
+    recorder.delegate = self;
+    recorder.shortcutValidation = [[SplitShortcutValidation alloc] initWithShortcutManager:_shortcutManager
+                                                                                validators:@[[SplitRegisteredShortcutValidator new]]];
   }
 }
 
-- (IBAction)swapFooterViews:(id)sender
+- (SplitShortcutAction)shortcutAction
 {
-  CATransition *transition = [CATransition animation];
-  NSView *currentFooterView = self.footerView.subviews[0];
-  NSView *nextFooterView = nil;
-  transition.type = kCATransitionPush;
-  if (currentFooterView == self.shortcutModifierLegendFooterView) {
-    nextFooterView = self.optionsFooterView;
-    transition.subtype = kCATransitionFromRight;
-  } else {
-    nextFooterView = self.shortcutModifierLegendFooterView;
-    transition.subtype = kCATransitionFromLeft;
-  }
-  self.footerView.animations = @{@"subviews": transition};
-  [self.footerView.animator replaceSubview:currentFooterView
-                                      with:nextFooterView];
-}
-
-- (IBAction)restoreDefaults:(id)sender
-{
-  [SplitUtilities displayRestoreDefaultsAlertWithConfirmationCallback:^() {
-    NSArray<SplitShortcut *> *shortcuts = SplitDefaultShortcutsWithAction(^(SplitShortcut *shortcut) {
-      [self->_windowPositionManager moveFrontmostWindowElement:[SplitAccessibilityElement frontmostWindowElement]
-                                                        action:shortcut.windowAction];
-    });
-    [self->_shortcutManager updateShortcuts:shortcuts];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SplitRestoreDefaultShortcutsNotification"
-                                                        object:self];
-  }];
-}
-
-- (IBAction)toggleLoginItem:(id)sender
-{
-  NSBundle *applicationBundle = NSBundle.mainBundle;
-  if (self.loginItemEnabled.state == NSControlStateValueOn) {
-    [SplitLoginItemHelper enableLoginItemForBundle:applicationBundle];
-  } else {
-    [SplitLoginItemHelper disableLoginItemForBundle:applicationBundle];
-  }
-}
-
-- (IBAction)toggleStatusItem:(id)sender
-{
-  NSString *notificationName = @"SplitStatusItemEnabledNotification";
-  BOOL isStatusItemEnabled = YES;
-  __block BOOL statusItemStateChanged = YES;
-  NSUserDefaults *userDefaults = NSUserDefaults.standardUserDefaults;
-  if ([userDefaults boolForKey:@"StatusItemEnabled"] == ([[sender selectedItem] tag] == 0)) {
-    return;
-  }
-  if ([sender selectedItem].tag != 0) {
-    notificationName = @"SplitStatusItemDisabledNotification";
-    isStatusItemEnabled = NO;
-    if (![userDefaults boolForKey:@"BackgroundAlertSuppressed"]) {
-      [SplitUtilities displayRunningInBackgroundAlertWithCallback:^(BOOL isConfirmed, BOOL isSuppressed) {
-        if (!isConfirmed) {
-          statusItemStateChanged = NO;
-          [sender selectItemWithTag:0];
-        }
-        [userDefaults setBool:isSuppressed forKey:@"BackgroundAlertSuppressed"];
-      }];
+  __weak typeof(self) weakSelf = self;
+  return ^(SplitShortcut *shortcut) {
+    SplitPreferencesController *strongSelf = weakSelf;
+    if (strongSelf.windowActionHandler) {
+      strongSelf.windowActionHandler(shortcut.windowAction);
     }
-  }
-  if (statusItemStateChanged) {
-    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
-    [userDefaults setBool:isStatusItemEnabled forKey:@"StatusItemEnabled"];
-  }
+  };
+}
+
+- (void)shortcutRecorder:(SplitShortcutRecorder *)shortcutRecorder didReceiveNewShortcut:(SplitShortcut *)shortcut
+{
+  [_shortcutManager updateShortcut:[shortcut copyWithShortcutAction:[self shortcutAction]]];
+  [NSNotificationCenter.defaultCenter postNotificationName:@"SplitShortcutChangedNotification" object:self];
+}
+
+- (void)shortcutRecorder:(SplitShortcutRecorder *)shortcutRecorder didClearExistingShortcut:(SplitShortcut *)shortcut
+{
+  [_shortcutManager clearShortcut:shortcut];
+  [NSNotificationCenter.defaultCenter postNotificationName:@"SplitShortcutChangedNotification" object:self];
+}
+
+- (void)restoreDefaults:(id)sender
+{
+  [SplitUtilities displayRestoreDefaultsAlertWithConfirmationCallback:^{
+    [self->_shortcutManager updateShortcuts:SplitDefaultShortcutsWithAction([self shortcutAction])];
+    [NSNotificationCenter.defaultCenter postNotificationName:@"SplitRestoreDefaultShortcutsNotification" object:self];
+  }];
 }
 
 - (void)dealloc
 {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
+  [_permissionTimer invalidate];
+  [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 @end

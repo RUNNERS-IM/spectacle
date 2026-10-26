@@ -1,5 +1,7 @@
 #import "SplitShortcutValidation.h"
 
+#import "SplitUtilities.h"
+
 #import <Carbon/Carbon.h>
 
 #import "SplitShortcut.h"
@@ -40,8 +42,8 @@
     NSUInteger modifiers = modifiersFromDictionary(shortcutDictionary);
     if (([shortcut shortcutKeyCode] == keyCode) && [shortcut containsModifiers:modifiers]) {
       if (error) {
-        NSString *description = NSLocalizedString(@"AlertMessageTextShortcutValidationError", @"The message text of the alert displayed when a shortcut is invalid");
-        NSString *recoverySuggestion = NSLocalizedString(@"AlertInformativeTextSystemWideShortcutAlreadyUsed", @"The informative text of the alert displayed when a system-wide shortcut is already in use");
+        NSString *description = SplitLocalized(@"AlertMessageTextShortcutValidationError");
+        NSString *recoverySuggestion = SplitLocalized(@"AlertInformativeTextSystemWideShortcutAlreadyUsed");
         *error = [SplitShortcutValidation errorWithShortcut:shortcut
                                                     description:description
                                              recoverySuggestion:recoverySuggestion];
@@ -53,8 +55,8 @@
     if ([validator conformsToProtocol:@protocol(SplitShortcutValidator)]
         && ![validator isShortcutValid:shortcut shortcutManager:_shortcutManager]) {
       if (error) {
-        NSString *description = NSLocalizedString(@"AlertMessageTextShortcutValidationError", @"The message text of the alert displayed when a shortcut is invalid");
-        NSString *recoverySuggestion = NSLocalizedString(@"AlertInformativeTextShortcutAlreadyInUse", @"The informative text of the alert displayed when a shortcut is already in use");
+        NSString *description = SplitLocalized(@"AlertMessageTextShortcutValidationError");
+        NSString *recoverySuggestion = SplitLocalized(@"AlertInformativeTextShortcutAlreadyInUse");
         *error = [SplitShortcutValidation errorWithShortcut:shortcut
                                                     description:description
                                              recoverySuggestion:recoverySuggestion];
@@ -75,7 +77,7 @@
                          userInfo:@{
                                     NSLocalizedDescriptionKey: [NSString stringWithFormat:description, shortcutString],
                                     NSLocalizedRecoverySuggestionErrorKey: [NSString stringWithFormat:recoverySuggestion, shortcutString],
-                                    NSLocalizedRecoveryOptionsErrorKey: @[NSLocalizedString(@"ButtonLabelAffirmative", @"The button label used in the affirmative")]
+                                    NSLocalizedRecoveryOptionsErrorKey: @[SplitLocalized(@"ButtonLabelAffirmative")]
                                     }];
 }
 
