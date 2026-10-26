@@ -10,6 +10,26 @@
 #import "SpectacleWindowPositionCalculator.h"
 #import "SpectacleWindowPositionManager.h"
 
+// OCMockito crashes on arm64 when it retains CGRect arguments of a stubbed call,
+// so the calculator is replaced with a hand-written fake that counts its calls.
+@interface SpectacleFakeWindowPositionCalculator : SpectacleWindowPositionCalculator
+@property (nonatomic, strong) SpectacleWindowPositionCalculationResult *stubbedResult;
+@property (nonatomic, assign) NSUInteger calculateCallCount;
+@end
+
+@implementation SpectacleFakeWindowPositionCalculator
+
+- (SpectacleWindowPositionCalculationResult *)calculateWindowRect:(CGRect)windowRect
+                                       visibleFrameOfSourceScreen:(CGRect)visibleFrameOfSourceScreen
+                                  visibleFrameOfDestinationScreen:(CGRect)visibleFrameOfDestinationScreen
+                                                           action:(SpectacleWindowAction *)action
+{
+  self.calculateCallCount += 1;
+  return self.stubbedResult;
+}
+
+@end
+
 SpecBegin(SpectacleWindowPositionManager)
 describe(@"SpectacleWindowPositionManager", ^{
   CGRect frameOfScreen = CGRectMake(0.0f, 0.0f, 1440.0f, 900.0f);
@@ -18,7 +38,7 @@ describe(@"SpectacleWindowPositionManager", ^{
 
   __block NSScreen *mockMainScreen;
   __block SpectacleScreenDetector *mockScreenDetector;
-  __block SpectacleWindowPositionCalculator *mockWindowPositionCalculator;
+  __block SpectacleFakeWindowPositionCalculator *mockWindowPositionCalculator;
   __block NSWorkspace *mockSharedWorkspace;
   __block NSRunningApplication *mockFrontmostApplication;
   __block SpectacleWindowPositionManager *windowPositionManager;
@@ -27,7 +47,7 @@ describe(@"SpectacleWindowPositionManager", ^{
   beforeEach(^{
     mockMainScreen = mock([NSScreen class]);
     mockScreenDetector = mock([SpectacleScreenDetector class]);
-    mockWindowPositionCalculator = mock([SpectacleWindowPositionCalculator class]);
+    mockWindowPositionCalculator = [[SpectacleFakeWindowPositionCalculator alloc] initWithErrorHandler:^(NSString *message) {}];
     mockSharedWorkspace = mock([NSWorkspace class]);
     mockFrontmostApplication = mock([NSRunningApplication class]);
     mockWindowPositionCalculationResult = mock([SpectacleWindowPositionCalculationResult class]);
@@ -35,25 +55,7 @@ describe(@"SpectacleWindowPositionManager", ^{
     [given([mockMainScreen frame]) willReturnStruct:&frameOfScreen objCType:@encode(NSRect)];
     [given([mockMainScreen visibleFrame]) willReturnStruct:&visibleFrameOfScreen objCType:@encode(NSRect)];
 
-    MKTOngoingStubbing *ongoingWindowPositionCalculatorStubbing =
-      given([mockWindowPositionCalculator calculateWindowRect:CGRectNull
-                                   visibleFrameOfSourceScreen:CGRectNull
-                              visibleFrameOfDestinationScreen:CGRectNull
-                                                       action:kSpectacleWindowActionNone]);
-
-    ongoingWindowPositionCalculatorStubbing = [ongoingWindowPositionCalculatorStubbing withMatcher:anything()
-                                                                                       forArgument:0];
-
-    ongoingWindowPositionCalculatorStubbing = [ongoingWindowPositionCalculatorStubbing withMatcher:anything()
-                                                                                       forArgument:1];
-
-    ongoingWindowPositionCalculatorStubbing = [ongoingWindowPositionCalculatorStubbing withMatcher:anything()
-                                                                                       forArgument:2];
-
-    ongoingWindowPositionCalculatorStubbing = [ongoingWindowPositionCalculatorStubbing withMatcher:anything()
-                                                                                       forArgument:3];
-
-    [ongoingWindowPositionCalculatorStubbing willReturn:mockWindowPositionCalculationResult];
+    mockWindowPositionCalculator.stubbedResult = mockWindowPositionCalculationResult;
 
     MKTOngoingStubbing *ongoingScreenDetectorStubbing =
       given([mockScreenDetector screenWithAction:kSpectacleWindowActionNone
@@ -96,10 +98,7 @@ describe(@"SpectacleWindowPositionManager", ^{
     [verify(mockAccessibilityElemenet) isSheet];
     [verifyCount(mockAccessibilityElemenet, never()) isSystemDialog];
 
-    [verifyCount(mockWindowPositionCalculator, never()) calculateWindowRect:CGRectNull
-                                                 visibleFrameOfSourceScreen:CGRectNull
-                                            visibleFrameOfDestinationScreen:CGRectNull
-                                                                     action:kSpectacleWindowActionNone];
+    expect(mockWindowPositionCalculator.calculateCallCount).to.equal(0);
   });
 
   it(@"should do nothing if the frontmost window is a system dialog", ^{
@@ -118,10 +117,7 @@ describe(@"SpectacleWindowPositionManager", ^{
     [verify(mockAccessibilityElemenet) isSheet];
     [verify(mockAccessibilityElemenet) isSystemDialog];
 
-    [verifyCount(mockWindowPositionCalculator, never()) calculateWindowRect:CGRectNull
-                                                 visibleFrameOfSourceScreen:CGRectNull
-                                            visibleFrameOfDestinationScreen:CGRectNull
-                                                                     action:kSpectacleWindowActionNone];
+    expect(mockWindowPositionCalculator.calculateCallCount).to.equal(0);
   });
 
   it(@"should do nothing if the frontmost window rect is unavailable", ^{
@@ -140,10 +136,7 @@ describe(@"SpectacleWindowPositionManager", ^{
     [verify(mockAccessibilityElemenet) isSheet];
     [verify(mockAccessibilityElemenet) isSystemDialog];
 
-    [verifyCount(mockWindowPositionCalculator, never()) calculateWindowRect:CGRectNull
-                                                 visibleFrameOfSourceScreen:CGRectNull
-                                            visibleFrameOfDestinationScreen:CGRectNull
-                                                                     action:kSpectacleWindowActionNone];
+    expect(mockWindowPositionCalculator.calculateCallCount).to.equal(0);
   });
 
   it(@"should do nothing if screen detection fails", ^{
@@ -168,10 +161,7 @@ describe(@"SpectacleWindowPositionManager", ^{
     [verify(mockAccessibilityElemenet) isSheet];
     [verify(mockAccessibilityElemenet) isSystemDialog];
 
-    [verifyCount(mockWindowPositionCalculator, never()) calculateWindowRect:CGRectNull
-                                                 visibleFrameOfSourceScreen:CGRectNull
-                                            visibleFrameOfDestinationScreen:CGRectNull
-                                                                     action:kSpectacleWindowActionNone];
+    expect(mockWindowPositionCalculator.calculateCallCount).to.equal(0);
   });
 
   it(@"should do nothing if the window position calculation returns the same results", ^{

@@ -39,14 +39,16 @@ NSString *SpectacleTranslateKeyCode(NSInteger keyCode)
   if (translatedLayoutIndependentKeyCode) {
     return translatedLayoutIndependentKeyCode;
   }
-  TISInputSourceRef inputSource = TISCopyCurrentKeyboardLayoutInputSource();
+  // Shortcuts are shown with the ASCII-capable layout so that ⌘C reads "C" even while a
+  // non-Latin input source such as Korean or Japanese is active.
+  TISInputSourceRef inputSource = TISCopyCurrentASCIICapableKeyboardLayoutInputSource();
   if (!inputSource) {
     return @"?";
   }
   CFDataRef layoutData = (CFDataRef)TISGetInputSourceProperty(inputSource, kTISPropertyUnicodeKeyLayoutData);
   CFRelease(inputSource);
   if (!layoutData) {
-    inputSource = TISCopyCurrentASCIICapableKeyboardLayoutInputSource();
+    inputSource = TISCopyCurrentKeyboardLayoutInputSource();
     if (!inputSource) {
       return @"?";
     }
