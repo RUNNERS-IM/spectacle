@@ -49,7 +49,7 @@ rm -rf "$OUT"; mkdir -p "$OUT"
 
 step "테스트"
 xcodebuild test -project "$REPO_ROOT/Split.xcodeproj" -scheme Split \
-  -destination 'platform=macOS' -derivedDataPath "$DERIVED" -quiet
+  -destination 'platform=macOS' -derivedDataPath "$DERIVED" CODE_SIGN_IDENTITY=- -quiet
 
 step "아카이브 (유니버설 Release)"
 xcodebuild archive -project "$REPO_ROOT/Split.xcodeproj" -scheme Split -configuration Release \
