@@ -5,6 +5,7 @@
 #import "SpectacleAccessibilityElement.h"
 #import "SpectacleAccessibilityGuideController.h"
 #import "SpectacleDefaultShortcutHelpers.h"
+#import "SpectacleLegacyPreferencesMigrator.h"
 #import "SpectacleMigratingShortcutStorage.h"
 #import "SpectaclePreferencesController.h"
 #import "SpectacleScreenDetector.h"
@@ -68,6 +69,7 @@
                                       name:NSWorkspaceDidDeactivateApplicationNotification
                                     object:nil];
   [SpectacleUtilities registerDefaultsForBundle:[NSBundle mainBundle]];
+  [SpectacleLegacyPreferencesMigrator migrateIfNeeded];
   _shortcutMenuItems = @{
                          @"MoveToCenter": _moveToCenterShortcutMenuItem,
                          @"MoveToFullscreen": _moveToFullscreenShortcutMenuItem,
@@ -117,9 +119,36 @@
   }
   self.updaterController.updater.automaticallyChecksForUpdates = automaticallyChecksForUpdates;
   [self updateShortcutMenuItems];
+  // Ask after launch has finished; an alert run from inside applicationDidFinishLaunching
+  // returned its first button straight away without the user touching it (macOS 26.1).
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    [self offerToQuitLegacySpectacle];
+  });
   if (![SpectacleAccessibilityGuideController isAccessibilityPermissionGranted]) {
     _accessibilityGuideController = [SpectacleAccessibilityGuideController new];
     [_accessibilityGuideController showGuide];
+  }
+}
+
+- (void)offerToQuitLegacySpectacle
+{
+  NSArray<NSRunningApplication *> *legacyApplications = [SpectacleLegacyPreferencesMigrator runningLegacyApplications];
+  if (legacyApplications.count == 0) {
+    return;
+  }
+  NSBundle *bundle = NSBundle.mainBundle;
+  NSAlert *alert = [NSAlert new];
+  alert.alertStyle = NSAlertStyleWarning;
+  alert.messageText = [bundle localizedStringForKey:@"LegacyRunningTitle" value:nil table:@"Migration"];
+  alert.informativeText = [bundle localizedStringForKey:@"LegacyRunningBody" value:nil table:@"Migration"];
+  // The safe choice is the default so a stray Return never quits the other app.
+  [alert addButtonWithTitle:[bundle localizedStringForKey:@"LegacyRunningKeep" value:nil table:@"Migration"]];
+  [alert addButtonWithTitle:[bundle localizedStringForKey:@"LegacyRunningQuit" value:nil table:@"Migration"]];
+  [NSApp activateIgnoringOtherApps:YES];
+  if ([alert runModal] == NSAlertSecondButtonReturn) {
+    for (NSRunningApplication *application in legacyApplications) {
+      [application terminate];
+    }
   }
 }
 

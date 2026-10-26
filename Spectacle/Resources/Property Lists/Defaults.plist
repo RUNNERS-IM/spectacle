@@ -10,6 +10,7 @@
 	<array>
 		<string>com.adobe.Photoshop</string>
 		<string>com.divisiblebyzero.Spectacle</string>
+		<string>im.runners.Spectacle</string>
 		<string>com.valvesoftware.steam</string>
 	</array>
 	<key>DisabledApplications</key>

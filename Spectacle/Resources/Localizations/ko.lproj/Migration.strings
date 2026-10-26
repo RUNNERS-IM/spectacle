@@ -1,0 +1,11 @@
+/* 원작자의 Spectacle 1.2 가 아직 켜져 있을 때 뜨는 알림 제목 */
+"LegacyRunningTitle" = "예전 Spectacle 이 아직 켜져 있어요";
+
+/* 원작자의 Spectacle 1.2 가 아직 켜져 있을 때 뜨는 알림 본문 */
+"LegacyRunningBody" = "두 앱이 같은 단축키에 함께 반응해요. 예전 Spectacle 을 끄고 휴지통으로 옮겨서 이 버전만 쓰세요.";
+
+/* 예전 Spectacle 을 끄는 버튼 */
+"LegacyRunningQuit" = "예전 버전 끄기";
+
+/* 예전 Spectacle 을 그대로 두는 버튼 */
+"LegacyRunningKeep" = "둘 다 두기";

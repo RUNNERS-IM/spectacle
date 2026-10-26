@@ -97,6 +97,7 @@
 		844BF9A1CA969F5B6C3C8DAC /* SpectaUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC01C878738F2FB4C6672D /* SpectaUtility.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		85EB8CDD03553A408310F89C /* SpectaDSL.m in Sources */ = {isa = PBXBuildFile; fileRef = 843415BF7FCFE6CAC211E024 /* SpectaDSL.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		878D649559670C9CDD510855 /* ExpectaSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = EFA817848F8B65B3EA866395 /* ExpectaSupport.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
+		8A98A894217D367E28C5C57E /* Migration.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86846CAC882D84270EB65140 /* Migration.strings */; };
 		8C74B701E1E110B02AE3DE60 /* EXPMatchers+beKindOf.m in Sources */ = {isa = PBXBuildFile; fileRef = 64686CFA6AB1AB662904BB30 /* EXPMatchers+beKindOf.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		93DFA59ADA568EBADA21D88F /* SPTSharedExampleGroups.m in Sources */ = {isa = PBXBuildFile; fileRef = 6793FC6AD4BC6A8105EF1779 /* SPTSharedExampleGroups.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		9A02515C7AC9B0FAEFE63F44 /* EXPMatchers+respondTo.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F9D696C6F218BF721D2407 /* EXPMatchers+respondTo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
@@ -105,10 +106,12 @@
 		A6DED8596B997C026A4E4B8F /* AccessibilityGuide.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9B6AA3E747837D486CFE15C7 /* AccessibilityGuide.strings */; };
 		AB89F5DA0B59184AF6C6F1A5 /* EXPDoubleTuple.m in Sources */ = {isa = PBXBuildFile; fileRef = C36B43AAEA54FD70DB0E3393 /* EXPDoubleTuple.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		AD26B9F242DA9737C58E061C /* SPTCallSite.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F96DE561233EBD6BCAF3B81 /* SPTCallSite.m */; settings = {COMPILER_FLAGS = "-w"; }; };
+		AFD6F6EF5B566093B8D15DC2 /* SpectacleLegacyPreferencesMigratorSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = DBC856E9F5CB29EBAA5BB497 /* SpectacleLegacyPreferencesMigratorSpec.m */; };
 		B5AE059E00EB53BBA825CB06 /* EXPMatchers+beTruthy.m in Sources */ = {isa = PBXBuildFile; fileRef = 256D63048AF859DB77287D44 /* EXPMatchers+beTruthy.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		B8F627DEE2DB28CB5ACC584C /* EXPMatchers+raise.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E7A3509B9A558A640897D32 /* EXPMatchers+raise.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		BFA5E2A44C3B809BAAC1EDEC /* EXPMatchers+beSupersetOf.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D19412F7CB148FAF367BD9B /* EXPMatchers+beSupersetOf.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		C3E1274A2FF0B9816A37D6D6 /* EXPMatcherHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65660ABD7BE3F6A31982FF72 /* EXPMatcherHelpers.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
+		C6979D2BC6ECD5EF23603B2F /* SpectacleLegacyPreferencesMigrator.m in Sources */ = {isa = PBXBuildFile; fileRef = EF951751B9EE5204F49F7ACB /* SpectacleLegacyPreferencesMigrator.m */; };
 		D98B2401E632E6D6A0E4F7CE /* EXPMatchers+beFalsy.m in Sources */ = {isa = PBXBuildFile; fileRef = FC6EFF6DF7227AD5B21B70FA /* EXPMatchers+beFalsy.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		E4F96312D551444EDC8C4B4B /* EXPMatchers+haveCountOf.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F88476968525E92D4D83098 /* EXPMatchers+haveCountOf.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		EB5BAFE2C2709FE7136A6EE5 /* SpectacleAccessibilityGuideController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5065BDA581DF5745FE00618E /* SpectacleAccessibilityGuideController.m */; };
@@ -157,7 +160,9 @@
 		0F2DFAFE7BA52FB51782CE57 /* EXPFloatTuple.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPFloatTuple.h; sourceTree = "<group>"; };
 		141C05A24DB0C7780F6C0FF5 /* EXPMatchers+raise.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+raise.h"; sourceTree = "<group>"; };
 		164864B64C01889D1668C0F7 /* EXPMatchers+beLessThan.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beLessThan.h"; sourceTree = "<group>"; };
+		1686D648CE109B811154B763 /* en */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = en; path = Spectacle/Resources/Localizations/en.lproj/Migration.strings; sourceTree = SOURCE_ROOT; };
 		17DBA649C7B8936134232F20 /* EXPMatchers+beginWith.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beginWith.h"; sourceTree = "<group>"; };
+		1A3CAAEF1191D6ECB5994F7C /* SpectacleLegacyPreferencesMigrator.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SpectacleLegacyPreferencesMigrator.h; path = Spectacle/Sources/SpectacleLegacyPreferencesMigrator.h; sourceTree = SOURCE_ROOT; };
 		1BF3DACDDA704F3A00054B31 /* EXPMatchers+equal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+equal.h"; sourceTree = "<group>"; };
 		256D63048AF859DB77287D44 /* EXPMatchers+beTruthy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beTruthy.m"; sourceTree = "<group>"; };
 		286718822DF8D6ACED9FFD61 /* EXPDoubleTuple.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPDoubleTuple.h; sourceTree = "<group>"; };
@@ -293,6 +298,7 @@
 		64686CFA6AB1AB662904BB30 /* EXPMatchers+beKindOf.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beKindOf.m"; sourceTree = "<group>"; };
 		64AB9F70A73E78DA2DF55A1A /* EXPMatchers+beGreaterThanOrEqualTo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beGreaterThanOrEqualTo.h"; sourceTree = "<group>"; };
 		65660ABD7BE3F6A31982FF72 /* EXPMatcherHelpers.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EXPMatcherHelpers.m; sourceTree = "<group>"; };
+		65BED5ED122130E14424977F /* ko */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ko; path = Spectacle/Resources/Localizations/ko.lproj/Migration.strings; sourceTree = SOURCE_ROOT; };
 		668DEE43698FB9D9575627E6 /* EXPMatchers+haveCountOf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+haveCountOf.h"; sourceTree = "<group>"; };
 		6793FC6AD4BC6A8105EF1779 /* SPTSharedExampleGroups.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SPTSharedExampleGroups.m; sourceTree = "<group>"; };
 		6812F86DB4E4CADC42087170 /* EXPMatchers+conformTo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+conformTo.h"; sourceTree = "<group>"; };
@@ -345,6 +351,8 @@
 		D0B230D1039C021B5282505D /* EXPBlockDefinedMatcher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPBlockDefinedMatcher.h; sourceTree = "<group>"; };
 		D0CC6E77F16E8453C6C1D41F /* SpectacleAccessibilityGuideController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SpectacleAccessibilityGuideController.h; path = Spectacle/Sources/SpectacleAccessibilityGuideController.h; sourceTree = SOURCE_ROOT; };
 		DAA9E46E0F21396D067AF2C0 /* EXPUnsupportedObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EXPUnsupportedObject.m; sourceTree = "<group>"; };
+		DBC856E9F5CB29EBAA5BB497 /* SpectacleLegacyPreferencesMigratorSpec.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SpectacleLegacyPreferencesMigratorSpec.m; path = SpectacleSpecs/Sources/SpectacleLegacyPreferencesMigratorSpec.m; sourceTree = SOURCE_ROOT; };
+		EF951751B9EE5204F49F7ACB /* SpectacleLegacyPreferencesMigrator.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SpectacleLegacyPreferencesMigrator.m; path = Spectacle/Sources/SpectacleLegacyPreferencesMigrator.m; sourceTree = SOURCE_ROOT; };
 		EFA817848F8B65B3EA866395 /* ExpectaSupport.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ExpectaSupport.m; sourceTree = "<group>"; };
 		F1D80FFE37BD32330D7E6F42 /* ExpectaObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ExpectaObject.h; sourceTree = "<group>"; };
 		F349DC6B4A170C05A1D0B3F5 /* SPTSpec.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SPTSpec.m; sourceTree = "<group>"; };
@@ -397,6 +405,8 @@
 				2D3A04FD194956E100CD96E7 /* SpectacleAccessibilityElement.m */,
 				D0CC6E77F16E8453C6C1D41F /* SpectacleAccessibilityGuideController.h */,
 				5065BDA581DF5745FE00618E /* SpectacleAccessibilityGuideController.m */,
+				1A3CAAEF1191D6ECB5994F7C /* SpectacleLegacyPreferencesMigrator.h */,
+				EF951751B9EE5204F49F7ACB /* SpectacleLegacyPreferencesMigrator.m */,
 			);
 			name = "Accessibility API";
 			sourceTree = "<group>";
@@ -439,6 +449,7 @@
 				2DC4E3D01AD84E5C0022ABF0 /* Spectacle.xib */,
 				2DC4E3D21AD84E5C0022ABF0 /* SpectaclePreferencesWindow.xib */,
 				9B6AA3E747837D486CFE15C7 /* AccessibilityGuide.strings */,
+				86846CAC882D84270EB65140 /* Migration.strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -586,6 +597,7 @@
 				2D20F0161CD18ED7003DDA5B /* SpectacleUpperLeftWindowCalculationSpec.m */,
 				2D20F0171CD18ED7003DDA5B /* SpectacleUpperRightWindowCalculationSpec.m */,
 				2D20F0281CD1969D003DDA5B /* SpectacleWindowPositionManagerSpec.m */,
+				DBC856E9F5CB29EBAA5BB497 /* SpectacleLegacyPreferencesMigratorSpec.m */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -903,6 +915,7 @@
 				2D7752111B83E95000C022EE /* SpectaclePreferencesWindow.xib in Resources */,
 				2D58CC391C7030B800E3DC74 /* Window Position Calculations in Resources */,
 				A6DED8596B997C026A4E4B8F /* AccessibilityGuide.strings in Resources */,
+				8A98A894217D367E28C5C57E /* Migration.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -969,6 +982,7 @@
 				2D7CF9EB1C6FED50004DC708 /* SpectacleWindowPositionCalculator.m in Sources */,
 				2D8DA058147E113D003BE1D3 /* SpectacleWindowPositionManager.m in Sources */,
 				EB5BAFE2C2709FE7136A6EE5 /* SpectacleAccessibilityGuideController.m in Sources */,
+				C6979D2BC6ECD5EF23603B2F /* SpectacleLegacyPreferencesMigrator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1040,6 +1054,7 @@
 				ECFBE8A48484FD10324F99A3 /* ExpectaObject.m in Sources */,
 				878D649559670C9CDD510855 /* ExpectaSupport.m in Sources */,
 				283919772D47341B79B96822 /* NSValue+Expecta.m in Sources */,
+				AFD6F6EF5B566093B8D15DC2 /* SpectacleLegacyPreferencesMigratorSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1117,6 +1132,15 @@
 				2D2A61A41DC2CD9C00D86193 /* es */,
 			);
 			name = SpectaclePreferencesWindow.xib;
+			sourceTree = "<group>";
+		};
+		86846CAC882D84270EB65140 /* Migration.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1686D648CE109B811154B763 /* en */,
+				65BED5ED122130E14424977F /* ko */,
+			);
+			name = Migration.strings;
 			sourceTree = "<group>";
 		};
 		9B6AA3E747837D486CFE15C7 /* AccessibilityGuide.strings */ = {
@@ -1241,7 +1265,7 @@
 				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = "Spectacle/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.divisiblebyzero.Spectacle;
+				PRODUCT_BUNDLE_IDENTIFIER = im.runners.Spectacle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1256,7 +1280,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = "Spectacle/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.divisiblebyzero.Spectacle;
+				PRODUCT_BUNDLE_IDENTIFIER = im.runners.Spectacle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -1276,7 +1300,7 @@
 				);
 				INFOPLIST_FILE = "SpectacleSpecs/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.divisiblebyzero.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = im.runners.SpectacleSpecs;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
@@ -1297,7 +1321,7 @@
 				);
 				INFOPLIST_FILE = "SpectacleSpecs/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.divisiblebyzero.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = im.runners.SpectacleSpecs;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
