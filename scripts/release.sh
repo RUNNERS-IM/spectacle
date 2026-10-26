@@ -98,6 +98,19 @@ if [ "$PUBLISH" = "--publish" ]; then
   fi
   gh release create "v$VERSION" "$ZIP" "$DMG" "$OUT/appcast.xml" \
     --repo "$GITHUB_REPO" --title "Split $VERSION" --generate-notes --latest
+
+  # Homebrew tap 갱신 (RUNNERS-IM/homebrew-tap 이 있을 때만)
+  if gh repo view RUNNERS-IM/homebrew-tap >/dev/null 2>&1; then
+    step "Homebrew tap 갱신"
+    TAP="$OUT/homebrew-tap"
+    gh repo clone RUNNERS-IM/homebrew-tap "$TAP" -- -q
+    mkdir -p "$TAP/Casks"
+    SHA=$(shasum -a 256 "$DMG" | cut -d' ' -f1)
+    sed -e "s/__VERSION__/$VERSION/" -e "s/__SHA256__/$SHA/" "$REPO_ROOT/packaging/homebrew/split.rb.template" | grep -v "^# " > "$TAP/Casks/split.rb"
+    git -C "$TAP" add Casks/split.rb
+    git -C "$TAP" -c user.name="RUNNERS-IM release" -c user.email="dev@runners.im" commit -q -m "split $VERSION"
+    git -C "$TAP" push -q
+  fi
 else
   echo "GitHub 에는 올리지 않았습니다. 올리려면: scripts/release.sh $VERSION --publish"
 fi
