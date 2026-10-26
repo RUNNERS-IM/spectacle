@@ -38,8 +38,20 @@
   BOOL _shortcutsAreDisabledForAnHour;
 }
 
+/// Unit tests launch the app as their host. Skip everything that talks to the user or to the
+/// system (permission guide, System Settings, Sparkle, login item, alerts) so the test runner can
+/// connect; on a fresh CI machine those otherwise block the launch.
+static BOOL SplitIsRunningUnitTests(void)
+{
+  return NSProcessInfo.processInfo.environment[@"XCTestConfigurationFilePath"] != nil
+      || NSClassFromString(@"XCTestCase") != nil;
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
+  if (SplitIsRunningUnitTests()) {
+    return;
+  }
   NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
   NSNotificationCenter *workspaceNotificationCenter = [NSWorkspace sharedWorkspace].notificationCenter;
   [notificationCenter addObserver:self
