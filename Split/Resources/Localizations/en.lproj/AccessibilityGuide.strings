@@ -1,0 +1,32 @@
+/* Title of the window that explains how to grant the Accessibility permission */
+"WindowTitle" = "Allow Split to move windows";
+
+/* Headline of the Accessibility permission guide */
+"Title" = "Split needs permission to move your windows";
+
+/* Explanation below the headline of the Accessibility permission guide */
+"Description" = "macOS asks before one app can move another app's windows. You only need to turn this on once.";
+
+/* Step 1 of the Accessibility permission guide. Text between ** is shown in bold. */
+"Step1" = "System Settings opens next to this window. If it doesn't, click **Open System Settings**.";
+
+/* Step 2 of the Accessibility permission guide. Text between ** is shown in bold. */
+"Step2" = "Turn on the switch next to **Split**.";
+
+/* Step 3 of the Accessibility permission guide */
+"Step3" = "This window closes by itself and Split is ready to use.";
+
+/* Caption under the drawn System Settings row */
+"SettingsPath" = "System Settings › Privacy & Security › Accessibility";
+
+/* Secondary button that hides the Accessibility permission guide */
+"ButtonLater" = "Later";
+
+/* Primary button that opens System Settings on the Accessibility pane */
+"ButtonOpenSettings" = "Open System Settings";
+
+/* Status line while Split waits for the Accessibility permission */
+"StatusWaiting" = "Waiting for permission…";
+
+/* Status line right after the Accessibility permission is granted */
+"StatusGranted" = "Permission granted. You're all set.";

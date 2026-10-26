@@ -1,0 +1,3 @@
+windowPositionCalculationRegistry.registerWindowPositionCalculationWithAction(function (windowRect, visibleFrameOfSourceScreen, visibleFrameOfDestinationScreen) {
+    return SplitNextOrPreviousDisplay.moveWindowRectToDisplay(windowRect, visibleFrameOfSourceScreen, visibleFrameOfDestinationScreen);
+}, "SplitWindowActionNextDisplay");
