@@ -1076,7 +1076,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# See: http://tgoode.com/2014/06/05/sensible-way-increment-bundle-version-cfbundleversion-xcode/\nbranch=${1:-'master'}\nbuild_number=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD...$branch --count))\necho \"Updating build number to $build_number using branch: $branch\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $build_number\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n";
+			shellScript = "# Build number = number of commits reachable from HEAD, so it only ever grows along the\n# history (Sparkle compares it to decide whether an update is newer).\nbuild_number=$(git -C \"${SRCROOT}\" rev-list HEAD --count)\necho \"Updating build number to $build_number\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $build_number\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n";
 		};
 		5D4CD8DD6B5CA527AB897F52 /* Update CFBundleVersion */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1094,7 +1094,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# See: http://tgoode.com/2014/06/05/sensible-way-increment-bundle-version-cfbundleversion-xcode/\nbranch=${1:-'master'}\nbuild_number=$(expr $(git rev-list $branch --count) - $(git rev-list HEAD...$branch --count))\necho \"Updating build number to $build_number using branch: $branch\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $build_number\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n";
+			shellScript = "# Build number = number of commits reachable from HEAD, so it only ever grows along the\n# history (Sparkle compares it to decide whether an update is newer).\nbuild_number=$(git -C \"${SRCROOT}\" rev-list HEAD --count)\necho \"Updating build number to $build_number\"\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $build_number\" \"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

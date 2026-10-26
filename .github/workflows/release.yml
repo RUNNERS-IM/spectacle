@@ -55,6 +55,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 0  # the build number is the commit count
           ref: ${{ inputs.version && format('v{0}', inputs.version) || github.ref }}
 
       - name: Prepare signing on the hosted Mac
