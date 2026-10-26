@@ -2,7 +2,11 @@
 
 @class SpectaclePreferencesController;
 
+@class SPUStandardUpdaterController;
+
 @interface SpectacleAppDelegate : NSObject <NSApplicationDelegate, NSMenuDelegate>
+
+@property (nonatomic, strong) IBOutlet SPUStandardUpdaterController *updaterController;
 
 @property (nonatomic, strong) IBOutlet NSMenu *statusItemMenu;
 @property (nonatomic, strong) IBOutlet NSWindow *accessiblityAccessDialogWindow;

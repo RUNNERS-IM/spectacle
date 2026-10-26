@@ -124,10 +124,10 @@ describe(@"SpectacleShortcutTranslations", ^{
   });
 
   it(@"should translate modifiers", ^{
-    expect(SpectacleTranslateModifiers(NSControlKeyMask)).to.equal(@"⌃");
-    expect(SpectacleTranslateModifiers(NSAlternateKeyMask)).to.equal(@"⌥");
-    expect(SpectacleTranslateModifiers(NSShiftKeyMask)).to.equal(@"⇧");
-    expect(SpectacleTranslateModifiers(NSCommandKeyMask)).to.equal(@"⌘");
+    expect(SpectacleTranslateModifiers(NSEventModifierFlagControl)).to.equal(@"⌃");
+    expect(SpectacleTranslateModifiers(NSEventModifierFlagOption)).to.equal(@"⌥");
+    expect(SpectacleTranslateModifiers(NSEventModifierFlagShift)).to.equal(@"⇧");
+    expect(SpectacleTranslateModifiers(NSEventModifierFlagCommand)).to.equal(@"⌘");
 
   });
 
@@ -163,17 +163,17 @@ describe(@"SpectacleShortcutTranslations", ^{
   });
 
   it(@"should convert Cocoa modifiers to Carbon modifiers", ^{
-    expect(SpectacleConvertCocoaModifiersToCarbon(NSControlKeyMask)).to.equal(controlKey);
-    expect(SpectacleConvertCocoaModifiersToCarbon(NSAlternateKeyMask)).to.equal(optionKey);
-    expect(SpectacleConvertCocoaModifiersToCarbon(NSShiftKeyMask)).to.equal(shiftKey);
-    expect(SpectacleConvertCocoaModifiersToCarbon(NSCommandKeyMask)).to.equal(cmdKey);
+    expect(SpectacleConvertCocoaModifiersToCarbon(NSEventModifierFlagControl)).to.equal(controlKey);
+    expect(SpectacleConvertCocoaModifiersToCarbon(NSEventModifierFlagOption)).to.equal(optionKey);
+    expect(SpectacleConvertCocoaModifiersToCarbon(NSEventModifierFlagShift)).to.equal(shiftKey);
+    expect(SpectacleConvertCocoaModifiersToCarbon(NSEventModifierFlagCommand)).to.equal(cmdKey);
   });
 
   it(@"should convert Carbon modifiers to Cocoa modifiers", ^{
-    expect(SpectacleConvertCarbonModifiersToCocoa(controlKey)).to.equal(NSControlKeyMask);
-    expect(SpectacleConvertCarbonModifiersToCocoa(optionKey)).to.equal(NSAlternateKeyMask);
-    expect(SpectacleConvertCarbonModifiersToCocoa(shiftKey)).to.equal(NSShiftKeyMask);
-    expect(SpectacleConvertCarbonModifiersToCocoa(cmdKey)).to.equal(NSCommandKeyMask);
+    expect(SpectacleConvertCarbonModifiersToCocoa(controlKey)).to.equal(NSEventModifierFlagControl);
+    expect(SpectacleConvertCarbonModifiersToCocoa(optionKey)).to.equal(NSEventModifierFlagOption);
+    expect(SpectacleConvertCarbonModifiersToCocoa(shiftKey)).to.equal(NSEventModifierFlagShift);
+    expect(SpectacleConvertCarbonModifiersToCocoa(cmdKey)).to.equal(NSEventModifierFlagCommand);
   });
 
   it(@"should convert modifiers to Carbon modifiers if necessary", ^{
@@ -181,21 +181,21 @@ describe(@"SpectacleShortcutTranslations", ^{
     expect(SpectacleConvertModifiersToCarbonIfNecessary(optionKey)).to.equal(optionKey);
     expect(SpectacleConvertModifiersToCarbonIfNecessary(shiftKey)).to.equal(shiftKey);
     expect(SpectacleConvertModifiersToCarbonIfNecessary(cmdKey)).to.equal(cmdKey);
-    expect(SpectacleConvertModifiersToCarbonIfNecessary(NSControlKeyMask)).to.equal(controlKey);
-    expect(SpectacleConvertModifiersToCarbonIfNecessary(NSAlternateKeyMask)).to.equal(optionKey);
-    expect(SpectacleConvertModifiersToCarbonIfNecessary(NSShiftKeyMask)).to.equal(shiftKey);
-    expect(SpectacleConvertModifiersToCarbonIfNecessary(NSCommandKeyMask)).to.equal(cmdKey);
+    expect(SpectacleConvertModifiersToCarbonIfNecessary(NSEventModifierFlagControl)).to.equal(controlKey);
+    expect(SpectacleConvertModifiersToCarbonIfNecessary(NSEventModifierFlagOption)).to.equal(optionKey);
+    expect(SpectacleConvertModifiersToCarbonIfNecessary(NSEventModifierFlagShift)).to.equal(shiftKey);
+    expect(SpectacleConvertModifiersToCarbonIfNecessary(NSEventModifierFlagCommand)).to.equal(cmdKey);
   });
 
   it(@"should convert modifiers to Cocoa modifiers if necessary", ^{
-    expect(SpectacleConvertModifiersToCocoaIfNecessary(NSControlKeyMask)).to.equal(NSControlKeyMask);
-    expect(SpectacleConvertModifiersToCocoaIfNecessary(NSAlternateKeyMask)).to.equal(NSAlternateKeyMask);
-    expect(SpectacleConvertModifiersToCocoaIfNecessary(NSShiftKeyMask)).to.equal(NSShiftKeyMask);
-    expect(SpectacleConvertModifiersToCocoaIfNecessary(NSCommandKeyMask)).to.equal(NSCommandKeyMask);
-    expect(SpectacleConvertModifiersToCocoaIfNecessary(controlKey)).to.equal(NSControlKeyMask);
-    expect(SpectacleConvertModifiersToCocoaIfNecessary(optionKey)).to.equal(NSAlternateKeyMask);
-    expect(SpectacleConvertModifiersToCocoaIfNecessary(shiftKey)).to.equal(NSShiftKeyMask);
-    expect(SpectacleConvertModifiersToCocoaIfNecessary(cmdKey)).to.equal(NSCommandKeyMask);
+    expect(SpectacleConvertModifiersToCocoaIfNecessary(NSEventModifierFlagControl)).to.equal(NSEventModifierFlagControl);
+    expect(SpectacleConvertModifiersToCocoaIfNecessary(NSEventModifierFlagOption)).to.equal(NSEventModifierFlagOption);
+    expect(SpectacleConvertModifiersToCocoaIfNecessary(NSEventModifierFlagShift)).to.equal(NSEventModifierFlagShift);
+    expect(SpectacleConvertModifiersToCocoaIfNecessary(NSEventModifierFlagCommand)).to.equal(NSEventModifierFlagCommand);
+    expect(SpectacleConvertModifiersToCocoaIfNecessary(controlKey)).to.equal(NSEventModifierFlagControl);
+    expect(SpectacleConvertModifiersToCocoaIfNecessary(optionKey)).to.equal(NSEventModifierFlagOption);
+    expect(SpectacleConvertModifiersToCocoaIfNecessary(shiftKey)).to.equal(NSEventModifierFlagShift);
+    expect(SpectacleConvertModifiersToCocoaIfNecessary(cmdKey)).to.equal(NSEventModifierFlagCommand);
   });
 });
 SpecEnd

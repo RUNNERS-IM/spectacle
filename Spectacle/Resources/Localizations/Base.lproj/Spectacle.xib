@@ -37,9 +37,10 @@
                 <outlet property="redoLastMoveShortcutMenuItem" destination="187-7k-0Ct" id="TFE-uS-twj"/>
                 <outlet property="statusItemMenu" destination="KsA-8w-wcl" id="76U-gs-viQ"/>
                 <outlet property="undoLastMoveShortcutMenuItem" destination="l9O-0B-fjp" id="gns-Zw-ZVc"/>
+                <outlet property="updaterController" destination="qZ6-IG-VBZ" id="Upd-aT-er1"/>
             </connections>
         </customObject>
-        <customObject id="qZ6-IG-VBZ" customClass="SUUpdater"/>
+        <customObject id="qZ6-IG-VBZ" customClass="SPUStandardUpdaterController"/>
         <menu title="Spectacle Status Item" id="KsA-8w-wcl" propertyAccessControl="localizable">
             <items>
                 <menuItem title="About Spectacle" tag="-1" id="EA9-dx-Qfg">

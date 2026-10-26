@@ -94,7 +94,7 @@
   _shortcutManager = [[SpectacleShortcutManager alloc] initWithShortcutStorage:_shortcutStorage];
   SpectacleWindowPositionCalculator *windowPositionCalculator = [[SpectacleWindowPositionCalculator alloc] initWithErrorHandler:^(NSString *errorMessage) {
     NSAlert *alert = [NSAlert new];
-    alert.alertStyle = NSWarningAlertStyle;
+    alert.alertStyle = NSAlertStyleWarning;
     alert.messageText = @"Encountered an unexpected error";
     alert.informativeText = errorMessage;
     [alert runModal];
@@ -113,7 +113,7 @@
   if (statusItemEnabled) {
     [self enableStatusItem];
   }
-  [[SUUpdater sharedUpdater] setAutomaticallyChecksForUpdates:automaticallyChecksForUpdates];
+  self.updaterController.updater.automaticallyChecksForUpdates = automaticallyChecksForUpdates;
   [self updateShortcutMenuItems];
   if (!AXIsProcessTrustedWithOptions(NULL)) {
     [[NSApplication sharedApplication] runModalForWindow:self.accessiblityAccessDialogWindow];
@@ -240,12 +240,12 @@
 
 - (IBAction)disableOrEnableShortcutsForAnHour:(id)sender
 {
-  NSInteger newMenuItemState = NSMixedState;
+  NSInteger newMenuItemState = NSControlStateValueMixed;
   if (_shortcutsAreDisabledForAnHour) {
     _shortcutsAreDisabledForAnHour = NO;
     [_disableShortcutsForAnHourTimer invalidate];
     [self enableShortcutsIfPermitted];
-    newMenuItemState = NSOffState;
+    newMenuItemState = NSControlStateValueOff;
   } else {
     _shortcutsAreDisabledForAnHour = YES;
     _disableShortcutsForAnHourTimer = [NSTimer scheduledTimerWithTimeInterval:3600
@@ -254,7 +254,7 @@
                                                                      userInfo:nil
                                                                       repeats:NO];
     [_shortcutManager unregisterShortcuts];
-    newMenuItemState = NSOnState;
+    newMenuItemState = NSControlStateValueOn;
   }
   self.disableShortcutsForAnHourMenuItem.state = newMenuItemState;
 }
@@ -265,11 +265,11 @@
   if ([_disabledApplications containsObject:frontmostApplication.bundleIdentifier]) {
     [_disabledApplications removeObject:frontmostApplication.bundleIdentifier];
     [self enableShortcutsIfPermitted];
-    self.disableShortcutsForApplicationMenuItem.state = NSOffState;
+    self.disableShortcutsForApplicationMenuItem.state = NSControlStateValueOff;
   } else {
     [_disabledApplications addObject:frontmostApplication.bundleIdentifier];
     [_shortcutManager unregisterShortcuts];
-    self.disableShortcutsForApplicationMenuItem.state = NSOnState;
+    self.disableShortcutsForApplicationMenuItem.state = NSControlStateValueOn;
   }
   [NSUserDefaults.standardUserDefaults setObject:_disabledApplications.allObjects forKey:@"DisabledApplications"];
 }
@@ -310,10 +310,9 @@
   _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
   NSImage *statusImage = [NSBundle.mainBundle imageForResource:@"Spectacle Status Item"];
   [statusImage setTemplate:YES];
-  _statusItem.highlightMode = YES;
-  _statusItem.image = statusImage;
+  _statusItem.button.image = statusImage;
   _statusItem.menu = _statusItemMenu;
-  _statusItem.toolTip = [@"Spectacle " stringByAppendingString:SpectacleUtilities.applicationVersion];
+  _statusItem.button.toolTip = [@"Spectacle " stringByAppendingString:SpectacleUtilities.applicationVersion];
 }
 
 - (void)disableStatusItem
@@ -392,9 +391,9 @@
       [NSString stringWithFormat:NSLocalizedString(@"MenuItemTitleDisableShortcutsForApplication", @"The menu item title that displays the application to disable shortcuts for"), frontmostApplication.localizedName];
   }
   if ([_disabledApplications containsObject:frontmostApplication.bundleIdentifier]) {
-    self.disableShortcutsForApplicationMenuItem.state = NSOnState;
+    self.disableShortcutsForApplicationMenuItem.state = NSControlStateValueOn;
   } else {
-    self.disableShortcutsForApplicationMenuItem.state = NSOffState;
+    self.disableShortcutsForApplicationMenuItem.state = NSControlStateValueOff;
   }
 }
 

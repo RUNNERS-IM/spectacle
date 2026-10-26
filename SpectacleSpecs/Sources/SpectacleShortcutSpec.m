@@ -17,7 +17,7 @@ describe(@"SpectacleShortcut", ^{
   it(@"should be copied with a new shortcut action", ^{
     SpectacleShortcut *shortcut = [[SpectacleShortcut alloc] initWithShortcutName:@"MoveToCenter"
                                                                   shortcutKeyCode:kVK_ANSI_C
-                                                                shortcutModifiers:NSAlternateKeyMask | NSCommandKeyMask];
+                                                                shortcutModifiers:NSEventModifierFlagOption | NSEventModifierFlagCommand];
     expect(shortcut.shortcutAction).to.beFalsy;
     expect([shortcut copyWithShortcutAction:^(SpectacleShortcut *shortcut) {}].shortcutAction).to.beTruthy;
   });
@@ -26,7 +26,7 @@ describe(@"SpectacleShortcut", ^{
     __block BOOL shortcutActionTriggered;
     SpectacleShortcut *shortcut = [[SpectacleShortcut alloc] initWithShortcutName:@"MoveToCenter"
                                                                   shortcutKeyCode:kVK_ANSI_C
-                                                                shortcutModifiers:NSAlternateKeyMask | NSCommandKeyMask
+                                                                shortcutModifiers:NSEventModifierFlagOption | NSEventModifierFlagCommand
                                                                    shortcutAction:^(SpectacleShortcut *shortcut) {
                                                                      shortcutActionTriggered = YES;
                                                                    }];
@@ -48,7 +48,7 @@ describe(@"SpectacleShortcut", ^{
   it(@"should provide a display string", ^{
     expect([[[SpectacleShortcut alloc] initWithShortcutName:@"MoveToCenter"
                                             shortcutKeyCode:kVK_ANSI_C
-                                          shortcutModifiers:NSAlternateKeyMask | NSCommandKeyMask] displayString]).to.equal(@"⌥⌘C");
+                                          shortcutModifiers:NSEventModifierFlagOption | NSEventModifierFlagCommand] displayString]).to.equal(@"⌥⌘C");
   });
 
   it(@"should provide a key binding", ^{
@@ -60,13 +60,13 @@ describe(@"SpectacleShortcut", ^{
   it(@"should support equality", ^{
     SpectacleShortcut *shortcut1 = [[SpectacleShortcut alloc] initWithShortcutName:@"MoveToCenter"
                                                                    shortcutKeyCode:kVK_ANSI_C
-                                                                 shortcutModifiers:NSAlternateKeyMask | NSCommandKeyMask];
+                                                                 shortcutModifiers:NSEventModifierFlagOption | NSEventModifierFlagCommand];
     SpectacleShortcut *shortcut2 = [[SpectacleShortcut alloc] initWithShortcutName:@"MoveToCenter"
                                                                    shortcutKeyCode:kVK_ANSI_C
-                                                                 shortcutModifiers:NSAlternateKeyMask | NSCommandKeyMask];
+                                                                 shortcutModifiers:NSEventModifierFlagOption | NSEventModifierFlagCommand];
     SpectacleShortcut *shortcut3 = [[SpectacleShortcut alloc] initWithShortcutName:nil
                                                                    shortcutKeyCode:kVK_ANSI_C
-                                                                 shortcutModifiers:NSAlternateKeyMask | NSCommandKeyMask];
+                                                                 shortcutModifiers:NSEventModifierFlagOption | NSEventModifierFlagCommand];
     expect(shortcut1).to.equal(shortcut2);
     expect(shortcut1).to.equal(shortcut3);
     expect(shortcut1).notTo.equal([[SpectacleShortcut alloc] initWithShortcutName:nil
@@ -77,10 +77,10 @@ describe(@"SpectacleShortcut", ^{
   it(@"should determine if the shortcut is contains modifiers", ^{
     SpectacleShortcut *shortcut = [[SpectacleShortcut alloc] initWithShortcutName:@"MoveToCenter"
                                                                   shortcutKeyCode:kVK_ANSI_C
-                                                                shortcutModifiers:NSAlternateKeyMask | NSCommandKeyMask];
-    expect([shortcut containsModifiers:NSAlternateKeyMask]).to.beTruthy;
-    expect([shortcut containsModifiers:NSAlternateKeyMask | NSCommandKeyMask]).to.beTruthy;
-    expect([shortcut containsModifiers:NSControlKeyMask]).to.beFalsy;
+                                                                shortcutModifiers:NSEventModifierFlagOption | NSEventModifierFlagCommand];
+    expect([shortcut containsModifiers:NSEventModifierFlagOption]).to.beTruthy;
+    expect([shortcut containsModifiers:NSEventModifierFlagOption | NSEventModifierFlagCommand]).to.beTruthy;
+    expect([shortcut containsModifiers:NSEventModifierFlagControl]).to.beFalsy;
   });
 });
 SpecEnd
