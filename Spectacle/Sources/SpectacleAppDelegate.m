@@ -3,6 +3,7 @@
 #import <Sparkle/Sparkle.h>
 
 #import "SpectacleAccessibilityElement.h"
+#import "SpectacleAccessibilityGuideController.h"
 #import "SpectacleDefaultShortcutHelpers.h"
 #import "SpectacleMigratingShortcutStorage.h"
 #import "SpectaclePreferencesController.h"
@@ -23,6 +24,7 @@
   SpectacleShortcutManager *_shortcutManager;
   SpectacleWindowPositionManager *_windowPositionManager;
   SpectaclePreferencesController *_preferencesController;
+  SpectacleAccessibilityGuideController *_accessibilityGuideController;
   NSTimer *_disableShortcutsForAnHourTimer;
   NSSet<NSString *> *_blacklistedApplications;
   NSMutableSet<NSString *> *_disabledApplications;
@@ -115,8 +117,9 @@
   }
   self.updaterController.updater.automaticallyChecksForUpdates = automaticallyChecksForUpdates;
   [self updateShortcutMenuItems];
-  if (!AXIsProcessTrustedWithOptions(NULL)) {
-    [[NSApplication sharedApplication] runModalForWindow:self.accessiblityAccessDialogWindow];
+  if (![SpectacleAccessibilityGuideController isAccessibilityPermissionGranted]) {
+    _accessibilityGuideController = [SpectacleAccessibilityGuideController new];
+    [_accessibilityGuideController showGuide];
   }
 }
 
@@ -272,16 +275,6 @@
     self.disableShortcutsForApplicationMenuItem.state = NSControlStateValueOn;
   }
   [NSUserDefaults.standardUserDefaults setObject:_disabledApplications.allObjects forKey:@"DisabledApplications"];
-}
-
-- (IBAction)openSystemPreferences:(id)sender
-{
-  // Opens System Settings directly on Privacy & Security > Accessibility (macOS 13+).
-  NSURL *accessibilitySettingsURL =
-    [NSURL URLWithString:@"x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility"];
-  [[NSApplication sharedApplication] stopModal];
-  [self.accessiblityAccessDialogWindow orderOut:self];
-  [[NSWorkspace sharedWorkspace] openURL:accessibilitySettingsURL];
 }
 
 - (void)dealloc

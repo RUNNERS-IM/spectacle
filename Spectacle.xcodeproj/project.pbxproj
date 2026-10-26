@@ -102,6 +102,7 @@
 		9A02515C7AC9B0FAEFE63F44 /* EXPMatchers+respondTo.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F9D696C6F218BF721D2407 /* EXPMatchers+respondTo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		A305FFB7C13EC17872225957 /* EXPMatchers+contain.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CB9B7453275086651C6C017 /* EXPMatchers+contain.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		A6D253B41B309B02E8FF9F47 /* EXPMatchers+beGreaterThanOrEqualTo.m in Sources */ = {isa = PBXBuildFile; fileRef = C6361AB2EDE2EA1744BF363E /* EXPMatchers+beGreaterThanOrEqualTo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
+		A6DED8596B997C026A4E4B8F /* AccessibilityGuide.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9B6AA3E747837D486CFE15C7 /* AccessibilityGuide.strings */; };
 		AB89F5DA0B59184AF6C6F1A5 /* EXPDoubleTuple.m in Sources */ = {isa = PBXBuildFile; fileRef = C36B43AAEA54FD70DB0E3393 /* EXPDoubleTuple.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		AD26B9F242DA9737C58E061C /* SPTCallSite.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F96DE561233EBD6BCAF3B81 /* SPTCallSite.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		B5AE059E00EB53BBA825CB06 /* EXPMatchers+beTruthy.m in Sources */ = {isa = PBXBuildFile; fileRef = 256D63048AF859DB77287D44 /* EXPMatchers+beTruthy.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
@@ -110,6 +111,7 @@
 		C3E1274A2FF0B9816A37D6D6 /* EXPMatcherHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 65660ABD7BE3F6A31982FF72 /* EXPMatcherHelpers.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		D98B2401E632E6D6A0E4F7CE /* EXPMatchers+beFalsy.m in Sources */ = {isa = PBXBuildFile; fileRef = FC6EFF6DF7227AD5B21B70FA /* EXPMatchers+beFalsy.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		E4F96312D551444EDC8C4B4B /* EXPMatchers+haveCountOf.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F88476968525E92D4D83098 /* EXPMatchers+haveCountOf.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
+		EB5BAFE2C2709FE7136A6EE5 /* SpectacleAccessibilityGuideController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5065BDA581DF5745FE00618E /* SpectacleAccessibilityGuideController.m */; };
 		ECFBE8A48484FD10324F99A3 /* ExpectaObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B6AB547188B509BD71CB1D9 /* ExpectaObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		ED241BF5D1F28A9E828B44B2 /* SPTCompiledExample.m in Sources */ = {isa = PBXBuildFile; fileRef = 57468B1AAF052486F47D37FF /* SPTCompiledExample.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		F10FE2D347F9A05DEA38F9AA /* OCHamcrest in Frameworks */ = {isa = PBXBuildFile; productRef = 59F367DAF3F68F8D1A8F20F5 /* OCHamcrest */; };
@@ -144,6 +146,7 @@
 		0830BE3CD4DF6E438B376AFF /* SPTExampleGroup.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SPTExampleGroup.m; sourceTree = "<group>"; };
 		091715306F7638D27613AF10 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
 		092EAFC43C229453DCF304CD /* NSObject+Expecta.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "NSObject+Expecta.h"; sourceTree = "<group>"; };
+		098A65257D1C16C6E1735FAB /* en */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = en; path = Spectacle/Resources/Localizations/en.lproj/AccessibilityGuide.strings; sourceTree = SOURCE_ROOT; };
 		09B97146CED27639CE8D3DDC /* EXPMatchers+beSubclassOf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beSubclassOf.h"; sourceTree = "<group>"; };
 		0B8242351BA6FAB59F1BBCF8 /* XCTestCase+Specta.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "XCTestCase+Specta.m"; sourceTree = "<group>"; };
 		0BB5E98EA755BB26715F66B7 /* EXPMatchers+beInTheRangeOf.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beInTheRangeOf.m"; sourceTree = "<group>"; };
@@ -275,6 +278,7 @@
 		48FAC3AF7698D914D40FF951 /* EXPMatcherHelpers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPMatcherHelpers.h; sourceTree = "<group>"; };
 		49B469AF6FCABC66B324271A /* EXPMatchers+postNotification.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+postNotification.m"; sourceTree = "<group>"; };
 		4B327DDEC1BB8958A5ABFD44 /* EXPMatchers+raiseWithReason.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+raiseWithReason.h"; sourceTree = "<group>"; };
+		5065BDA581DF5745FE00618E /* SpectacleAccessibilityGuideController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SpectacleAccessibilityGuideController.m; path = Spectacle/Sources/SpectacleAccessibilityGuideController.m; sourceTree = SOURCE_ROOT; };
 		538EF7A71956CFA6456E20B4 /* EXPMatchers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPMatchers.h; sourceTree = "<group>"; };
 		57468B1AAF052486F47D37FF /* SPTCompiledExample.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SPTCompiledExample.m; sourceTree = "<group>"; };
 		574F6A1A1C57BE40001A5679 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = Spectacle/Resources/Localizations/pt.lproj/Spectacle.strings; sourceTree = "<group>"; };
@@ -319,6 +323,7 @@
 		9BDD940B4072FD97E1F13DB5 /* EXPBlockDefinedMatcher.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EXPBlockDefinedMatcher.m; sourceTree = "<group>"; };
 		9D491F89B65570BB9E2467B5 /* SPTTestSuite.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SPTTestSuite.m; sourceTree = "<group>"; };
 		A0F8C6FC86A58FF40E33A1AB /* EXPMatchers+beLessThan.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beLessThan.m"; sourceTree = "<group>"; };
+		A4801B0FC0E67D42A50E5AFE /* ko */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ko; path = Spectacle/Resources/Localizations/ko.lproj/AccessibilityGuide.strings; sourceTree = SOURCE_ROOT; };
 		A4A2464379F970C3E2865452 /* SPTExcludeGlobalBeforeAfterEach.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SPTExcludeGlobalBeforeAfterEach.h; sourceTree = "<group>"; };
 		A4C5DC6D70469C46E1DBB244 /* EXPMatchers+match.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+match.h"; sourceTree = "<group>"; };
 		A52B7C1732B10715DC50A415 /* SpectaTypes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SpectaTypes.h; sourceTree = "<group>"; };
@@ -338,6 +343,7 @@
 		CA5B539428AF7CBBB3E84445 /* EXPMatchers+equal.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+equal.m"; sourceTree = "<group>"; };
 		CAFC873E097E53570EF0CF5C /* SPTExampleGroup.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SPTExampleGroup.h; sourceTree = "<group>"; };
 		D0B230D1039C021B5282505D /* EXPBlockDefinedMatcher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPBlockDefinedMatcher.h; sourceTree = "<group>"; };
+		D0CC6E77F16E8453C6C1D41F /* SpectacleAccessibilityGuideController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SpectacleAccessibilityGuideController.h; path = Spectacle/Sources/SpectacleAccessibilityGuideController.h; sourceTree = SOURCE_ROOT; };
 		DAA9E46E0F21396D067AF2C0 /* EXPUnsupportedObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EXPUnsupportedObject.m; sourceTree = "<group>"; };
 		EFA817848F8B65B3EA866395 /* ExpectaSupport.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ExpectaSupport.m; sourceTree = "<group>"; };
 		F1D80FFE37BD32330D7E6F42 /* ExpectaObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ExpectaObject.h; sourceTree = "<group>"; };
@@ -389,6 +395,8 @@
 			children = (
 				2D3A04FC194956E100CD96E7 /* SpectacleAccessibilityElement.h */,
 				2D3A04FD194956E100CD96E7 /* SpectacleAccessibilityElement.m */,
+				D0CC6E77F16E8453C6C1D41F /* SpectacleAccessibilityGuideController.h */,
+				5065BDA581DF5745FE00618E /* SpectacleAccessibilityGuideController.m */,
 			);
 			name = "Accessibility API";
 			sourceTree = "<group>";
@@ -430,6 +438,7 @@
 				2DC4E3CE1AD84E5C0022ABF0 /* Localizable.strings */,
 				2DC4E3D01AD84E5C0022ABF0 /* Spectacle.xib */,
 				2DC4E3D21AD84E5C0022ABF0 /* SpectaclePreferencesWindow.xib */,
+				9B6AA3E747837D486CFE15C7 /* AccessibilityGuide.strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -862,6 +871,7 @@
 				pt,
 				fi,
 				es,
+				ko,
 			);
 			mainGroup = 089C166AFE841209C02AAC07;
 			packageReferences = (
@@ -892,6 +902,7 @@
 				2D7752101B83E94C00C022EE /* Spectacle.xib in Resources */,
 				2D7752111B83E95000C022EE /* SpectaclePreferencesWindow.xib in Resources */,
 				2D58CC391C7030B800E3DC74 /* Window Position Calculations in Resources */,
+				A6DED8596B997C026A4E4B8F /* AccessibilityGuide.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -957,6 +968,7 @@
 				2D98D7311AE064B7007AD995 /* SpectacleWindowPositionCalculationResult.m in Sources */,
 				2D7CF9EB1C6FED50004DC708 /* SpectacleWindowPositionCalculator.m in Sources */,
 				2D8DA058147E113D003BE1D3 /* SpectacleWindowPositionManager.m in Sources */,
+				EB5BAFE2C2709FE7136A6EE5 /* SpectacleAccessibilityGuideController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1105,6 +1117,15 @@
 				2D2A61A41DC2CD9C00D86193 /* es */,
 			);
 			name = SpectaclePreferencesWindow.xib;
+			sourceTree = "<group>";
+		};
+		9B6AA3E747837D486CFE15C7 /* AccessibilityGuide.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				098A65257D1C16C6E1735FAB /* en */,
+				A4801B0FC0E67D42A50E5AFE /* ko */,
+			);
+			name = AccessibilityGuide.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
