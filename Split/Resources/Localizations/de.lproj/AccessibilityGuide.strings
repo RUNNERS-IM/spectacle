@@ -2,22 +2,10 @@
 "WindowTitle" = "Split erlauben, Fenster zu bewegen";
 
 /* Headline of the Accessibility permission guide */
-"Title" = "Split braucht deine Erlaubnis, um Fenster zu bewegen";
+"Title" = "Zugriff für Split aktivieren";
 
 /* Explanation below the headline of the Accessibility permission guide */
-"Description" = "macOS fragt nach, bevor eine App die Fenster einer anderen App bewegen darf. Du musst das nur einmal aktivieren.";
-
-/* Step 1 of the Accessibility permission guide. Text between ** is shown in bold. */
-"Step1" = "Die Systemeinstellungen öffnen sich neben diesem Fenster. Falls nicht, klicke auf **Systemeinstellungen öffnen**.";
-
-/* Step 2 of the Accessibility permission guide. Text between ** is shown in bold. */
-"Step2" = "Aktiviere den Schalter neben **Split**.";
-
-/* Step 3 of the Accessibility permission guide */
-"Step3" = "Dieses Fenster schließt sich automatisch und Split ist bereit.";
-
-/* Caption under the drawn System Settings row */
-"SettingsPath" = "Systemeinstellungen › Datenschutz & Sicherheit › Bedienungshilfen";
+"Description" = "Aktiviere einfach diesen einen Schalter in den Systemeinstellungen.";
 
 /* Secondary button that hides the Accessibility permission guide */
 "ButtonLater" = "Später";
@@ -25,20 +13,11 @@
 /* Primary button that opens System Settings on the Accessibility pane */
 "ButtonOpenSettings" = "Systemeinstellungen öffnen";
 
+/* Link shown when the switch is already on but Split still has no access */
+"ButtonReset" = "Schon an, aber geht nicht?";
+
 /* Status line while Split waits for the Accessibility permission */
 "StatusWaiting" = "Warten auf Erlaubnis …";
 
 /* Status line right after the Accessibility permission is granted */
 "StatusGranted" = "Erlaubnis erteilt. Alles bereit.";
-
-/* Caption under the screenshot of System Settings in the Accessibility guide */
-"ScreenshotCaption" = "Systemeinstellungen › Datenschutz & Sicherheit › Bedienungshilfen – aktiviere den orange markierten Schalter.";
-
-/* Caption under the live permission row in the Accessibility guide */
-"LiveStatus" = "Aktuelle Berechtigung von Split, jede Sekunde geprüft";
-
-/* Label next to the live switch when Accessibility access is granted */
-"ToggleOn" = "Ein";
-
-/* Label next to the live switch when Accessibility access is not granted */
-"ToggleOff" = "Aus";
