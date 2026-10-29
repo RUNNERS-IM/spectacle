@@ -102,13 +102,9 @@ Done:
 - New icon, a picture menu with a live preview, and a glow after each move
 - Auto arrange (⌥⌘A)
 - A new settings window and 18 languages
-
-Next, in this order:
-
-1. New ratios (1/4, 2/3) and a grid picker in the menu bar
-2. Command line tool and URL scheme (`split left`, `split://center`) for Raycast, Shortcuts and scripts
-3. Export and import of settings as JSON
-4. Drag to snap at screen edges
+- 1.2: an Effects tab (strength, color, label, duration, position), space between windows,
+  full screen that toggles back, rearranging windows when monitors are plugged in or out,
+  a shortcut list while ⌥⌘ is held, and short tips for new users
 
 Issues and pull requests are welcome in this repository.
 
