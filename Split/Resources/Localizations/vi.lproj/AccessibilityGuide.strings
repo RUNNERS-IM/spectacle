@@ -1,15 +1,16 @@
 "WindowTitle" = "Cho phép Split di chuyển cửa sổ";
-"Title" = "Split cần quyền để di chuyển cửa sổ của bạn";
-"Description" = "macOS sẽ hỏi trước khi một ứng dụng có thể di chuyển cửa sổ của ứng dụng khác. Bạn chỉ cần bật một lần.";
-"Step1" = "Cài đặt hệ thống sẽ mở bên cạnh cửa sổ này. Nếu không, hãy bấm **Mở Cài đặt hệ thống**.";
-"Step2" = "Bật công tắc bên cạnh **Split**.";
-"Step3" = "Cửa sổ này sẽ tự đóng và Split đã sẵn sàng để dùng.";
-"SettingsPath" = "Cài đặt hệ thống › Quyền riêng tư & Bảo mật › Trợ năng";
+
+"Title" = "Bật quyền truy cập cho Split";
+
+"Description" = "Chỉ cần bật công tắc này trong Cài đặt hệ thống.";
+
 "ButtonLater" = "Để sau";
+
 "ButtonOpenSettings" = "Mở Cài đặt hệ thống";
+
+/* Link shown when the switch is already on but Split still has no access */
+"ButtonReset" = "Đã bật nhưng không hoạt động?";
+
 "StatusWaiting" = "Đang chờ cấp quyền…";
+
 "StatusGranted" = "Đã cấp quyền. Mọi thứ đã sẵn sàng.";
-"ScreenshotCaption" = "Cài đặt hệ thống › Quyền riêng tư & Bảo mật › Trợ năng — bật công tắc được khoanh màu cam.";
-"LiveStatus" = "Quyền hiện tại của Split, kiểm tra mỗi giây";
-"ToggleOn" = "Bật";
-"ToggleOff" = "Tắt";

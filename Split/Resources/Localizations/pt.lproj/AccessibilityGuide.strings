@@ -1,15 +1,16 @@
 "WindowTitle" = "Permitir que o Split mova janelas";
-"Title" = "O Split precisa de permissão para mover suas janelas";
-"Description" = "O macOS pergunta antes de um app mover as janelas de outro app. Você só precisa ativar isso uma vez.";
-"Step1" = "Os Ajustes do Sistema abrem ao lado desta janela. Se isso não acontecer, clique em **Abrir Ajustes do Sistema**.";
-"Step2" = "Ative o botão ao lado de **Split**.";
-"Step3" = "Esta janela fecha sozinha e o Split fica pronto para usar.";
-"SettingsPath" = "Ajustes do Sistema › Privacidade e Segurança › Acessibilidade";
+
+"Title" = "Ative o acesso do Split";
+
+"Description" = "Basta ativar este botão nos Ajustes do Sistema.";
+
 "ButtonLater" = "Mais Tarde";
+
 "ButtonOpenSettings" = "Abrir Ajustes do Sistema";
+
+/* Link shown when the switch is already on but Split still has no access */
+"ButtonReset" = "Já está ativado e não funciona?";
+
 "StatusWaiting" = "Aguardando permissão…";
+
 "StatusGranted" = "Permissão concedida. Tudo pronto.";
-"ScreenshotCaption" = "Ajustes do Sistema › Privacidade e Segurança › Acessibilidade — ative o botão circulado em laranja.";
-"LiveStatus" = "Permissão atual do Split, verificada a cada segundo";
-"ToggleOn" = "Ativado";
-"ToggleOff" = "Desativado";

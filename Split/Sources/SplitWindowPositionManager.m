@@ -9,6 +9,7 @@
 #import "SplitScreenDetector.h"
 #import "SplitShortcut.h"
 #import "SplitStandardWindowMover.h"
+#import "SplitWindowArranger.h"
 #import "SplitWindowPositionCalculationResult.h"
 #import "SplitWindowPositionCalculator.h"
 
@@ -20,6 +21,40 @@
   NSWorkspace *_sharedWorkspace;
   SplitFailureFeedback _failureFeedback;
   id<SplitWindowMover> _windowMover;
+  /// Window → @[rect before full screen, full screen rect], so pressing full screen again restores it.
+  NSMapTable<SplitAccessibilityElement *, NSArray<NSValue *> *> *_fullscreenRestoreRects;
+  /// Window → @[rect with the gap, the same rect without it]. Halves and thirds cycle by
+  /// comparing the window with exact fractions of the screen, so the calculation is given the
+  /// rect without the gap.
+  NSMapTable<SplitAccessibilityElement *, NSArray<NSValue *> *> *_gaplessRects;
+}
+
+/// Actions that fill a fraction of the screen and so leave a gap around the window.
+static BOOL ActionUsesGap(SplitWindowAction *action)
+{
+  static NSSet<NSString *> *actions;
+  static dispatch_once_t once;
+  dispatch_once(&once, ^{
+    actions = [NSSet setWithArray:@[
+      kSplitWindowActionFullscreen, kSplitWindowActionLeftHalf, kSplitWindowActionRightHalf,
+      kSplitWindowActionTopHalf, kSplitWindowActionBottomHalf, kSplitWindowActionUpperLeft,
+      kSplitWindowActionUpperRight, kSplitWindowActionLowerLeft, kSplitWindowActionLowerRight,
+      kSplitWindowActionNextThird, kSplitWindowActionPreviousThird,
+    ]];
+  });
+  return [actions containsObject:action];
+}
+
+/// Apps such as Terminal round their size to whole characters, so a window counts as still
+/// full screen when every edge is within this distance of where Split put it.
+static const CGFloat kFullscreenMatchTolerance = 24.0;
+
+static BOOL RectsRoughlyEqual(CGRect a, CGRect b)
+{
+  return fabs(CGRectGetMinX(a) - CGRectGetMinX(b)) <= kFullscreenMatchTolerance
+    && fabs(CGRectGetMinY(a) - CGRectGetMinY(b)) <= kFullscreenMatchTolerance
+    && fabs(CGRectGetMaxX(a) - CGRectGetMaxX(b)) <= kFullscreenMatchTolerance
+    && fabs(CGRectGetMaxY(a) - CGRectGetMaxY(b)) <= kFullscreenMatchTolerance;
 }
 
 - (instancetype)initWithScreenDetector:(SplitScreenDetector *)screenDetector
@@ -35,8 +70,37 @@
     _sharedWorkspace = sharedWorkspace;
     _failureFeedback = failureFeedback;
     _windowMover = windowMover;
+    _fullscreenRestoreRects = [NSMapTable strongToStrongObjectsMapTable];
+    _gaplessRects = [NSMapTable strongToStrongObjectsMapTable];
   }
   return self;
+}
+
+/// The rect to hand to the calculation: the gapless version when the window still sits where
+/// Split put it with a gap.
+- (CGRect)calculationRectForElement:(SplitAccessibilityElement *)element windowRect:(CGRect)windowRect
+{
+  NSArray<NSValue *> *rects = element ? [_gaplessRects objectForKey:element] : nil;
+  if (rects && RectsRoughlyEqual(windowRect, NSRectToCGRect(rects[0].rectValue))) {
+    return NSRectToCGRect(rects[1].rectValue);
+  }
+  return windowRect;
+}
+
+/// The rect to go back to when full screen is pressed on a window Split made full screen and
+/// nobody has moved since. CGRectNull otherwise.
+- (CGRect)fullscreenRestoreRectForElement:(SplitAccessibilityElement *)element
+                                   action:(SplitWindowAction *)action
+                               windowRect:(CGRect)windowRect
+{
+  if (![action isEqualToString:kSplitWindowActionFullscreen] || !element) {
+    return CGRectNull;
+  }
+  NSArray<NSValue *> *rects = [_fullscreenRestoreRects objectForKey:element];
+  if (!rects || !RectsRoughlyEqual(windowRect, NSRectToCGRect(rects[1].rectValue))) {
+    return CGRectNull;
+  }
+  return NSRectToCGRect(rects[0].rectValue);
 }
 
 - (instancetype)initWithScreenDetector:(SplitScreenDetector *)screenDetector
@@ -88,8 +152,22 @@
                                                                  windowRect:frontmostWindowRect];
     [history addHistoryItem:historyItem];
   }
+  CGRect restoreRect = [self fullscreenRestoreRectForElement:frontmostWindowElement action:action windowRect:frontmostWindowRect];
+  [_fullscreenRestoreRects removeObjectForKey:frontmostWindowElement];
+  if (!CGRectIsNull(restoreRect)) {
+    [history addHistoryItem:[SplitHistoryItem historyItemFromAccessibilityElement:frontmostWindowElement windowRect:restoreRect]];
+    [_windowMover moveWindowRect:restoreRect
+                   frameOfScreen:CGRectNull
+            visibleFrameOfScreen:visibleFrameOfDestinationScreen
+          frontmostWindowElement:frontmostWindowElement
+                          action:kSplitWindowActionUndo];
+    return;
+  }
+  CGRect rectBeforeMove = frontmostWindowRect;
   frontmostWindowRect = [SplitAccessibilityElement normalizeCoordinatesOfRect:frontmostWindowRect
                                                                     frameOfScreen:frameOfDestinationScreen];
+  frontmostWindowRect = [self calculationRectForElement:frontmostWindowElement windowRect:frontmostWindowRect];
+  [_gaplessRects removeObjectForKey:frontmostWindowElement];
   previousFrontmostWindowRect = frontmostWindowRect;
   windowPositionCalculationResult = [_windowPositionCalculator calculateWindowRect:frontmostWindowRect
                                                         visibleFrameOfSourceScreen:visibleFrameOfSourceScreen
@@ -105,11 +183,24 @@
     _failureFeedback();
     return;
   }
+  CGFloat gap = SplitWindowGap();
+  if (gap > 0 && ActionUsesGap(action)) {
+    CGRect gapless = frontmostWindowRect;
+    frontmostWindowRect = SplitRectWithGap(frontmostWindowRect, visibleFrameOfDestinationScreen, gap);
+    [_gaplessRects setObject:@[[NSValue valueWithRect:NSRectFromCGRect(frontmostWindowRect)],
+                               [NSValue valueWithRect:NSRectFromCGRect(gapless)]]
+                      forKey:frontmostWindowElement];
+  }
   frontmostWindowRect = [SplitAccessibilityElement normalizeCoordinatesOfRect:frontmostWindowRect
                                                                     frameOfScreen:frameOfDestinationScreen];
   historyItem = [SplitHistoryItem historyItemFromAccessibilityElement:frontmostWindowElement
                                                                windowRect:frontmostWindowRect];
   [history addHistoryItem:historyItem];
+  if ([action isEqualToString:kSplitWindowActionFullscreen]) {
+    [_fullscreenRestoreRects setObject:@[[NSValue valueWithRect:NSRectFromCGRect(rectBeforeMove)],
+                                         [NSValue valueWithRect:NSRectFromCGRect(frontmostWindowRect)]]
+                                forKey:frontmostWindowElement];
+  }
   [_windowMover moveWindowRect:frontmostWindowRect
                  frameOfScreen:frameOfDestinationScreen
           visibleFrameOfScreen:visibleFrameOfDestinationScreen
@@ -152,7 +243,12 @@
   if ([frontmostWindowElement isSheet] || [frontmostWindowElement isSystemDialog] || CGRectIsNull(windowRect)) {
     return CGRectNull;
   }
+  CGRect restoreRect = [self fullscreenRestoreRectForElement:frontmostWindowElement action:action windowRect:windowRect];
+  if (!CGRectIsNull(restoreRect)) {
+    return restoreRect;
+  }
   windowRect = [SplitAccessibilityElement normalizeCoordinatesOfRect:windowRect frameOfScreen:frameOfDestinationScreen];
+  windowRect = [self calculationRectForElement:frontmostWindowElement windowRect:windowRect];
   SplitWindowPositionCalculationResult *result = [_windowPositionCalculator calculateWindowRect:windowRect
                                                                      visibleFrameOfSourceScreen:visibleFrameOfSourceScreen
                                                                 visibleFrameOfDestinationScreen:visibleFrameOfDestinationScreen
@@ -160,7 +256,11 @@
   if (!result || CGRectEqualToRect(result.windowRect, windowRect)) {
     return CGRectNull;
   }
-  return [SplitAccessibilityElement normalizeCoordinatesOfRect:result.windowRect frameOfScreen:frameOfDestinationScreen];
+  CGRect target = result.windowRect;
+  if (ActionUsesGap(result.action)) {
+    target = SplitRectWithGap(target, visibleFrameOfDestinationScreen, SplitWindowGap());
+  }
+  return [SplitAccessibilityElement normalizeCoordinatesOfRect:target frameOfScreen:frameOfDestinationScreen];
 }
 
 - (void)undoLastWindowAction

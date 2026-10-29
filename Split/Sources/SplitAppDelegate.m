@@ -32,6 +32,8 @@
   SplitPreferencesController *_preferencesController;
   SplitWindowFeedback *_windowFeedback;
   SplitWindowArranger *_windowArranger;
+  SplitDisplayChangeArranger *_displayChangeArranger;
+  SplitShortcutSheet *_shortcutSheet;
   NSMenuItem *_arrangeWindowsMenuItem;
 #if !SPLIT_APP_STORE
   SPUStandardUpdaterController *_updaterController;
@@ -161,6 +163,16 @@ static BOOL SplitIsRunningUnitTests(void)
   [self updateShortcutMenuItems];
   _windowFeedback = [SplitWindowFeedback new];
   _windowArranger = [SplitWindowArranger new];
+  _displayChangeArranger = [[SplitDisplayChangeArranger alloc] initWithArranger:_windowArranger completion:^(NSUInteger movedCount, BOOL restored) {
+    [weakSelf showDisplayChangeFeedbackForCount:movedCount restored:restored];
+  }];
+  [_displayChangeArranger start];
+  SplitShortcutManager *shortcutManager = _shortcutManager;
+  _shortcutSheet = [[SplitShortcutSheet alloc] initWithSections:SplitShortcutSections() keysForName:^NSString *(NSString *shortcutName) {
+    return [shortcutManager shortcutForShortcutName:shortcutName].displayString;
+  }];
+  [_shortcutSheet startWatchingModifiers];
+  [self insertShortcutSheetMenuItem];
   [self localizeStatusMenu];
   [self decorateStatusMenu];
   // Ask after launch has finished; an alert run from inside applicationDidFinishLaunching
@@ -535,7 +547,8 @@ static NSDictionary<NSString *, SplitWindowAction *> *SplitWindowActionsByShortc
       return;
     }
     title = [NSString localizedStringWithFormat:SplitLocalized(@"ArrangedCount"), (long)rects.count];
-    [_windowFeedback showMoveFeedbackForRects:rects title:title shortcut:keys];
+    [_windowFeedback showMoveFeedbackForRects:rects title:title shortcut:keys tip:[self nextTipForAction:action]];
+    [_displayChangeArranger recordSoon];
     return;
   }
   // One undo after auto-arrange puts every window back, not just the frontmost one.
@@ -553,7 +566,90 @@ static NSDictionary<NSString *, SplitWindowAction *> *SplitWindowActionsByShortc
   if (CGRectIsNull(target)) {
     return;
   }
-  [_windowFeedback showMoveFeedbackForRect:target title:title shortcut:keys];
+  [_windowFeedback showMoveFeedbackForRect:target title:title shortcut:keys tip:[self nextTipForAction:action]];
+  [_displayChangeArranger recordSoon];
+}
+
+#pragma mark - Tips and monitor changes
+
+/// Tips shown once each, one per move, while the label is on; the one that fits the action that
+/// was just used comes first. Returns nil once every tip has been shown.
+- (NSString *)nextTipForAction:(SplitWindowAction *)action
+{
+  if (!SplitWindowFeedback.moveFeedbackEnabled || !SplitWindowFeedback.moveFeedbackShowsShortcut) {
+    return nil;
+  }
+  NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
+  NSArray<NSString *> *shown = [defaults stringArrayForKey:@"ShownTips"] ?: @[];
+  NSString *(^keys)(NSString *) = ^NSString *(NSString *name) {
+    return [self->_shortcutManager shortcutForShortcutName:name].displayString ?: @"";
+  };
+  BOOL half = [@[kSplitWindowActionLeftHalf, kSplitWindowActionRightHalf, kSplitWindowActionTopHalf, kSplitWindowActionBottomHalf] containsObject:action];
+  NSArray<NSArray *> *tips = @[
+    @[@"TipCycle", @(half), @""],
+    @[@"TipFullscreenAgain", @([action isEqualToString:kSplitWindowActionFullscreen]), @""],
+    @[@"TipUndo", @NO, keys(@"UndoLastMove")],
+    @[@"TipSheet", @NO, @""],
+    @[@"TipArrange", @NO, keys(@"ArrangeWindows")],
+  ];
+  NSArray *chosen = nil;
+  for (NSArray *tip in tips) {
+    if (![shown containsObject:tip[0]] && [tip[1] boolValue]) {
+      chosen = tip;
+      break;
+    }
+  }
+  for (NSArray *tip in tips) {
+    // Tips tied to another action wait for that action.
+    BOOL tiedToAction = [tip[0] isEqualToString:@"TipCycle"] || [tip[0] isEqualToString:@"TipFullscreenAgain"];
+    if (!chosen && ![shown containsObject:tip[0]] && !tiedToAction) {
+      chosen = tip;
+    }
+  }
+  if (!chosen || ([chosen[0] isEqualToString:@"TipSheet"] && !SplitShortcutSheet.holdToShowEnabled)) {
+    if (chosen) {
+      [defaults setObject:[shown arrayByAddingObject:chosen[0]] forKey:@"ShownTips"];
+    }
+    return nil;
+  }
+  [defaults setObject:[shown arrayByAddingObject:chosen[0]] forKey:@"ShownTips"];
+  NSString *text = SplitLocalized(chosen[0]);
+  return [chosen[2] length] > 0 ? [NSString stringWithFormat:text, chosen[2]] : text;
+}
+
+- (void)showDisplayChangeFeedbackForCount:(NSUInteger)count restored:(BOOL)restored
+{
+  if (!SplitWindowFeedback.moveFeedbackEnabled || count == 0) {
+    return;
+  }
+  NSString *format = SplitLocalized(restored ? @"DisplayRestored" : @"DisplayRearranged");
+  NSString *undo = [_shortcutManager shortcutForShortcutName:@"UndoLastMove"].displayString ?: @"";
+  [_windowFeedback showLabel:[NSString localizedStringWithFormat:format, (long)count]
+                    shortcut:nil
+                         tip:[NSString stringWithFormat:SplitLocalized(@"DisplayUndoTip"), undo]];
+}
+
+- (void)insertShortcutSheetMenuItem
+{
+  NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:SplitLocalized(@"ShowShortcutSheet")
+                                                action:@selector(showShortcutSheet:)
+                                         keyEquivalent:@""];
+  item.target = self;
+  NSInteger index = -1;
+  for (NSMenuItem *candidate in _statusItemMenu.itemArray) {
+    if (candidate.action == @selector(showPreferencesWindow:)) {
+      index = [_statusItemMenu indexOfItem:candidate];
+    }
+  }
+  [_statusItemMenu insertItem:item atIndex:index >= 0 ? index : _statusItemMenu.numberOfItems];
+}
+
+- (void)showShortcutSheet:(id)sender
+{
+  // The menu is still closing; show the card once it is gone.
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    [self->_shortcutSheet show];
+  });
 }
 
 /// The arrange item is new in 1.1 and not in the menu file; it goes right after Full Screen.

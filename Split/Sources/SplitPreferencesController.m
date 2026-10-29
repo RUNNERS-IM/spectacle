@@ -10,6 +10,7 @@
 #import "SplitShortcutStorage.h"
 #import "SplitShortcutValidation.h"
 #import "SplitUtilities.h"
+#import "SplitWindowArranger.h"
 #import "SplitWindowFeedback.h"
 #import "SplitWindowPositionManager.h"
 
@@ -25,7 +26,7 @@ static const CGFloat kRecorderWidth = 168.0;
 
 /// Shortcut groups in the order the status menu shows them. Each entry: section title key,
 /// optional hint key, shortcut names.
-static NSArray<NSArray *> *ShortcutSections(void)
+NSArray<NSArray *> *SplitShortcutSections(void)
 {
   return @[
     @[@"SectionBasic", @"", @[@"MoveToCenter", @"MoveToFullscreen"]],
@@ -163,6 +164,55 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   return row;
 }
 
+/// A round color button for the Effects tab. "accent" is drawn as a color wheel because it
+/// follows whatever accent color is chosen in System Settings.
+@interface SplitColorSwatch : NSButton
+@property (nonatomic, copy) NSString *colorName;
+@property (nonatomic) BOOL chosen;
+@end
+
+@implementation SplitColorSwatch
+
+- (void)setChosen:(BOOL)chosen
+{
+  _chosen = chosen;
+  self.needsDisplay = YES;
+}
+
+- (void)drawRect:(NSRect)dirtyRect
+{
+  NSRect circle = NSInsetRect(self.bounds, 4.0, 4.0);
+  if ([self.colorName isEqualToString:@"accent"]) {
+    NSArray<NSColor *> *wheel = @[NSColor.systemRedColor, NSColor.systemOrangeColor, NSColor.systemYellowColor,
+                                  NSColor.systemGreenColor, NSColor.systemBlueColor, NSColor.systemPurpleColor];
+    NSPoint center = NSMakePoint(NSMidX(circle), NSMidY(circle));
+    CGFloat step = 360.0 / wheel.count;
+    [wheel enumerateObjectsUsingBlock:^(NSColor *color, NSUInteger index, BOOL *stop) {
+      NSBezierPath *slice = [NSBezierPath bezierPath];
+      [slice moveToPoint:center];
+      [slice appendBezierPathWithArcWithCenter:center radius:NSWidth(circle) / 2.0 startAngle:90.0 + index * step endAngle:90.0 + (index + 1) * step];
+      [slice closePath];
+      [color setFill];
+      [slice fill];
+    }];
+  } else {
+    [SplitMoveFeedbackColorForName(self.colorName) setFill];
+    [[NSBezierPath bezierPathWithOvalInRect:circle] fill];
+  }
+  if (self.chosen) {
+    NSBezierPath *ring = [NSBezierPath bezierPathWithOvalInRect:NSInsetRect(self.bounds, 1.0, 1.0)];
+    ring.lineWidth = 2.0;
+    [NSColor.labelColor setStroke];
+    [ring stroke];
+  }
+  if (!self.enabled) {
+    [[NSColor.windowBackgroundColor colorWithAlphaComponent:0.6] setFill];
+    [[NSBezierPath bezierPathWithOvalInRect:self.bounds] fill];
+  }
+}
+
+@end
+
 #pragma mark -
 
 @interface SplitPreferencesController () <NSWindowDelegate>
@@ -177,8 +227,18 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   NSTabViewController *_tabViewController;
   NSSwitch *_loginItemSwitch;
   NSSwitch *_statusItemSwitch;
-  NSSwitch *_moveFeedbackSwitch;
+  NSSegmentedControl *_feedbackStyleControl;
+  NSArray<SplitColorSwatch *> *_colorSwatches;
+  NSSwitch *_feedbackShortcutSwitch;
+  NSSegmentedControl *_feedbackDurationControl;
+  NSSegmentedControl *_feedbackPositionControl;
+  NSArray<NSView *> *_feedbackDetailRows;
+  NSView *_feedbackPositionRow;
+  SplitWindowFeedback *_feedbackSample;
   NSSwitch *_automaticUpdateSwitch;
+  NSSegmentedControl *_gapControl;
+  NSSwitch *_displayChangeSwitch;
+  NSSwitch *_shortcutSheetSwitch;
   NSView *_permissionDot;
   NSTextField *_permissionHint;
   NSButton *_permissionButton;
@@ -211,6 +271,9 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   [_tabViewController addTabViewItem:[self tabItemWithView:[self makeGeneralView]
                                                      title:SplitLocalized(@"TabGeneral")
                                                     symbol:@"gearshape"]];
+  [_tabViewController addTabViewItem:[self tabItemWithView:[self makeEffectsView]
+                                                     title:SplitLocalized(@"TabEffects")
+                                                    symbol:@"sparkles"]];
   [_tabViewController addTabViewItem:[self tabItemWithView:[self makeShortcutsView]
                                                      title:SplitLocalized(@"TabShortcuts")
                                                     symbol:@"keyboard"]];
@@ -277,11 +340,16 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
 
   _loginItemSwitch = [self switchWithAction:@selector(toggleLoginItem:)];
   _statusItemSwitch = [self switchWithAction:@selector(toggleStatusItem:)];
-  _moveFeedbackSwitch = [self switchWithAction:@selector(toggleMoveFeedback:)];
+  _gapControl = [self segmentsWithLabelKeys:@[@"GapNone", @"GapNarrow", @"GapNormal", @"GapWide"] action:@selector(changeGap:)];
+  _displayChangeSwitch = [self switchWithAction:@selector(toggleDisplayChange:)];
+  _shortcutSheetSwitch = [self switchWithAction:@selector(toggleShortcutSheet:)];
+  CGFloat gapTextWidth = cardWidth - 2 * kRowHorizontalPadding - 230;
   NSMutableArray<NSView *> *rows = [NSMutableArray arrayWithArray:@[
     Row([self textBlockWithTitle:SplitLocalized(@"LaunchAtLogin") hint:SplitLocalized(@"LaunchAtLoginHint") width:textWidth], _loginItemSwitch, cardWidth, 10),
     Row([self textBlockWithTitle:SplitLocalized(@"ShowMenuBarIcon") hint:SplitLocalized(@"ShowMenuBarIconHint") width:textWidth], _statusItemSwitch, cardWidth, 10),
-    Row([self textBlockWithTitle:SplitLocalized(@"MoveFeedback") hint:SplitLocalized(@"MoveFeedbackHint") width:textWidth], _moveFeedbackSwitch, cardWidth, 10),
+    Row([self textBlockWithTitle:SplitLocalized(@"WindowGap") hint:SplitLocalized(@"WindowGapHint") width:gapTextWidth], _gapControl, cardWidth, 10),
+    Row([self textBlockWithTitle:SplitLocalized(@"DisplayChange") hint:SplitLocalized(@"DisplayChangeHint") width:textWidth], _displayChangeSwitch, cardWidth, 10),
+    Row([self textBlockWithTitle:SplitLocalized(@"ShortcutSheetHold") hint:SplitLocalized(@"ShortcutSheetHoldHint") width:textWidth], _shortcutSheetSwitch, cardWidth, 10),
   ]];
 #if !SPLIT_APP_STORE
   _automaticUpdateSwitch = [self switchWithAction:@selector(toggleAutomaticUpdates:)];
@@ -325,7 +393,15 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   NSStackView *about = HorizontalStack(@[icon, aboutText, FlexibleSpace(), website, github], 10);
   [about.widthAnchor constraintEqualToConstant:cardWidth].active = YES;
 
-  NSStackView *content = VerticalStack(@[optionsCard, permissionCard, about], 16);
+  NSMutableArray<NSView *> *cards = [NSMutableArray arrayWithObject:optionsCard];
+#if !SPLIT_APP_STORE
+  NSView *spacesCard = [self spacesCardWithWidth:cardWidth];
+  if (spacesCard) {
+    [cards addObject:spacesCard];
+  }
+#endif
+  [cards addObjectsFromArray:@[permissionCard, about]];
+  NSStackView *content = VerticalStack(cards, 16);
   NSView *container = [NSView new];
   [container addSubview:content];
   [NSLayoutConstraint activateConstraints:@[
@@ -342,7 +418,12 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   NSUserDefaults *defaults = NSUserDefaults.standardUserDefaults;
   _loginItemSwitch.state = [SplitLoginItemHelper isLoginItemEnabledForBundle:NSBundle.mainBundle] ? NSControlStateValueOn : NSControlStateValueOff;
   _statusItemSwitch.state = [defaults boolForKey:@"StatusItemEnabled"] ? NSControlStateValueOn : NSControlStateValueOff;
-  _moveFeedbackSwitch.state = SplitWindowFeedback.moveFeedbackEnabled ? NSControlStateValueOn : NSControlStateValueOff;
+  [self refreshEffectsState];
+  NSArray<NSNumber *> *gaps = @[@0, @8, @16, @24];
+  NSUInteger gapIndex = [gaps indexOfObject:@((NSInteger)round(SplitWindowGap()))];
+  _gapControl.selectedSegment = gapIndex == NSNotFound ? 1 : (NSInteger)gapIndex;
+  _displayChangeSwitch.state = SplitDisplayChangeArranger.enabled ? NSControlStateValueOn : NSControlStateValueOff;
+  _shortcutSheetSwitch.state = SplitShortcutSheet.holdToShowEnabled ? NSControlStateValueOn : NSControlStateValueOff;
   _automaticUpdateSwitch.state = [defaults boolForKey:@"AutomaticUpdateCheckEnabled"] ? NSControlStateValueOn : NSControlStateValueOff;
   [self refreshPermission];
 }
@@ -399,9 +480,208 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
                                                     object:self];
 }
 
-- (void)toggleMoveFeedback:(NSSwitch *)sender
+- (void)changeGap:(NSSegmentedControl *)sender
 {
-  [NSUserDefaults.standardUserDefaults setBool:sender.state == NSControlStateValueOn forKey:@"MoveFeedbackEnabled"];
+  NSArray<NSNumber *> *gaps = @[@0, @8, @16, @24];
+  [NSUserDefaults.standardUserDefaults setObject:gaps[MIN((NSUInteger)MAX(sender.selectedSegment, 0), gaps.count - 1)] forKey:SplitWindowGapKey];
+}
+
+- (void)toggleDisplayChange:(NSSwitch *)sender
+{
+  [NSUserDefaults.standardUserDefaults setBool:sender.state == NSControlStateValueOn forKey:@"RearrangeOnDisplayChange"];
+}
+
+- (void)toggleShortcutSheet:(NSSwitch *)sender
+{
+  [NSUserDefaults.standardUserDefaults setBool:sender.state == NSControlStateValueOn forKey:@"ShortcutSheetEnabled"];
+}
+
+#if !SPLIT_APP_STORE
+/// Two macOS settings make desktops pile up and change order when monitors come and go.
+/// Split cannot move windows between desktops, so it points to the settings instead, and only
+/// while they are on.
+- (NSView *)spacesCardWithWidth:(CGFloat)cardWidth
+{
+  CGFloat textWidth = cardWidth - 2 * kRowHorizontalPadding - 90;
+  NSNumber *reorders = CFBridgingRelease(CFPreferencesCopyAppValue(CFSTR("mru-spaces"), CFSTR("com.apple.dock")));
+  NSNumber *spansDisplays = CFBridgingRelease(CFPreferencesCopyAppValue(CFSTR("spans-displays"), CFSTR("com.apple.spaces")));
+  NSMutableArray<NSView *> *rows = [NSMutableArray new];
+  if (!reorders || reorders.boolValue) {
+    NSButton *open = [NSButton buttonWithTitle:SplitLocalized(@"PermissionOpen") target:self action:@selector(openDesktopSettings:)];
+    open.controlSize = NSControlSizeSmall;
+    [rows addObject:Row([self textBlockWithTitle:SplitLocalized(@"SpacesReorder") hint:SplitLocalized(@"SpacesReorderHint") width:textWidth], open, cardWidth, 10)];
+  }
+  if (!spansDisplays || !spansDisplays.boolValue) {
+    NSButton *open = [NSButton buttonWithTitle:SplitLocalized(@"PermissionOpen") target:self action:@selector(openDesktopSettings:)];
+    open.controlSize = NSControlSizeSmall;
+    [rows addObject:Row([self textBlockWithTitle:SplitLocalized(@"SpacesSeparate") hint:SplitLocalized(@"SpacesSeparateHint") width:textWidth], open, cardWidth, 10)];
+  }
+  if (rows.count == 0) {
+    return nil;
+  }
+  NSStackView *section = VerticalStack(@[Label(SplitLocalized(@"SpacesSection"), 11, NSFontWeightSemibold, NSColor.secondaryLabelColor), Card(rows, cardWidth)], 6);
+  return section;
+}
+
+- (void)openDesktopSettings:(id)sender
+{
+  [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:@"x-apple.systempreferences:com.apple.Desktop-Settings.extension"]];
+}
+#endif
+
+#pragma mark - Effects tab
+
+- (NSSegmentedControl *)segmentsWithLabelKeys:(NSArray<NSString *> *)keys action:(SEL)action
+{
+  NSMutableArray<NSString *> *labels = [NSMutableArray new];
+  for (NSString *key in keys) {
+    [labels addObject:SplitLocalized(key)];
+  }
+  NSSegmentedControl *control = [NSSegmentedControl segmentedControlWithLabels:labels
+                                                                  trackingMode:NSSegmentSwitchTrackingSelectOne
+                                                                        target:self
+                                                                        action:action];
+  control.controlSize = NSControlSizeSmall;
+  control.font = [NSFont systemFontOfSize:NSFont.smallSystemFontSize];
+  control.translatesAutoresizingMaskIntoConstraints = NO;
+  return control;
+}
+
+- (NSView *)makeEffectsView
+{
+  CGFloat cardWidth = kContentWidth - 2 * kOuterPadding;
+  CGFloat textWidth = cardWidth - 2 * kRowHorizontalPadding - 240;
+
+  _feedbackStyleControl = [self segmentsWithLabelKeys:@[@"FeedbackOff", @"FeedbackSubtle", @"FeedbackStrong"] action:@selector(changeFeedbackStyle:)];
+  NSMutableArray<SplitColorSwatch *> *swatches = [NSMutableArray new];
+  for (NSString *name in SplitMoveFeedbackColorNames()) {
+    SplitColorSwatch *swatch = [SplitColorSwatch new];
+    swatch.colorName = name;
+    swatch.bordered = NO;
+    swatch.title = @"";
+    swatch.target = self;
+    swatch.action = @selector(chooseFeedbackColor:);
+    NSString *label = SplitLocalized([@"Color_" stringByAppendingString:name]);
+    swatch.toolTip = label;
+    swatch.accessibilityLabel = label;
+    swatch.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+      [swatch.widthAnchor constraintEqualToConstant:22],
+      [swatch.heightAnchor constraintEqualToConstant:22],
+    ]];
+    [swatches addObject:swatch];
+  }
+  _colorSwatches = swatches;
+  _feedbackShortcutSwitch = [self switchWithAction:@selector(toggleFeedbackShortcut:)];
+  _feedbackDurationControl = [self segmentsWithLabelKeys:@[@"DurationShort", @"DurationNormal", @"DurationLong"] action:@selector(changeFeedbackDuration:)];
+  _feedbackPositionControl = [self segmentsWithLabelKeys:@[@"PositionBottom", @"PositionTop", @"PositionCenter"] action:@selector(changeFeedbackPosition:)];
+
+  NSView *colorRow = Row([self textBlockWithTitle:SplitLocalized(@"FeedbackColor") hint:SplitLocalized(@"FeedbackColorHint") width:textWidth], HorizontalStack(swatches, 2), cardWidth, 10);
+  NSView *shortcutRow = Row([self textBlockWithTitle:SplitLocalized(@"FeedbackShortcut") hint:SplitLocalized(@"FeedbackShortcutHint") width:textWidth], _feedbackShortcutSwitch, cardWidth, 10);
+  NSView *durationRow = Row([self textBlockWithTitle:SplitLocalized(@"FeedbackDuration") hint:nil width:textWidth], _feedbackDurationControl, cardWidth, 10);
+  _feedbackPositionRow = Row([self textBlockWithTitle:SplitLocalized(@"FeedbackPosition") hint:nil width:textWidth], _feedbackPositionControl, cardWidth, 10);
+  _feedbackDetailRows = @[colorRow, shortcutRow, durationRow];
+  NSBox *card = Card(@[
+    Row([self textBlockWithTitle:SplitLocalized(@"MoveFeedback") hint:SplitLocalized(@"MoveFeedbackHint") width:textWidth], _feedbackStyleControl, cardWidth, 10),
+    colorRow,
+    shortcutRow,
+    durationRow,
+    _feedbackPositionRow,
+  ], cardWidth);
+
+  NSButton *sample = [NSButton buttonWithTitle:SplitLocalized(@"FeedbackTry") target:self action:@selector(showFeedbackSample:)];
+  sample.controlSize = NSControlSizeSmall;
+  NSStackView *footer = HorizontalStack(@[Label(SplitLocalized(@"FeedbackTryHint"), 11, NSFontWeightRegular, NSColor.secondaryLabelColor), FlexibleSpace(), sample], 12);
+  [footer.widthAnchor constraintEqualToConstant:cardWidth].active = YES;
+
+  NSStackView *content = VerticalStack(@[card, footer], 12);
+  NSView *container = [NSView new];
+  [container addSubview:content];
+  [NSLayoutConstraint activateConstraints:@[
+    [container.widthAnchor constraintEqualToConstant:kContentWidth],
+    [content.topAnchor constraintEqualToAnchor:container.topAnchor constant:kOuterPadding],
+    [content.bottomAnchor constraintEqualToAnchor:container.bottomAnchor constant:-kOuterPadding],
+    [content.leadingAnchor constraintEqualToAnchor:container.leadingAnchor constant:kOuterPadding],
+  ]];
+  return container;
+}
+
+/// Turns a row's controls and labels on or off together, so a disabled row looks dimmed.
+static void SetRowEnabled(NSView *view, BOOL enabled)
+{
+  if ([view isKindOfClass:NSControl.class]) {
+    ((NSControl *)view).enabled = enabled;
+    if ([view isKindOfClass:NSTextField.class]) {
+      view.alphaValue = enabled ? 1.0 : 0.45;
+    }
+  }
+  for (NSView *subview in view.subviews) {
+    SetRowEnabled(subview, enabled);
+  }
+}
+
+- (void)refreshEffectsState
+{
+  SplitMoveFeedbackStyle style = SplitWindowFeedback.moveFeedbackStyle;
+  _feedbackStyleControl.selectedSegment = style;
+  NSString *colorName = SplitWindowFeedback.moveFeedbackColorName;
+  for (SplitColorSwatch *swatch in _colorSwatches) {
+    swatch.chosen = [swatch.colorName isEqualToString:colorName];
+  }
+  _feedbackShortcutSwitch.state = SplitWindowFeedback.moveFeedbackShowsShortcut ? NSControlStateValueOn : NSControlStateValueOff;
+  _feedbackDurationControl.selectedSegment = SplitWindowFeedback.moveFeedbackDuration;
+  _feedbackPositionControl.selectedSegment = SplitWindowFeedback.moveFeedbackLabelPosition;
+  BOOL enabled = style != SplitMoveFeedbackStyleOff;
+  for (NSView *row in _feedbackDetailRows) {
+    SetRowEnabled(row, enabled);
+  }
+  SetRowEnabled(_feedbackPositionRow, enabled && SplitWindowFeedback.moveFeedbackShowsShortcut);
+}
+
+/// Plays the glow and label around the Settings window so a change can be seen right away.
+- (void)showFeedbackSample:(id)sender
+{
+  [self refreshEffectsState];
+  if (!SplitWindowFeedback.moveFeedbackEnabled || !self.window) {
+    return;
+  }
+  if (!_feedbackSample) {
+    _feedbackSample = [SplitWindowFeedback new];
+  }
+  NSRect frame = self.window.frame;
+  CGFloat primaryHeight = NSScreen.screens.firstObject.frame.size.height;
+  CGRect rect = CGRectMake(NSMinX(frame), primaryHeight - NSMaxY(frame), NSWidth(frame), NSHeight(frame));
+  [_feedbackSample showMoveFeedbackForRect:rect title:SplitLocalized(@"MoveToCenter") shortcut:[_shortcutManager shortcutForShortcutName:@"MoveToCenter"].displayString];
+}
+
+- (void)changeFeedbackStyle:(NSSegmentedControl *)sender
+{
+  [NSUserDefaults.standardUserDefaults setInteger:sender.selectedSegment forKey:SplitMoveFeedbackStyleKey];
+  [self showFeedbackSample:sender];
+}
+
+- (void)chooseFeedbackColor:(SplitColorSwatch *)sender
+{
+  [NSUserDefaults.standardUserDefaults setObject:sender.colorName forKey:SplitMoveFeedbackColorKey];
+  [self showFeedbackSample:sender];
+}
+
+- (void)toggleFeedbackShortcut:(NSSwitch *)sender
+{
+  [NSUserDefaults.standardUserDefaults setBool:sender.state == NSControlStateValueOn forKey:SplitMoveFeedbackShowsShortcutKey];
+  [self showFeedbackSample:sender];
+}
+
+- (void)changeFeedbackDuration:(NSSegmentedControl *)sender
+{
+  [NSUserDefaults.standardUserDefaults setInteger:sender.selectedSegment forKey:SplitMoveFeedbackDurationKey];
+  [self showFeedbackSample:sender];
+}
+
+- (void)changeFeedbackPosition:(NSSegmentedControl *)sender
+{
+  [NSUserDefaults.standardUserDefaults setInteger:sender.selectedSegment forKey:SplitMoveFeedbackLabelPositionKey];
+  [self showFeedbackSample:sender];
 }
 
 - (void)toggleAutomaticUpdates:(NSSwitch *)sender
@@ -452,7 +732,7 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
 {
   CGFloat cardWidth = kContentWidth - 2 * kOuterPadding;
   NSMutableArray<NSView *> *sections = [NSMutableArray new];
-  for (NSArray *section in ShortcutSections()) {
+  for (NSArray *section in SplitShortcutSections()) {
     NSMutableArray<NSView *> *header = [NSMutableArray arrayWithObject:Label(SplitLocalized(section[0]), 11, NSFontWeightSemibold, NSColor.secondaryLabelColor)];
     if ([section[1] length] > 0) {
       [header addObject:WrappingLabel(SplitLocalized(section[1]), 11, NSColor.tertiaryLabelColor, cardWidth - 8)];

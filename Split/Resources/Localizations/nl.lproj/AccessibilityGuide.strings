@@ -1,15 +1,16 @@
 "WindowTitle" = "Sta Split toe vensters te verplaatsen";
-"Title" = "Split heeft toestemming nodig om je vensters te verplaatsen";
-"Description" = "macOS vraagt het eerst voordat een app de vensters van een andere app mag verplaatsen. Je hoeft dit maar één keer aan te zetten.";
-"Step1" = "Systeeminstellingen wordt naast dit venster geopend. Gebeurt dat niet, klik dan op **Open Systeeminstellingen**.";
-"Step2" = "Zet de schakelaar naast **Split** aan.";
-"Step3" = "Dit venster sluit vanzelf en Split is klaar voor gebruik.";
-"SettingsPath" = "Systeeminstellingen › Privacy en beveiliging › Toegankelijkheid";
+
+"Title" = "Zet toegang voor Split aan";
+
+"Description" = "Zet alleen deze ene schakelaar aan in Systeeminstellingen.";
+
 "ButtonLater" = "Later";
+
 "ButtonOpenSettings" = "Open Systeeminstellingen";
+
+/* Link shown when the switch is already on but Split still has no access */
+"ButtonReset" = "Staat al aan maar werkt niet?";
+
 "StatusWaiting" = "Wachten op toestemming…";
+
 "StatusGranted" = "Toestemming gegeven. Je bent klaar.";
-"ScreenshotCaption" = "Systeeminstellingen › Privacy en beveiliging › Toegankelijkheid — zet de oranje omcirkelde schakelaar aan.";
-"LiveStatus" = "Huidige toestemming van Split, elke seconde gecontroleerd";
-"ToggleOn" = "Aan";
-"ToggleOff" = "Uit";
