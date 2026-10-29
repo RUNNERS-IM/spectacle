@@ -4,6 +4,10 @@
 #   scripts/release.sh 2.0            # build/release/2.0/ 에 파일만 만든다 (GitHub 에 안 올림)
 #   scripts/release.sh 2.0 --publish  # 위 + GitHub Releases v2.0 으로 올린다
 #
+# 보통은 이 스크립트를 직접 돌리지 않고 Info.plist 버전을 올려 master 에 합친 뒤 태그
+# v2.0 만 올린다. 그러면 .github/workflows/release.yml 이 이 스크립트를 --publish 로 돌린다.
+# 이 맥에서 --publish 로 돌리면 태그가 올라가면서 워크플로도 한 번 더 돌아 겹친다.
+#
 # 필요한 것 (맥마다 한 번, ~/claude-config/bin/split-keys 가 준비):
 #   - 키체인의 Developer ID Application 인증서 (RGWVXJ8URP)
 #   - notarytool 키체인 이름 "runners"
