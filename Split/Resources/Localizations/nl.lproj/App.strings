@@ -62,7 +62,7 @@
 "FeedbackTry" = "Probeer";
 "FeedbackTryHint" = "Wijzigingen zie je meteen rond dit venster.";
 "WindowGap" = "Ruimte tussen vensters";
-"WindowGapHint" = "Laat ruimte tussen vensters en langs de schermranden.";
+"WindowGapHint" = "Laat ruimte tussen vensters. Langs de schermranden sluiten ze aan.";
 "GapNone" = "Geen";
 "GapNarrow" = "Smal";
 "GapNormal" = "Normaal";

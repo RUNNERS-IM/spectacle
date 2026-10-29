@@ -65,7 +65,7 @@
 "FeedbackTry" = "지금 보기";
 "FeedbackTryHint" = "설정을 바꾸면 이 창 둘레에 바로 보여 줘요.";
 "WindowGap" = "창 사이 간격";
-"WindowGapHint" = "창과 창, 창과 화면 끝 사이를 띄워요.";
+"WindowGapHint" = "창과 창 사이를 띄워요. 화면 끝에는 딱 붙어요.";
 "GapNone" = "없음";
 "GapNarrow" = "좁게";
 "GapNormal" = "보통";

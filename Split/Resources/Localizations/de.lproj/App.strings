@@ -77,7 +77,7 @@
 "FeedbackTry" = "Ausprobieren";
 "FeedbackTryHint" = "Änderungen werden sofort um dieses Fenster gezeigt.";
 "WindowGap" = "Abstand zwischen Fenstern";
-"WindowGapHint" = "Lässt Platz zwischen Fenstern und zum Bildschirmrand.";
+"WindowGapHint" = "Lässt Platz zwischen Fenstern. Am Bildschirmrand liegen sie bündig an.";
 "GapNone" = "Kein";
 "GapNarrow" = "Schmal";
 "GapNormal" = "Normal";

@@ -20,8 +20,8 @@ NSArray<NSValue *> *SplitArrangeLayoutRects(NSUInteger count, CGRect visibleFram
 extern NSString *const SplitWindowGapKey;
 CGFloat SplitWindowGap(void);
 
-/// Shrinks `rect` so it keeps `gap` points from the edges of `visibleFrame` and half of that
-/// from the windows next to it, so two neighbours end up `gap` apart. Works in either
+/// Shrinks `rect` by half of `gap` on every side that faces another window, so two neighbours
+/// end up `gap` apart. Sides on the edge of `visibleFrame` stay on the edge. Works in either
 /// coordinate system as long as both rects use the same one.
 CGRect SplitRectWithGap(CGRect rect, CGRect visibleFrame, CGFloat gap);
 

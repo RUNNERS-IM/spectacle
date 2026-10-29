@@ -77,7 +77,7 @@
 "FeedbackTry" = "Probar";
 "FeedbackTryHint" = "Los cambios se muestran al momento alrededor de esta ventana.";
 "WindowGap" = "Espacio entre ventanas";
-"WindowGapHint" = "Deja espacio entre ventanas y alrededor de los bordes de la pantalla.";
+"WindowGapHint" = "Deja espacio entre ventanas. Los bordes de la pantalla quedan pegados.";
 "GapNone" = "Ninguno";
 "GapNarrow" = "Estrecho";
 "GapNormal" = "Normal";

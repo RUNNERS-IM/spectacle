@@ -102,7 +102,7 @@ Done:
 - New icon, a picture menu with a live preview, and a glow after each move
 - Auto arrange (⌥⌘A)
 - A new settings window and 18 languages
-- 1.2: an Effects tab (strength, color, label, duration, position), space between windows,
+- 1.2: an Effects tab (strength, color, label, duration, position), space between windows (screen edges stay flush),
   full screen that toggles back, rearranging windows when monitors are plugged in or out,
   a shortcut list while ⌥⌘ is held, and short tips for new users
 
