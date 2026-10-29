@@ -10,6 +10,7 @@
 #import "SplitShortcutStorage.h"
 #import "SplitShortcutValidation.h"
 #import "SplitUtilities.h"
+#import "SplitWindowArranger.h"
 #import "SplitWindowFeedback.h"
 #import "SplitWindowPositionManager.h"
 
@@ -25,7 +26,7 @@ static const CGFloat kRecorderWidth = 168.0;
 
 /// Shortcut groups in the order the status menu shows them. Each entry: section title key,
 /// optional hint key, shortcut names.
-static NSArray<NSArray *> *ShortcutSections(void)
+NSArray<NSArray *> *SplitShortcutSections(void)
 {
   return @[
     @[@"SectionBasic", @"", @[@"MoveToCenter", @"MoveToFullscreen"]],
@@ -235,6 +236,9 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   NSView *_feedbackPositionRow;
   SplitWindowFeedback *_feedbackSample;
   NSSwitch *_automaticUpdateSwitch;
+  NSSegmentedControl *_gapControl;
+  NSSwitch *_displayChangeSwitch;
+  NSSwitch *_shortcutSheetSwitch;
   NSView *_permissionDot;
   NSTextField *_permissionHint;
   NSButton *_permissionButton;
@@ -336,9 +340,16 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
 
   _loginItemSwitch = [self switchWithAction:@selector(toggleLoginItem:)];
   _statusItemSwitch = [self switchWithAction:@selector(toggleStatusItem:)];
+  _gapControl = [self segmentsWithLabelKeys:@[@"GapNone", @"GapNarrow", @"GapNormal", @"GapWide"] action:@selector(changeGap:)];
+  _displayChangeSwitch = [self switchWithAction:@selector(toggleDisplayChange:)];
+  _shortcutSheetSwitch = [self switchWithAction:@selector(toggleShortcutSheet:)];
+  CGFloat gapTextWidth = cardWidth - 2 * kRowHorizontalPadding - 230;
   NSMutableArray<NSView *> *rows = [NSMutableArray arrayWithArray:@[
     Row([self textBlockWithTitle:SplitLocalized(@"LaunchAtLogin") hint:SplitLocalized(@"LaunchAtLoginHint") width:textWidth], _loginItemSwitch, cardWidth, 10),
     Row([self textBlockWithTitle:SplitLocalized(@"ShowMenuBarIcon") hint:SplitLocalized(@"ShowMenuBarIconHint") width:textWidth], _statusItemSwitch, cardWidth, 10),
+    Row([self textBlockWithTitle:SplitLocalized(@"WindowGap") hint:SplitLocalized(@"WindowGapHint") width:gapTextWidth], _gapControl, cardWidth, 10),
+    Row([self textBlockWithTitle:SplitLocalized(@"DisplayChange") hint:SplitLocalized(@"DisplayChangeHint") width:textWidth], _displayChangeSwitch, cardWidth, 10),
+    Row([self textBlockWithTitle:SplitLocalized(@"ShortcutSheetHold") hint:SplitLocalized(@"ShortcutSheetHoldHint") width:textWidth], _shortcutSheetSwitch, cardWidth, 10),
   ]];
 #if !SPLIT_APP_STORE
   _automaticUpdateSwitch = [self switchWithAction:@selector(toggleAutomaticUpdates:)];
@@ -382,7 +393,15 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   NSStackView *about = HorizontalStack(@[icon, aboutText, FlexibleSpace(), website, github], 10);
   [about.widthAnchor constraintEqualToConstant:cardWidth].active = YES;
 
-  NSStackView *content = VerticalStack(@[optionsCard, permissionCard, about], 16);
+  NSMutableArray<NSView *> *cards = [NSMutableArray arrayWithObject:optionsCard];
+#if !SPLIT_APP_STORE
+  NSView *spacesCard = [self spacesCardWithWidth:cardWidth];
+  if (spacesCard) {
+    [cards addObject:spacesCard];
+  }
+#endif
+  [cards addObjectsFromArray:@[permissionCard, about]];
+  NSStackView *content = VerticalStack(cards, 16);
   NSView *container = [NSView new];
   [container addSubview:content];
   [NSLayoutConstraint activateConstraints:@[
@@ -400,6 +419,11 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   _loginItemSwitch.state = [SplitLoginItemHelper isLoginItemEnabledForBundle:NSBundle.mainBundle] ? NSControlStateValueOn : NSControlStateValueOff;
   _statusItemSwitch.state = [defaults boolForKey:@"StatusItemEnabled"] ? NSControlStateValueOn : NSControlStateValueOff;
   [self refreshEffectsState];
+  NSArray<NSNumber *> *gaps = @[@0, @8, @16, @24];
+  NSUInteger gapIndex = [gaps indexOfObject:@((NSInteger)round(SplitWindowGap()))];
+  _gapControl.selectedSegment = gapIndex == NSNotFound ? 1 : (NSInteger)gapIndex;
+  _displayChangeSwitch.state = SplitDisplayChangeArranger.enabled ? NSControlStateValueOn : NSControlStateValueOff;
+  _shortcutSheetSwitch.state = SplitShortcutSheet.holdToShowEnabled ? NSControlStateValueOn : NSControlStateValueOff;
   _automaticUpdateSwitch.state = [defaults boolForKey:@"AutomaticUpdateCheckEnabled"] ? NSControlStateValueOn : NSControlStateValueOff;
   [self refreshPermission];
 }
@@ -455,6 +479,55 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   [NSNotificationCenter.defaultCenter postNotificationName:enable ? @"SplitStatusItemEnabledNotification" : @"SplitStatusItemDisabledNotification"
                                                     object:self];
 }
+
+- (void)changeGap:(NSSegmentedControl *)sender
+{
+  NSArray<NSNumber *> *gaps = @[@0, @8, @16, @24];
+  [NSUserDefaults.standardUserDefaults setObject:gaps[MIN((NSUInteger)MAX(sender.selectedSegment, 0), gaps.count - 1)] forKey:SplitWindowGapKey];
+}
+
+- (void)toggleDisplayChange:(NSSwitch *)sender
+{
+  [NSUserDefaults.standardUserDefaults setBool:sender.state == NSControlStateValueOn forKey:@"RearrangeOnDisplayChange"];
+}
+
+- (void)toggleShortcutSheet:(NSSwitch *)sender
+{
+  [NSUserDefaults.standardUserDefaults setBool:sender.state == NSControlStateValueOn forKey:@"ShortcutSheetEnabled"];
+}
+
+#if !SPLIT_APP_STORE
+/// Two macOS settings make desktops pile up and change order when monitors come and go.
+/// Split cannot move windows between desktops, so it points to the settings instead, and only
+/// while they are on.
+- (NSView *)spacesCardWithWidth:(CGFloat)cardWidth
+{
+  CGFloat textWidth = cardWidth - 2 * kRowHorizontalPadding - 90;
+  NSNumber *reorders = CFBridgingRelease(CFPreferencesCopyAppValue(CFSTR("mru-spaces"), CFSTR("com.apple.dock")));
+  NSNumber *spansDisplays = CFBridgingRelease(CFPreferencesCopyAppValue(CFSTR("spans-displays"), CFSTR("com.apple.spaces")));
+  NSMutableArray<NSView *> *rows = [NSMutableArray new];
+  if (!reorders || reorders.boolValue) {
+    NSButton *open = [NSButton buttonWithTitle:SplitLocalized(@"PermissionOpen") target:self action:@selector(openDesktopSettings:)];
+    open.controlSize = NSControlSizeSmall;
+    [rows addObject:Row([self textBlockWithTitle:SplitLocalized(@"SpacesReorder") hint:SplitLocalized(@"SpacesReorderHint") width:textWidth], open, cardWidth, 10)];
+  }
+  if (!spansDisplays || !spansDisplays.boolValue) {
+    NSButton *open = [NSButton buttonWithTitle:SplitLocalized(@"PermissionOpen") target:self action:@selector(openDesktopSettings:)];
+    open.controlSize = NSControlSizeSmall;
+    [rows addObject:Row([self textBlockWithTitle:SplitLocalized(@"SpacesSeparate") hint:SplitLocalized(@"SpacesSeparateHint") width:textWidth], open, cardWidth, 10)];
+  }
+  if (rows.count == 0) {
+    return nil;
+  }
+  NSStackView *section = VerticalStack(@[Label(SplitLocalized(@"SpacesSection"), 11, NSFontWeightSemibold, NSColor.secondaryLabelColor), Card(rows, cardWidth)], 6);
+  return section;
+}
+
+- (void)openDesktopSettings:(id)sender
+{
+  [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:@"x-apple.systempreferences:com.apple.Desktop-Settings.extension"]];
+}
+#endif
 
 #pragma mark - Effects tab
 
@@ -659,7 +732,7 @@ static void SetRowEnabled(NSView *view, BOOL enabled)
 {
   CGFloat cardWidth = kContentWidth - 2 * kOuterPadding;
   NSMutableArray<NSView *> *sections = [NSMutableArray new];
-  for (NSArray *section in ShortcutSections()) {
+  for (NSArray *section in SplitShortcutSections()) {
     NSMutableArray<NSView *> *header = [NSMutableArray arrayWithObject:Label(SplitLocalized(section[0]), 11, NSFontWeightSemibold, NSColor.secondaryLabelColor)];
     if ([section[1] length] > 0) {
       [header addObject:WrappingLabel(SplitLocalized(section[1]), 11, NSColor.tertiaryLabelColor, cardWidth - 8)];

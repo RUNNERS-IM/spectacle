@@ -60,6 +60,31 @@ NSColor *SplitMoveFeedbackColorForName(NSString *name);
 /// Only the heads-up label, for example when there was nothing to arrange.
 - (void)showLabel:(NSString *)title shortcut:(nullable NSString *)shortcut;
 
+/// The label with a smaller second line under it (a tip for new users, or how to undo).
+- (void)showLabel:(NSString *)title shortcut:(nullable NSString *)shortcut tip:(nullable NSString *)tip;
+- (void)showMoveFeedbackForRect:(CGRect)rect title:(NSString *)title shortcut:(nullable NSString *)shortcut tip:(nullable NSString *)tip;
+- (void)showMoveFeedbackForRects:(NSArray<NSValue *> *)rects title:(NSString *)title shortcut:(nullable NSString *)shortcut tip:(nullable NSString *)tip;
+
+@end
+
+/// A see-through card that lists every Split shortcut with its picture, shown while ⌥⌘ is
+/// held for a second (user default "ShortcutSheetEnabled", on when never set) or from the menu.
+@interface SplitShortcutSheet : NSObject
+
+@property (class, nonatomic, readonly) BOOL holdToShowEnabled;
+
+/// `sections` as SplitShortcutSections() returns them; `keysForName` gives the current
+/// shortcut text for a shortcut name.
+- (instancetype)initWithSections:(NSArray<NSArray *> *)sections
+                     keysForName:(NSString *_Nullable (^)(NSString *shortcutName))keysForName;
+
+/// Starts watching for ⌥⌘ being held.
+- (void)startWatchingModifiers;
+
+/// Shows the card until the next key press or click.
+- (void)show;
+- (void)hide;
+
 @end
 
 /// Small template images that show where a window goes, for the status menu.

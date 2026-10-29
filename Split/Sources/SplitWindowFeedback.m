@@ -1,5 +1,7 @@
 #import "SplitWindowFeedback.h"
 
+#import "SplitUtilities.h"
+
 #import <QuartzCore/QuartzCore.h>
 
 static const CGFloat kPreviewCornerRadius = 12.0;
@@ -206,13 +208,18 @@ static NSColor *FeedbackColor(void)
 
 - (void)showMoveFeedbackForRect:(CGRect)rect title:(NSString *)title shortcut:(NSString *)shortcut
 {
+  [self showMoveFeedbackForRect:rect title:title shortcut:shortcut tip:nil];
+}
+
+- (void)showMoveFeedbackForRect:(CGRect)rect title:(NSString *)title shortcut:(NSString *)shortcut tip:(NSString *)tip
+{
   if (!SplitWindowFeedback.moveFeedbackEnabled || CGRectIsNull(rect)) {
     return;
   }
   [self hidePreview];
   [self glowAtRect:rect];
   if (SplitWindowFeedback.moveFeedbackShowsShortcut) {
-    [self showLabel:title shortcut:shortcut onScreenContainingRect:CocoaRectFromAccessibilityRect(rect)];
+    [self showLabel:title shortcut:shortcut tip:tip onScreenContainingRect:CocoaRectFromAccessibilityRect(rect)];
   }
 }
 
@@ -285,20 +292,30 @@ static NSRect UnionOfAccessibilityRects(NSArray<NSValue *> *rects)
 
 - (void)showMoveFeedbackForRects:(NSArray<NSValue *> *)rects title:(NSString *)title shortcut:(NSString *)shortcut
 {
+  [self showMoveFeedbackForRects:rects title:title shortcut:shortcut tip:nil];
+}
+
+- (void)showMoveFeedbackForRects:(NSArray<NSValue *> *)rects title:(NSString *)title shortcut:(NSString *)shortcut tip:(NSString *)tip
+{
   [self hidePreview];
   if (!SplitWindowFeedback.moveFeedbackEnabled || rects.count == 0) {
     return;
   }
   [self glowAtRects:rects];
   if (SplitWindowFeedback.moveFeedbackShowsShortcut) {
-    [self showLabel:title shortcut:shortcut onScreenContainingRect:UnionOfAccessibilityRects(rects)];
+    [self showLabel:title shortcut:shortcut tip:tip onScreenContainingRect:UnionOfAccessibilityRects(rects)];
   }
 }
 
 - (void)showLabel:(NSString *)title shortcut:(NSString *)shortcut
 {
+  [self showLabel:title shortcut:shortcut tip:nil];
+}
+
+- (void)showLabel:(NSString *)title shortcut:(NSString *)shortcut tip:(NSString *)tip
+{
   NSScreen *screen = NSScreen.mainScreen ?: NSScreen.screens.firstObject;
-  [self showLabel:title shortcut:shortcut onScreenContainingRect:screen.frame];
+  [self showLabel:title shortcut:shortcut tip:tip onScreenContainingRect:screen.frame];
 }
 
 - (void)showPreviewForRects:(NSArray<NSValue *> *)rects
@@ -336,7 +353,7 @@ static NSRect UnionOfAccessibilityRects(NSArray<NSValue *> *rects)
   [_previewWindow orderFrontRegardless];
 }
 
-- (void)showLabel:(NSString *)title shortcut:(NSString *)shortcut onScreenContainingRect:(NSRect)rect
+- (void)showLabel:(NSString *)title shortcut:(NSString *)shortcut tip:(NSString *)tip onScreenContainingRect:(NSRect)rect
 {
   if (!_labelPanel) {
     _labelPanel = [[NSPanel alloc] initWithContentRect:NSZeroRect
@@ -357,6 +374,9 @@ static NSRect UnionOfAccessibilityRects(NSArray<NSValue *> *rects)
     background.layer.cornerRadius = 14.0;
     background.layer.masksToBounds = YES;
     _labelField = [NSTextField labelWithString:@""];
+    _labelField.alignment = NSTextAlignmentCenter;
+    _labelField.usesSingleLineMode = NO;
+    _labelField.maximumNumberOfLines = 2;
     _labelField.textColor = NSColor.labelColor;
     _labelField.translatesAutoresizingMaskIntoConstraints = NO;
     [background addSubview:_labelField];
@@ -370,9 +390,25 @@ static NSRect UnionOfAccessibilityRects(NSArray<NSValue *> *rects)
   _labelPanel.contentView.layer.cornerRadius = metrics.labelCornerRadius;
   _labelField.font = [NSFont systemFontOfSize:metrics.fontSize weight:NSFontWeightSemibold];
   NSString *text = shortcut.length > 0 ? [NSString stringWithFormat:@"%@   %@", shortcut, title] : title;
-  _labelField.stringValue = text;
+  NSMutableParagraphStyle *centered = [NSMutableParagraphStyle new];
+  centered.alignment = NSTextAlignmentCenter;
+  NSMutableAttributedString *attributed = [[NSMutableAttributedString alloc] initWithString:text attributes:@{
+    NSFontAttributeName: [NSFont systemFontOfSize:metrics.fontSize weight:NSFontWeightSemibold],
+    NSForegroundColorAttributeName: NSColor.labelColor,
+    NSParagraphStyleAttributeName: centered,
+  }];
+  CGFloat tipHeight = 0;
+  if (tip.length > 0) {
+    [attributed appendAttributedString:[[NSAttributedString alloc] initWithString:[@"\n" stringByAppendingString:tip] attributes:@{
+      NSFontAttributeName: [NSFont systemFontOfSize:metrics.fontSize - 2.0],
+      NSForegroundColorAttributeName: NSColor.secondaryLabelColor,
+      NSParagraphStyleAttributeName: centered,
+    }]];
+    tipHeight = metrics.fontSize + 6.0;
+  }
+  _labelField.attributedStringValue = attributed;
   CGFloat padding = metrics.labelHeight < 40.0 ? 28.0 : 40.0;
-  NSSize size = NSMakeSize(MAX(metrics.labelMinWidth, _labelField.intrinsicContentSize.width + padding), metrics.labelHeight);
+  NSSize size = NSMakeSize(MAX(metrics.labelMinWidth, _labelField.intrinsicContentSize.width + padding), metrics.labelHeight + tipHeight);
 
   NSScreen *screen = NSScreen.mainScreen;
   for (NSScreen *candidate in NSScreen.screens) {
@@ -397,7 +433,9 @@ static NSRect UnionOfAccessibilityRects(NSArray<NSValue *> *rects)
     self->_labelPanel.animator.alphaValue = metrics.labelOpacity;
   }];
   NSUInteger generation = ++_labelGeneration;
-  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(metrics.labelVisibleDuration * DurationScale() * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+  // A tip needs a moment longer to read.
+  NSTimeInterval visibleTime = metrics.labelVisibleDuration * DurationScale() + (tip.length > 0 ? 1.6 : 0.0);
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(visibleTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
     if (generation != self->_labelGeneration) {
       return;
     }
@@ -410,6 +448,286 @@ static NSRect UnionOfAccessibilityRects(NSArray<NSValue *> *rects)
       }
     }];
   });
+}
+
+@end
+
+#pragma mark - Shortcut sheet
+
+static const NSTimeInterval kSheetHoldDelay = 1.0;
+
+@implementation SplitShortcutSheet
+{
+  NSArray<NSArray *> *_sections;
+  NSString *_Nullable (^_keysForName)(NSString *);
+  NSPanel *_panel;
+  NSTimer *_holdTimer;
+  NSMutableArray *_monitors;
+  id _dismissMonitor;
+  BOOL _shownByHold;
+}
+
++ (BOOL)holdToShowEnabled
+{
+  NSNumber *value = [NSUserDefaults.standardUserDefaults objectForKey:@"ShortcutSheetEnabled"];
+  return value ? value.boolValue : YES;
+}
+
+- (instancetype)initWithSections:(NSArray<NSArray *> *)sections keysForName:(NSString *(^)(NSString *))keysForName
+{
+  if (self = [super init]) {
+    _sections = sections;
+    _keysForName = [keysForName copy];
+    _monitors = [NSMutableArray new];
+  }
+  return self;
+}
+
+static BOOL OnlyOptionAndCommand(NSEventModifierFlags flags)
+{
+  flags &= NSEventModifierFlagShift | NSEventModifierFlagControl | NSEventModifierFlagOption | NSEventModifierFlagCommand;
+  return flags == (NSEventModifierFlagOption | NSEventModifierFlagCommand);
+}
+
+- (void)startWatchingModifiers
+{
+  if (_monitors.count > 0) {
+    return;
+  }
+  __weak typeof(self) weakSelf = self;
+  void (^flags)(NSEvent *) = ^(NSEvent *event) {
+    [weakSelf modifiersChanged:event.modifierFlags];
+  };
+  void (^other)(NSEvent *) = ^(NSEvent *event) {
+    [weakSelf cancelHold];
+  };
+  NSEventMask otherMask = NSEventMaskKeyDown | NSEventMaskLeftMouseDown | NSEventMaskRightMouseDown | NSEventMaskScrollWheel;
+  id globalFlags = [NSEvent addGlobalMonitorForEventsMatchingMask:NSEventMaskFlagsChanged handler:flags];
+  id globalOther = [NSEvent addGlobalMonitorForEventsMatchingMask:otherMask handler:other];
+  id localFlags = [NSEvent addLocalMonitorForEventsMatchingMask:NSEventMaskFlagsChanged handler:^NSEvent *(NSEvent *event) {
+    flags(event);
+    return event;
+  }];
+  id localOther = [NSEvent addLocalMonitorForEventsMatchingMask:otherMask handler:^NSEvent *(NSEvent *event) {
+    other(event);
+    return event;
+  }];
+  for (id monitor in @[globalFlags ?: NSNull.null, globalOther ?: NSNull.null, localFlags ?: NSNull.null, localOther ?: NSNull.null]) {
+    if (monitor != NSNull.null) {
+      [_monitors addObject:monitor];
+    }
+  }
+}
+
+- (void)modifiersChanged:(NSEventModifierFlags)flags
+{
+  if (OnlyOptionAndCommand(flags) && SplitShortcutSheet.holdToShowEnabled) {
+    [_holdTimer invalidate];
+    _holdTimer = [NSTimer scheduledTimerWithTimeInterval:kSheetHoldDelay repeats:NO block:^(NSTimer *timer) {
+      [self showFromHold];
+    }];
+  } else {
+    [self cancelHold];
+  }
+}
+
+/// Any key or click: the user went on to use a shortcut, so the card is not needed.
+- (void)cancelHold
+{
+  [_holdTimer invalidate];
+  _holdTimer = nil;
+  if (_shownByHold) {
+    [self hide];
+  }
+}
+
+- (void)showFromHold
+{
+  _holdTimer = nil;
+  if (NSEvent.pressedMouseButtons != 0 || !OnlyOptionAndCommand(NSEvent.modifierFlags)) {
+    return;
+  }
+  [self present];
+  _shownByHold = YES;
+}
+
+- (void)show
+{
+  [self present];
+  _shownByHold = NO;
+  if (!_dismissMonitor) {
+    __weak typeof(self) weakSelf = self;
+    _dismissMonitor = [NSEvent addGlobalMonitorForEventsMatchingMask:NSEventMaskKeyDown | NSEventMaskLeftMouseDown | NSEventMaskRightMouseDown
+                                                             handler:^(NSEvent *event) {
+      [weakSelf hide];
+    }];
+  }
+}
+
+- (void)hide
+{
+  _shownByHold = NO;
+  if (_dismissMonitor) {
+    [NSEvent removeMonitor:_dismissMonitor];
+    _dismissMonitor = nil;
+  }
+  if (!_panel.isVisible) {
+    return;
+  }
+  NSPanel *panel = _panel;
+  [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+    context.duration = 0.12;
+    panel.animator.alphaValue = 0.0;
+  } completionHandler:^{
+    if (panel.alphaValue < 0.01) {
+      [panel orderOut:nil];
+    }
+  }];
+}
+
+static NSTextField *SheetLabel(NSString *text, CGFloat size, NSFontWeight weight, NSColor *color)
+{
+  NSTextField *label = [NSTextField labelWithString:text ?: @""];
+  label.font = [NSFont systemFontOfSize:size weight:weight];
+  label.textColor = color;
+  label.translatesAutoresizingMaskIntoConstraints = NO;
+  return label;
+}
+
+- (NSView *)rowForShortcutName:(NSString *)name
+{
+  NSImageView *picture = [NSImageView imageViewWithImage:SplitMenuImageForShortcutName(name) ?: [NSImage new]];
+  picture.contentTintColor = NSColor.secondaryLabelColor;
+  picture.imageScaling = NSImageScaleProportionallyUpOrDown;
+  picture.translatesAutoresizingMaskIntoConstraints = NO;
+  [NSLayoutConstraint activateConstraints:@[
+    [picture.widthAnchor constraintEqualToConstant:20],
+    [picture.heightAnchor constraintEqualToConstant:14],
+  ]];
+  NSTextField *title = SheetLabel(SplitLocalized(name), 12, NSFontWeightRegular, NSColor.labelColor);
+  NSTextField *keys = SheetLabel(_keysForName(name) ?: @"—", 12, NSFontWeightMedium, NSColor.secondaryLabelColor);
+  NSView *space = [NSView new];
+  space.translatesAutoresizingMaskIntoConstraints = NO;
+  [space setContentHuggingPriority:1 forOrientation:NSLayoutConstraintOrientationHorizontal];
+  NSStackView *row = [NSStackView stackViewWithViews:@[picture, title, space, keys]];
+  row.spacing = 8;
+  row.translatesAutoresizingMaskIntoConstraints = NO;
+  [row.widthAnchor constraintEqualToConstant:220].active = YES;
+  return row;
+}
+
+- (NSView *)makeContent
+{
+  NSMutableArray<NSStackView *> *columns = [NSMutableArray new];
+  for (NSUInteger index = 0; index < 3; index++) {
+    NSStackView *column = [NSStackView stackViewWithViews:@[]];
+    column.orientation = NSUserInterfaceLayoutOrientationVertical;
+    column.alignment = NSLayoutAttributeLeading;
+    column.spacing = 4;
+    column.translatesAutoresizingMaskIntoConstraints = NO;
+    [columns addObject:column];
+  }
+  // Fill columns in turn by height so they come out about even.
+  NSUInteger heights[3] = {0, 0, 0};
+  for (NSArray *section in _sections) {
+    NSUInteger target = 0;
+    for (NSUInteger index = 1; index < 3; index++) {
+      if (heights[index] < heights[target]) {
+        target = index;
+      }
+    }
+    NSStackView *column = columns[target];
+    NSTextField *header = SheetLabel(SplitLocalized(section[0]), 10, NSFontWeightSemibold, NSColor.tertiaryLabelColor);
+    [column addArrangedSubview:header];
+    if (column.arrangedSubviews.count > 1) {
+      [column setCustomSpacing:10 afterView:column.arrangedSubviews[column.arrangedSubviews.count - 2]];
+    }
+    for (NSString *name in section[2]) {
+      [column addArrangedSubview:[self rowForShortcutName:name]];
+    }
+    heights[target] += [section[2] count] + 1;
+  }
+  NSStackView *grid = [NSStackView stackViewWithViews:columns];
+  grid.alignment = NSLayoutAttributeTop;
+  grid.spacing = 22;
+  grid.translatesAutoresizingMaskIntoConstraints = NO;
+
+  NSTextField *title = SheetLabel(SplitLocalized(@"ShortcutSheetTitle"), 14, NSFontWeightBold, NSColor.labelColor);
+  NSTextField *hint = SheetLabel(SplitLocalized(@"ShortcutSheetHint"), 11, NSFontWeightRegular, NSColor.secondaryLabelColor);
+  NSView *space = [NSView new];
+  space.translatesAutoresizingMaskIntoConstraints = NO;
+  [space setContentHuggingPriority:1 forOrientation:NSLayoutConstraintOrientationHorizontal];
+  NSStackView *head = [NSStackView stackViewWithViews:@[title, space, hint]];
+  head.translatesAutoresizingMaskIntoConstraints = NO;
+
+  NSStackView *content = [NSStackView stackViewWithViews:@[head, grid]];
+  content.orientation = NSUserInterfaceLayoutOrientationVertical;
+  content.alignment = NSLayoutAttributeLeading;
+  content.spacing = 12;
+  content.translatesAutoresizingMaskIntoConstraints = NO;
+  [head.widthAnchor constraintEqualToAnchor:grid.widthAnchor].active = YES;
+
+  NSVisualEffectView *background = [NSVisualEffectView new];
+  background.material = NSVisualEffectMaterialHUDWindow;
+  background.blendingMode = NSVisualEffectBlendingModeBehindWindow;
+  background.state = NSVisualEffectStateActive;
+  background.wantsLayer = YES;
+  background.layer.cornerRadius = 16.0;
+  background.layer.masksToBounds = YES;
+  [background addSubview:content];
+  [NSLayoutConstraint activateConstraints:@[
+    [content.topAnchor constraintEqualToAnchor:background.topAnchor constant:18],
+    [content.bottomAnchor constraintEqualToAnchor:background.bottomAnchor constant:-18],
+    [content.leadingAnchor constraintEqualToAnchor:background.leadingAnchor constant:22],
+    [content.trailingAnchor constraintEqualToAnchor:background.trailingAnchor constant:-22],
+  ]];
+  return background;
+}
+
+- (void)present
+{
+  // Built every time so changed shortcuts show up.
+  NSView *content = [self makeContent];
+  if (!_panel) {
+    _panel = [[NSPanel alloc] initWithContentRect:NSZeroRect
+                                        styleMask:NSWindowStyleMaskBorderless | NSWindowStyleMaskNonactivatingPanel
+                                          backing:NSBackingStoreBuffered
+                                            defer:YES];
+    _panel.opaque = NO;
+    _panel.backgroundColor = NSColor.clearColor;
+    _panel.hasShadow = YES;
+    _panel.ignoresMouseEvents = YES;
+    _panel.level = NSStatusWindowLevel;
+    _panel.collectionBehavior = NSWindowCollectionBehaviorCanJoinAllSpaces | NSWindowCollectionBehaviorFullScreenAuxiliary;
+  }
+  _panel.contentView = content;
+  NSSize size = content.fittingSize;
+  NSScreen *screen = NSScreen.mainScreen;
+  NSPoint mouse = NSEvent.mouseLocation;
+  for (NSScreen *candidate in NSScreen.screens) {
+    if (NSPointInRect(mouse, candidate.frame)) {
+      screen = candidate;
+      break;
+    }
+  }
+  NSRect visible = screen.visibleFrame;
+  [_panel setFrame:NSMakeRect(NSMidX(visible) - size.width / 2.0, NSMidY(visible) - size.height / 2.0, size.width, size.height) display:YES];
+  _panel.alphaValue = 0.0;
+  [_panel orderFrontRegardless];
+  [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+    context.duration = 0.15;
+    self->_panel.animator.alphaValue = 1.0;
+  }];
+}
+
+- (void)dealloc
+{
+  for (id monitor in _monitors) {
+    [NSEvent removeMonitor:monitor];
+  }
+  if (_dismissMonitor) {
+    [NSEvent removeMonitor:_dismissMonitor];
+  }
 }
 
 @end

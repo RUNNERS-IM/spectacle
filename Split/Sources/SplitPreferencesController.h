@@ -27,6 +27,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+/// Shortcut groups in the order the status menu shows them. Each entry: section title key,
+/// optional hint key, shortcut names.
+NSArray<NSArray *> *SplitShortcutSections(void);
+
 /// Posted when "Check for updates automatically" changes. The new value is in the user default
 /// "AutomaticUpdateCheckEnabled".
 extern NSNotificationName const SplitAutomaticUpdateCheckChangedNotification;

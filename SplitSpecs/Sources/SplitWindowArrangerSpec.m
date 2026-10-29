@@ -93,4 +93,15 @@ describe(@"App.strings", ^{
     }
   });
 });
+describe(@"SplitRectWithGap", ^{
+  it(@"keeps the gap from screen edges and half of it from neighbours", ^{
+    CGRect screen = CGRectMake(0, 0, 1440, 900);
+    CGRect left = SplitRectWithGap(CGRectMake(0, 0, 720, 900), screen, 8);
+    CGRect right = SplitRectWithGap(CGRectMake(720, 0, 720, 900), screen, 8);
+    expect(NSStringFromRect(left)).to.equal(NSStringFromRect(NSMakeRect(8, 8, 708, 884)));
+    expect(NSStringFromRect(right)).to.equal(NSStringFromRect(NSMakeRect(724, 8, 708, 884)));
+    expect(CGRectGetMinX(right) - CGRectGetMaxX(left)).to.equal(8);
+    expect(NSStringFromRect(SplitRectWithGap(CGRectMake(0, 0, 720, 900), screen, 0))).to.equal(NSStringFromRect(NSMakeRect(0, 0, 720, 900)));
+  });
+});
 SpecEnd
