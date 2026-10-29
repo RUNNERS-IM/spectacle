@@ -1,21 +1,24 @@
-# 버전 태그(v1.3 등)를 올리면 직접 배포 판을 서명·공증해 GitHub Releases 에 올린다.
-# 1) 사무실 맥 러너(라벨 split-release)가 켜져 있고 놀고 있으면 거기서,
-# 2) 아니면 GitHub 호스팅 맥(macos-26)에서 비밀값으로 임시 키체인을 만들어 돈다.
+# master 를 release 브랜치로 합치면 직접 배포 판을 낸다. 센스·푸딩과 같은 방식:
+# 1) 버전을 출시일 기준 2.{연도 끝자리}.{MMDD} 로 올려 release 에 커밋한다([skip ci]),
+# 2) 서명·공증해 GitHub Releases(태그 v<버전>)·appcast 에 올린다. 사용자에게는 자동 업데이트로 바로 간다.
+# Homebrew 는 RUNNERS-IM/homebrew-tap 의 워크플로가 최신 릴리스를 보고 따라 고친다.
+#
+# 러너: 저장소 변수 SPLIT_RUNNER 가 'mac-studio' 면 사무실 Mac Studio(라벨 split-release),
+# 아니면 GitHub 호스팅 macos-26. 서명 키는 어느 쪽이든 GitHub Secrets 로 이 실행 동안만 쓰는
+# 임시 키체인을 만들고 끝나면 지운다. 러너 맥의 로그인 키체인·파일은 건드리지 않는다.
+#
+# 손으로 돌릴 때(workflow_dispatch) publish 를 끄면 버전을 올리지 않고 서명·공증까지만 해서
+# 결과를 실행 기록 첨부로만 남긴다. 아무에게도 배포되지 않으니 러너·서명 시험에 쓴다.
 # App Store 업로드는 저장소 변수 APP_STORE_UPLOAD 가 'true' 일 때만 한다. 심사 제출은 사람이 한다.
-# 손으로 돌릴 때(workflow_dispatch) publish 를 끄면 서명·공증까지만 하고 결과는 실행 기록의
-# 첨부 파일로만 남긴다. 아무에게도 배포되지 않으니 러너·서명 설정 시험에 쓴다.
 name: Release
 
 on:
   push:
-    tags: ["v*"]
+    branches: [release]
   workflow_dispatch:
     inputs:
-      version:
-        description: "버전 (예: 1.3). 해당 태그가 이미 있어야 합니다"
-        required: true
       publish:
-        description: "GitHub Releases·Homebrew 에 올리기 (끄면 시험 실행)"
+        description: "버전을 올리고 배포하기 (끄면 시험 실행)"
         type: boolean
         default: false
 
@@ -23,49 +26,42 @@ permissions:
   contents: write
 
 concurrency:
-  group: release
+  group: split-release
   cancel-in-progress: false
 
 jobs:
-  pick-runner:
-    runs-on: ubuntu-latest
-    outputs:
-      runs_on: ${{ steps.pick.outputs.runs_on }}
-      hosted: ${{ steps.pick.outputs.hosted }}
-    steps:
-      - id: pick
-        env:
-          GH_TOKEN: ${{ secrets.RUNNER_STATUS_TOKEN }}
-        run: |
-          online=""
-          if [ -n "$GH_TOKEN" ]; then
-            online=$(gh api "repos/${{ github.repository }}/actions/runners" \
-              --jq '[.runners[] | select(.status=="online" and (.busy|not) and ([.labels[].name] | index("split-release")))] | length' 2>/dev/null || echo 0)
-          fi
-          if [ "${online:-0}" -gt 0 ]; then
-            echo 'runs_on=["self-hosted","split-release"]' >> "$GITHUB_OUTPUT"
-            echo 'hosted=false' >> "$GITHUB_OUTPUT"
-            echo "사무실 맥 러너에서 실행합니다."
-          else
-            echo 'runs_on="macos-26"' >> "$GITHUB_OUTPUT"
-            echo 'hosted=true' >> "$GITHUB_OUTPUT"
-            echo "사무실 맥 러너가 없어 GitHub 호스팅 맥에서 실행합니다."
-          fi
-
   release:
-    needs: pick-runner
-    runs-on: ${{ fromJSON(needs.pick-runner.outputs.runs_on) }}
+    # 버전 올림 커밋이 다시 이 워크플로를 부르지 않게 막는다
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    runs-on: ${{ vars.SPLIT_RUNNER == 'mac-studio' && fromJSON('["self-hosted","split-release"]') || 'macos-26' }}
     timeout-minutes: 60
     env:
-      VERSION: ${{ inputs.version || github.ref_name }}
+      PUBLISH: ${{ github.event_name == 'push' || inputs.publish }}
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # the build number is the commit count
-          ref: ${{ inputs.version && format('v{0}', inputs.version) || github.ref }}
+          ref: release
+          fetch-depth: 0  # the build number is the commit count, and tags tell which versions exist
 
-      - name: Prepare signing on the hosted Mac
-        if: needs.pick-runner.outputs.hosted == 'true'
+      - name: Bump the version and push
+        id: bump
+        if: env.PUBLISH == 'true'
+        run: |
+          set -euo pipefail
+          VERSION=$(scripts/bump-release.sh)
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "Split/Supporting Files/Info.plist"
+          git commit -q -m "Split $VERSION [skip ci]"
+          git push origin HEAD:release
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Pick the version of a test run
+        id: current
+        if: env.PUBLISH != 'true'
+        run: echo "version=$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' 'Split/Supporting Files/Info.plist')" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare a temporary signing keychain
         env:
           DEVELOPER_ID_P12_BASE64: ${{ secrets.DEVELOPER_ID_P12_BASE64 }}
           DEVELOPER_ID_P12_PASSWORD: ${{ secrets.DEVELOPER_ID_P12_PASSWORD }}
@@ -75,50 +71,59 @@ jobs:
           SPARKLE_EDDSA_PRIVATE_KEY: ${{ secrets.SPARKLE_EDDSA_PRIVATE_KEY }}
         run: |
           set -euo pipefail
+          SECRETS="$RUNNER_TEMP/split-secrets"
+          mkdir -p "$SECRETS" && chmod 700 "$SECRETS"
           KEYCHAIN="$RUNNER_TEMP/split-signing.keychain-db"
           KEYCHAIN_PASSWORD="$(uuidgen)"
+          # The search list is put back as it was when the run ends.
+          security list-keychains -d user | tr -d '" ' > "$SECRETS/keychains-before"
           security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
           security set-keychain-settings -lut 3600 "$KEYCHAIN"
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
-          echo "$DEVELOPER_ID_P12_BASE64" | base64 --decode > "$RUNNER_TEMP/developer-id.p12"
-          security import "$RUNNER_TEMP/developer-id.p12" -k "$KEYCHAIN" -P "$DEVELOPER_ID_P12_PASSWORD" -T /usr/bin/codesign -T /usr/bin/security
+          echo "$DEVELOPER_ID_P12_BASE64" | base64 --decode > "$SECRETS/developer-id.p12"
+          security import "$SECRETS/developer-id.p12" -k "$KEYCHAIN" -P "$DEVELOPER_ID_P12_PASSWORD" -T /usr/bin/codesign -T /usr/bin/security
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN" >/dev/null
-          security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | tr -d '"')
-          rm "$RUNNER_TEMP/developer-id.p12"
-          mkdir -p "$HOME/.runners/secrets"
-          printf '%s' "$ASC_API_KEY_P8" > "$HOME/.runners/secrets/AuthKey_${ASC_API_KEY_ID}.p8"
-          printf '%s' "$SPARKLE_EDDSA_PRIVATE_KEY" > "$HOME/.runners/secrets/sparkle_eddsa_private.key"
-          chmod 600 "$HOME/.runners/secrets/"*
-          xcrun notarytool store-credentials runners --key "$HOME/.runners/secrets/AuthKey_${ASC_API_KEY_ID}.p8" \
+          security list-keychains -d user -s "$KEYCHAIN" $(cat "$SECRETS/keychains-before")
+          rm "$SECRETS/developer-id.p12"
+          printf '%s' "$ASC_API_KEY_P8" > "$SECRETS/AuthKey_${ASC_API_KEY_ID}.p8"
+          printf '%s' "$SPARKLE_EDDSA_PRIVATE_KEY" > "$SECRETS/sparkle_eddsa_private.key"
+          chmod 600 "$SECRETS/"*
+          xcrun notarytool store-credentials runners --key "$SECRETS/AuthKey_${ASC_API_KEY_ID}.p8" \
             --key-id "$ASC_API_KEY_ID" --issuer "$ASC_API_ISSUER_ID" --keychain "$KEYCHAIN"
           echo "NOTARY_KEYCHAIN=$KEYCHAIN" >> "$GITHUB_ENV"
+          echo "SPARKLE_KEY_FILE=$SECRETS/sparkle_eddsa_private.key" >> "$GITHUB_ENV"
 
       - name: Release (sign, notarize, publish)
         env:
           GH_TOKEN: ${{ github.token }}
-          # A tag push always publishes; a manual run publishes only when asked.
-          PUBLISH: ${{ github.event_name == 'push' || inputs.publish }}
+          VERSION: ${{ steps.bump.outputs.version || steps.current.outputs.version }}
         run: |
           if [ "$PUBLISH" = "true" ]; then
-            scripts/release.sh "${VERSION#v}" --publish
+            scripts/release.sh "$VERSION" --publish
           else
-            scripts/release.sh "${VERSION#v}"
+            scripts/release.sh "$VERSION"
           fi
 
       - name: Keep the files of a test run
-        if: github.event_name == 'workflow_dispatch' && !inputs.publish
+        if: env.PUBLISH != 'true'
         uses: actions/upload-artifact@v4
         with:
-          name: split-${{ inputs.version }}-test
+          name: split-${{ steps.current.outputs.version }}-test
           path: |
             build/release/*/Split-*.dmg
             build/release/*/appcast.xml
           retention-days: 3
 
       - name: Upload the App Store build
-        if: (github.event_name == 'push' || inputs.publish) && vars.APP_STORE_UPLOAD == 'true'
-        run: scripts/release-app-store.sh "${VERSION#v}"
+        if: env.PUBLISH == 'true' && vars.APP_STORE_UPLOAD == 'true'
+        run: scripts/release-app-store.sh "${{ steps.bump.outputs.version }}"
 
-      - name: Remove the temporary keychain
-        if: always() && needs.pick-runner.outputs.hosted == 'true'
-        run: security delete-keychain "$RUNNER_TEMP/split-signing.keychain-db" || true
+      - name: Remove the temporary keychain and keys
+        if: always()
+        run: |
+          SECRETS="$RUNNER_TEMP/split-secrets"
+          if [ -f "$SECRETS/keychains-before" ]; then
+            security list-keychains -d user -s $(cat "$SECRETS/keychains-before")
+          fi
+          security delete-keychain "$RUNNER_TEMP/split-signing.keychain-db" 2>/dev/null || true
+          rm -rf "$SECRETS"

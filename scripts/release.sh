@@ -4,9 +4,9 @@
 #   scripts/release.sh 2.0            # build/release/2.0/ 에 파일만 만든다 (GitHub 에 안 올림)
 #   scripts/release.sh 2.0 --publish  # 위 + GitHub Releases v2.0 으로 올린다
 #
-# 보통은 이 스크립트를 직접 돌리지 않고 Info.plist 버전을 올려 master 에 합친 뒤 태그
-# v2.0 만 올린다. 그러면 .github/workflows/release.yml 이 이 스크립트를 --publish 로 돌린다.
-# 이 맥에서 --publish 로 돌리면 태그가 올라가면서 워크플로도 한 번 더 돌아 겹친다.
+# 보통은 이 스크립트를 직접 돌리지 않는다. master 를 release 브랜치로 합치면
+# .github/workflows/release.yml 이 버전을 날짜로 올리고(scripts/bump-release.sh) 이 스크립트를
+# --publish 로 돌린다.
 #
 # 필요한 것 (맥마다 한 번, ~/claude-config/bin/split-keys 가 준비):
 #   - 키체인의 Developer ID Application 인증서 (RGWVXJ8URP)
@@ -25,7 +25,7 @@ NOTARY_PROFILE="runners"
 # GitHub 호스팅 맥에서는 워크플로가 만든 임시 키체인에 공증 정보가 있다.
 NOTARY_ARGS=(--keychain-profile "$NOTARY_PROFILE")
 if [ -n "${NOTARY_KEYCHAIN:-}" ]; then NOTARY_ARGS+=(--keychain "$NOTARY_KEYCHAIN"); fi
-SPARKLE_KEY="$HOME/.runners/secrets/sparkle_eddsa_private.key"
+SPARKLE_KEY="${SPARKLE_KEY_FILE:-$HOME/.runners/secrets/sparkle_eddsa_private.key}"
 INFO_PLIST="$REPO_ROOT/Split/Supporting Files/Info.plist"
 
 OUT="$REPO_ROOT/build/release/$VERSION"
@@ -103,8 +103,9 @@ if [ "$PUBLISH" = "--publish" ]; then
   gh release create "v$VERSION" "$ZIP" "$DMG" "$OUT/appcast.xml" \
     --repo "$GITHUB_REPO" --title "Split $VERSION" --generate-notes --latest
 
-  # Homebrew tap 갱신 (RUNNERS-IM/homebrew-tap 이 있을 때만)
-  if gh repo view RUNNERS-IM/homebrew-tap >/dev/null 2>&1; then
+  # Homebrew tap 갱신 (RUNNERS-IM/homebrew-tap 에 쓸 수 있을 때만). GitHub Actions 의 토큰은
+  # 다른 저장소에 못 써서 건너뛴다. 그때는 tap 저장소의 워크플로가 최신 릴리스를 보고 고친다.
+  if [ "$(gh api repos/RUNNERS-IM/homebrew-tap --jq .permissions.push 2>/dev/null)" = "true" ]; then
     step "Homebrew tap 갱신"
     TAP="$OUT/homebrew-tap"
     gh repo clone RUNNERS-IM/homebrew-tap "$TAP" -- -q
