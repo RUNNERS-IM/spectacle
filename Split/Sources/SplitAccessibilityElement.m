@@ -16,6 +16,24 @@
   return self;
 }
 
+/// Two wrappers are equal when they point at the same window, so a window can be looked up later.
+- (BOOL)isEqual:(id)object
+{
+  if (![object isKindOfClass:SplitAccessibilityElement.class]) {
+    return NO;
+  }
+  AXUIElementRef other = ((SplitAccessibilityElement *)object)->_underlyingElement;
+  if (!_underlyingElement || !other) {
+    return _underlyingElement == other;
+  }
+  return CFEqual(_underlyingElement, other);
+}
+
+- (NSUInteger)hash
+{
+  return _underlyingElement ? CFHash(_underlyingElement) : 0;
+}
+
 + (SplitAccessibilityElement *)frontmostApplicationElement
 {
   NSRunningApplication *frontmostApplication = [NSWorkspace sharedWorkspace].frontmostApplication;

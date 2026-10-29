@@ -8,6 +8,7 @@
 #import "SplitScreenDetector.h"
 #import "SplitWindowPositionCalculationResult.h"
 #import "SplitWindowPositionCalculator.h"
+#import "SplitWindowMover.h"
 #import "SplitWindowPositionManager.h"
 
 // OCMockito crashes on arm64 when it retains CGRect arguments of a stubbed call,
@@ -26,6 +27,37 @@
 {
   self.calculateCallCount += 1;
   return self.stubbedResult;
+}
+
+@end
+
+/// Remembers every rect it was asked to move a window to.
+@interface SplitRecordingWindowMover : NSObject <SplitWindowMover>
+@property (nonatomic, strong) NSMutableArray<NSValue *> *movedRects;
+@end
+
+@implementation SplitRecordingWindowMover
+
+- (instancetype)initWithInnerWindowMover:(id<SplitWindowMover>)innerWindowMover
+{
+  if (self = [super init]) {
+    _movedRects = [NSMutableArray new];
+  }
+  return self;
+}
+
++ (instancetype)newWithInnerWindowMover:(id<SplitWindowMover>)innerWindowMover
+{
+  return [[self alloc] initWithInnerWindowMover:innerWindowMover];
+}
+
+- (void)moveWindowRect:(CGRect)windowRect
+         frameOfScreen:(CGRect)frameOfScreen
+  visibleFrameOfScreen:(CGRect)visibleFrameOfScreen
+frontmostWindowElement:(SplitAccessibilityElement *)frontmostWindowElement
+                action:(SplitWindowAction *)action
+{
+  [self.movedRects addObject:[NSValue valueWithRect:NSRectFromCGRect(windowRect)]];
 }
 
 @end
@@ -187,6 +219,46 @@ describe(@"SplitWindowPositionManager", ^{
     [verify(mockWindowPositionCalculationResult) windowRect];
 
     [[verifyCount(mockAccessibilityElemenet, never()) withMatcher:anything()] setRectOfElement:CGRectNull];
+  });
+  it(@"should put a full screen window back when full screen is pressed again", ^{
+    SplitRecordingWindowMover *mover = [SplitRecordingWindowMover newWithInnerWindowMover:nil];
+    SplitWindowPositionManager *manager = [[SplitWindowPositionManager alloc] initWithScreenDetector:mockScreenDetector
+                                                                       windowPositionCalculator:mockWindowPositionCalculator
+                                                                                sharedWorkspace:mockSharedWorkspace
+                                                                                failureFeedback:^() {}
+                                                                                    windowMover:mover];
+    SplitAccessibilityElement *mockAccessibilityElemenet = mock([SplitAccessibilityElement class]);
+    [given([mockAccessibilityElemenet rectOfElement]) willReturnStruct:&frontmostWindowRect objCType:@encode(CGRect)];
+    [given([mockAccessibilityElemenet isSheet]) willReturnBool:NO];
+    [given([mockAccessibilityElemenet isSystemDialog]) willReturnBool:NO];
+    [given([mockWindowPositionCalculationResult action]) willReturn:kSplitWindowActionFullscreen];
+    CGRect calculatedFullscreenRect = visibleFrameOfScreen;
+    [given([mockWindowPositionCalculationResult windowRect]) willReturnStruct:&calculatedFullscreenRect objCType:@encode(CGRect)];
+
+    [manager moveFrontmostWindowElement:mockAccessibilityElemenet
+                                 action:kSplitWindowActionFullscreen
+                                screens:@[mockMainScreen]
+                             mainScreen:mockMainScreen];
+    expect(mover.movedRects.count).to.equal(1);
+    CGRect fullscreenRect = NSRectToCGRect(mover.movedRects[0].rectValue);
+
+    // The window now sits where Split put it.
+    [given([mockAccessibilityElemenet rectOfElement]) willReturnStruct:&fullscreenRect objCType:@encode(CGRect)];
+    [manager moveFrontmostWindowElement:mockAccessibilityElemenet
+                                 action:kSplitWindowActionFullscreen
+                                screens:@[mockMainScreen]
+                             mainScreen:mockMainScreen];
+    expect(mover.movedRects.count).to.equal(2);
+    expect(CGRectEqualToRect(NSRectToCGRect(mover.movedRects[1].rectValue), frontmostWindowRect)).to.beTruthy();
+
+    // A third press makes it full screen again.
+    [given([mockAccessibilityElemenet rectOfElement]) willReturnStruct:&frontmostWindowRect objCType:@encode(CGRect)];
+    [manager moveFrontmostWindowElement:mockAccessibilityElemenet
+                                 action:kSplitWindowActionFullscreen
+                                screens:@[mockMainScreen]
+                             mainScreen:mockMainScreen];
+    expect(mover.movedRects.count).to.equal(3);
+    expect(CGRectEqualToRect(NSRectToCGRect(mover.movedRects[2].rectValue), fullscreenRect)).to.beTruthy();
   });
 });
 SpecEnd
