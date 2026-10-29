@@ -1,15 +1,16 @@
 "WindowTitle" = "Pozwól Split przenosić okna";
-"Title" = "Split potrzebuje pozwolenia na przenoszenie okien";
-"Description" = "macOS pyta, zanim jedna aplikacja będzie mogła przenosić okna innej aplikacji. Wystarczy to włączyć tylko raz.";
-"Step1" = "Ustawienia systemowe otworzą się obok tego okna. Jeśli tak się nie stanie, kliknij **Otwórz Ustawienia systemowe**.";
-"Step2" = "Włącz przełącznik obok **Split**.";
-"Step3" = "To okno zamknie się samo, a Split będzie gotowy do użycia.";
-"SettingsPath" = "Ustawienia systemowe › Prywatność i ochrona › Dostępność";
+
+"Title" = "Włącz dostęp dla Split";
+
+"Description" = "Wystarczy włączyć ten jeden przełącznik w Ustawieniach systemowych.";
+
 "ButtonLater" = "Później";
+
 "ButtonOpenSettings" = "Otwórz Ustawienia systemowe";
+
+/* Link shown when the switch is already on but Split still has no access */
+"ButtonReset" = "Włączone, ale nie działa?";
+
 "StatusWaiting" = "Oczekiwanie na pozwolenie…";
+
 "StatusGranted" = "Pozwolenie udzielone. Wszystko gotowe.";
-"ScreenshotCaption" = "Ustawienia systemowe › Prywatność i ochrona › Dostępność — włącz przełącznik zakreślony na pomarańczowo.";
-"LiveStatus" = "Bieżące pozwolenie Split, sprawdzane co sekundę";
-"ToggleOn" = "Wł.";
-"ToggleOff" = "Wył.";

@@ -1,15 +1,16 @@
 "WindowTitle" = "允许 Split 移动窗口";
-"Title" = "Split 需要权限才能移动你的窗口";
-"Description" = "在一个 App 移动另一个 App 的窗口之前，macOS 会先征求许可。你只需开启一次。";
-"Step1" = "“系统设置”会在此窗口旁边打开。如果没有打开，请点按**打开系统设置**。";
-"Step2" = "打开 **Split** 旁边的开关。";
-"Step3" = "此窗口会自动关闭，Split 即可使用。";
-"SettingsPath" = "系统设置 › 隐私与安全性 › 辅助功能";
+
+"Title" = "请为 Split 开启权限";
+
+"Description" = "只需在系统设置中打开这一个开关。";
+
 "ButtonLater" = "以后";
+
 "ButtonOpenSettings" = "打开系统设置";
+
+/* Link shown when the switch is already on but Split still has no access */
+"ButtonReset" = "已打开但仍无效？";
+
 "StatusWaiting" = "正在等待权限…";
+
 "StatusGranted" = "已获得权限，一切就绪。";
-"ScreenshotCaption" = "系统设置 › 隐私与安全性 › 辅助功能 — 打开橙色圆圈标出的开关。";
-"LiveStatus" = "Split 的当前权限，每秒检查一次";
-"ToggleOn" = "开";
-"ToggleOff" = "关";
