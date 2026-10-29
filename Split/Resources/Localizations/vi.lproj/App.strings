@@ -62,7 +62,7 @@
 "FeedbackTry" = "Thử";
 "FeedbackTryHint" = "Thay đổi hiện ngay quanh cửa sổ này.";
 "WindowGap" = "Khoảng cách giữa cửa sổ";
-"WindowGapHint" = "Chừa chỗ giữa các cửa sổ và quanh mép màn hình.";
+"WindowGapHint" = "Chừa chỗ giữa các cửa sổ. Mép màn hình vẫn sát khít.";
 "GapNone" = "Không";
 "GapNarrow" = "Hẹp";
 "GapNormal" = "Vừa";

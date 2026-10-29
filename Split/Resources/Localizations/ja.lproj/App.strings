@@ -62,7 +62,7 @@
 "FeedbackTry" = "試す";
 "FeedbackTryHint" = "設定を変えるとこのウインドウの周りですぐ表示します。";
 "WindowGap" = "ウインドウの間隔";
-"WindowGapHint" = "ウインドウ同士と画面の端のあいだを空けます。";
+"WindowGapHint" = "ウインドウ同士のあいだを空けます。画面の端にはぴったり付きます。";
 "GapNone" = "なし";
 "GapNarrow" = "狭く";
 "GapNormal" = "普通";

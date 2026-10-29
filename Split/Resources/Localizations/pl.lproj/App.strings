@@ -62,7 +62,7 @@
 "FeedbackTry" = "Wypróbuj";
 "FeedbackTryHint" = "Zmiany widać od razu wokół tego okna.";
 "WindowGap" = "Odstęp między oknami";
-"WindowGapHint" = "Zostawia miejsce między oknami i przy krawędziach ekranu.";
+"WindowGapHint" = "Zostawia odstęp między oknami. Przy krawędziach ekranu przylegają.";
 "GapNone" = "Brak";
 "GapNarrow" = "Wąski";
 "GapNormal" = "Normalny";

@@ -62,7 +62,7 @@
 "FeedbackTry" = "试一下";
 "FeedbackTryHint" = "更改设置后会立即在此窗口周围显示。";
 "WindowGap" = "窗口间距";
-"WindowGapHint" = "在窗口之间和屏幕边缘留出空隙。";
+"WindowGapHint" = "在窗口之间留出空隙，屏幕边缘保持贴合。";
 "GapNone" = "无";
 "GapNarrow" = "窄";
 "GapNormal" = "正常";

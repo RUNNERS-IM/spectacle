@@ -62,7 +62,7 @@
 "FeedbackTry" = "Testar";
 "FeedbackTryHint" = "As mudanças aparecem na hora ao redor desta janela.";
 "WindowGap" = "Espaço entre janelas";
-"WindowGapHint" = "Deixa espaço entre as janelas e nas bordas da tela.";
+"WindowGapHint" = "Deixa espaço entre as janelas. Elas ficam encostadas nas bordas da tela.";
 "GapNone" = "Nenhum";
 "GapNarrow" = "Estreito";
 "GapNormal" = "Normal";

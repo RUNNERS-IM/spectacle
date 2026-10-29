@@ -19,11 +19,12 @@ CGRect SplitRectWithGap(CGRect rect, CGRect visibleFrame, CGFloat gap)
   if (gap <= 0.0 || CGRectIsNull(rect) || CGRectIsNull(visibleFrame)) {
     return rect;
   }
-  // An edge within a point of the screen edge is a screen edge; any other edge faces a neighbour.
-  CGFloat left = fabs(CGRectGetMinX(rect) - CGRectGetMinX(visibleFrame)) <= 1.0 ? gap : gap / 2.0;
-  CGFloat right = fabs(CGRectGetMaxX(rect) - CGRectGetMaxX(visibleFrame)) <= 1.0 ? gap : gap / 2.0;
-  CGFloat bottom = fabs(CGRectGetMinY(rect) - CGRectGetMinY(visibleFrame)) <= 1.0 ? gap : gap / 2.0;
-  CGFloat top = fabs(CGRectGetMaxY(rect) - CGRectGetMaxY(visibleFrame)) <= 1.0 ? gap : gap / 2.0;
+  // An edge within a point of the screen edge stays on it; any other edge faces a neighbour and
+  // gives up half the gap, so two neighbours end up `gap` apart.
+  CGFloat left = fabs(CGRectGetMinX(rect) - CGRectGetMinX(visibleFrame)) <= 1.0 ? 0.0 : gap / 2.0;
+  CGFloat right = fabs(CGRectGetMaxX(rect) - CGRectGetMaxX(visibleFrame)) <= 1.0 ? 0.0 : gap / 2.0;
+  CGFloat bottom = fabs(CGRectGetMinY(rect) - CGRectGetMinY(visibleFrame)) <= 1.0 ? 0.0 : gap / 2.0;
+  CGFloat top = fabs(CGRectGetMaxY(rect) - CGRectGetMaxY(visibleFrame)) <= 1.0 ? 0.0 : gap / 2.0;
   CGRect result = CGRectMake(round(rect.origin.x + left), round(rect.origin.y + bottom),
                              round(rect.size.width - left - right), round(rect.size.height - bottom - top));
   return result.size.width > 0 && result.size.height > 0 ? result : rect;
