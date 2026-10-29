@@ -9,8 +9,44 @@ NS_ASSUME_NONNULL_BEGIN
 /// Rectangles are in the top-left based coordinates the Accessibility API uses.
 @interface SplitWindowFeedback : NSObject
 
-/// Whether the glow and the shortcut label are shown after a move (user default "MoveFeedbackEnabled").
+typedef NS_ENUM(NSInteger, SplitMoveFeedbackStyle) {
+  SplitMoveFeedbackStyleOff = 0,
+  SplitMoveFeedbackStyleSubtle = 1,
+  SplitMoveFeedbackStyleStrong = 2,
+};
+
+typedef NS_ENUM(NSInteger, SplitMoveFeedbackDuration) {
+  SplitMoveFeedbackDurationShort = 0,
+  SplitMoveFeedbackDurationNormal = 1,
+  SplitMoveFeedbackDurationLong = 2,
+};
+
+typedef NS_ENUM(NSInteger, SplitMoveFeedbackLabelPosition) {
+  SplitMoveFeedbackLabelPositionBottom = 0,
+  SplitMoveFeedbackLabelPositionTop = 1,
+  SplitMoveFeedbackLabelPositionCenter = 2,
+};
+
+/// User default keys for the Effects tab.
+extern NSString *const SplitMoveFeedbackStyleKey;
+extern NSString *const SplitMoveFeedbackColorKey;
+extern NSString *const SplitMoveFeedbackShowsShortcutKey;
+extern NSString *const SplitMoveFeedbackDurationKey;
+extern NSString *const SplitMoveFeedbackLabelPositionKey;
+
+/// Color names for SplitMoveFeedbackColorKey, in the order the Effects tab shows them.
+/// "accent" follows the accent color chosen in System Settings.
+NSArray<NSString *> *SplitMoveFeedbackColorNames(void);
+NSColor *SplitMoveFeedbackColorForName(NSString *name);
+
+/// How the glow and the shortcut label look after a move. Users who turned the old
+/// "MoveFeedbackEnabled" switch off start at Off; everyone else starts at Subtle.
+@property (class, nonatomic, readonly) SplitMoveFeedbackStyle moveFeedbackStyle;
 @property (class, nonatomic, readonly) BOOL moveFeedbackEnabled;
+@property (class, nonatomic, readonly) NSString *moveFeedbackColorName;
+@property (class, nonatomic, readonly) BOOL moveFeedbackShowsShortcut;
+@property (class, nonatomic, readonly) SplitMoveFeedbackDuration moveFeedbackDuration;
+@property (class, nonatomic, readonly) SplitMoveFeedbackLabelPosition moveFeedbackLabelPosition;
 
 - (void)showPreviewForRect:(CGRect)rect;
 - (void)hidePreview;
