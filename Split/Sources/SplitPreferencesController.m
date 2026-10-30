@@ -270,13 +270,13 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   _tabViewController.transitionOptions = NSViewControllerTransitionCrossfade | NSViewControllerTransitionAllowUserInteraction;
   [_tabViewController addTabViewItem:[self tabItemWithView:[self makeGeneralView]
                                                      title:SplitLocalized(@"TabGeneral")
-                                                    symbol:@"gearshape"]];
+                                                      icon:@"settings"]];
   [_tabViewController addTabViewItem:[self tabItemWithView:[self makeEffectsView]
                                                      title:SplitLocalized(@"TabEffects")
-                                                    symbol:@"sparkles"]];
+                                                      icon:@"sparkles"]];
   [_tabViewController addTabViewItem:[self tabItemWithView:[self makeShortcutsView]
                                                      title:SplitLocalized(@"TabShortcuts")
-                                                    symbol:@"keyboard"]];
+                                                      icon:@"keyboard"]];
   NSWindow *window = [NSWindow windowWithContentViewController:_tabViewController];
   window.styleMask = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable;
   window.toolbarStyle = NSWindowToolbarStylePreference;
@@ -291,7 +291,7 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   [self loadRegisteredShortcuts];
 }
 
-- (NSTabViewItem *)tabItemWithView:(NSView *)view title:(NSString *)title symbol:(NSString *)symbol
+- (NSTabViewItem *)tabItemWithView:(NSView *)view title:(NSString *)title icon:(NSString *)icon
 {
   NSViewController *controller = [NSViewController new];
   controller.view = view;
@@ -299,7 +299,7 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   controller.preferredContentSize = view.fittingSize;
   NSTabViewItem *item = [NSTabViewItem tabViewItemWithViewController:controller];
   item.label = title;
-  item.image = [NSImage imageWithSystemSymbolName:symbol accessibilityDescription:title];
+  item.image = SplitIcon(icon, 22);
   return item;
 }
 

@@ -758,15 +758,15 @@ static NSDictionary<NSString *, NSValue *> *ScreenRegions(void)
   return regions;
 }
 
-static NSDictionary<NSString *, NSString *> *SymbolNames(void)
+static NSDictionary<NSString *, NSString *> *IconNames(void)
 {
   return @{
-    @"MoveToNextDisplay": @"rectangle.portrait.and.arrow.right",
-    @"MoveToPreviousDisplay": @"rectangle.portrait.and.arrow.right",
-    @"MakeLarger": @"arrow.up.left.and.arrow.down.right",
-    @"MakeSmaller": @"arrow.down.right.and.arrow.up.left",
-    @"UndoLastMove": @"arrow.uturn.backward",
-    @"RedoLastMove": @"arrow.uturn.forward",
+    @"MoveToNextDisplay": @"square-arrow-right",
+    @"MoveToPreviousDisplay": @"square-arrow-left",
+    @"MakeLarger": @"maximize-2",
+    @"MakeSmaller": @"minimize-2",
+    @"UndoLastMove": @"undo-2",
+    @"RedoLastMove": @"redo-2",
   };
 }
 
@@ -808,23 +808,8 @@ NSImage *SplitMenuImageForShortcutName(NSString *shortcutName)
   }
   NSValue *region = ScreenRegions()[shortcutName];
   if (!region) {
-    NSString *symbol = SymbolNames()[shortcutName];
-    NSImage *image = symbol ? [NSImage imageWithSystemSymbolName:symbol accessibilityDescription:nil] : nil;
-    if ([shortcutName isEqualToString:@"MoveToPreviousDisplay"] && image) {
-      // Mirror the next-display arrow so it points left.
-      NSImage *mirrored = [NSImage imageWithSize:image.size flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
-        NSAffineTransform *transform = [NSAffineTransform transform];
-        [transform translateXBy:dstRect.size.width yBy:0];
-        [transform scaleXBy:-1 yBy:1];
-        [transform concat];
-        [image drawInRect:dstRect];
-        return YES;
-      }];
-      mirrored.template = YES;
-      return mirrored;
-    }
-    image.template = YES;
-    return image;
+    NSString *icon = IconNames()[shortcutName];
+    return icon ? SplitIcon(icon, 16) : nil;
   }
   return MiniScreenImage(@[region]);
 }
