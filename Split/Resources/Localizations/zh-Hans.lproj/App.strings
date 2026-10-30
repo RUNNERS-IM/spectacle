@@ -153,3 +153,13 @@
 "RunnersAppsTitle" = "RUNNERS 的更多 App";
 "RunnersServicesTitle" = "RUNNERS 的服务";
 "RunnersGet" = "获取";
+
+/* Split Pro: the pill next to paid features and the sheet it opens */
+"ProFeatures" = "保存和恢复布局，并按显示器组合自动载入布局";
+"ProPriceMonthly" = "$1 / 月";
+"ProPriceYearly" = "$6 / 年";
+"ProComingSoon" = "即将推出";
+"ProSignIn" = "登录";
+"ProRestore" = "恢复购买";
+"ProContinue" = "继续使用";
+"ProFreeUntilLaunch" = "Pro 推出前可免费使用";

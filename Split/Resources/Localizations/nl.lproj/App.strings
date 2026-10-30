@@ -153,3 +153,13 @@
 "RunnersAppsTitle" = "Meer apps van RUNNERS";
 "RunnersServicesTitle" = "Diensten van RUNNERS";
 "RunnersGet" = "Download";
+
+/* Split Pro: the pill next to paid features and the sheet it opens */
+"ProFeatures" = "Indelingen bewaren en herstellen, en per combinatie van beeldschermen automatisch laden";
+"ProPriceMonthly" = "$ 1 / maand";
+"ProPriceYearly" = "$ 6 / jaar";
+"ProComingSoon" = "Binnenkort";
+"ProSignIn" = "Inloggen";
+"ProRestore" = "Aankoop herstellen";
+"ProContinue" = "Blijven gebruiken";
+"ProFreeUntilLaunch" = "Tot Pro uitkomt, kunt u het gratis gebruiken";

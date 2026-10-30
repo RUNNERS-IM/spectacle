@@ -153,3 +153,13 @@
 "RunnersAppsTitle" = "แอปอื่นจาก RUNNERS";
 "RunnersServicesTitle" = "บริการจาก RUNNERS";
 "RunnersGet" = "รับ";
+
+/* Split Pro: the pill next to paid features and the sheet it opens */
+"ProFeatures" = "บันทึกและเรียกคืนการจัดวาง และโหลดการจัดวางอัตโนมัติตามชุดจอภาพ";
+"ProPriceMonthly" = "$1 / เดือน";
+"ProPriceYearly" = "$6 / ปี";
+"ProComingSoon" = "เร็วๆ นี้";
+"ProSignIn" = "ลงชื่อเข้าใช้";
+"ProRestore" = "กู้คืนการซื้อ";
+"ProContinue" = "ใช้ต่อ";
+"ProFreeUntilLaunch" = "ใช้ฟรีจนกว่า Pro จะเปิดตัว";
