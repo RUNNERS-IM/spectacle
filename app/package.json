@@ -1,0 +1,36 @@
+{
+  "name": "split",
+  "productName": "Split",
+  "private": true,
+  "version": "2.6.1030",
+  "description": "Window arranging app by RUNNERS",
+  "author": "RUNNERS",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "native": "node-gyp rebuild --directory native --target=$(node -p \"require('electron/package.json').version\") --dist-url=https://electronjs.org/headers",
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "test": "node --test --experimental-strip-types test/**/*.test.ts",
+    "dist:mac": "electron-vite build && electron-builder --mac --config builder.config.cjs"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.10",
+    "lucide-react": "^1.63.0",
+    "react": "~19.2.8",
+    "react-dom": "~19.2.8"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^6.1.2",
+    "electron": "43.8.1",
+    "electron-builder": "26.15.3",
+    "electron-vite": "^6.0.0",
+    "node-addon-api": "^8.0.0",
+    "node-gyp": "12.3.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5"
+  }
+}
