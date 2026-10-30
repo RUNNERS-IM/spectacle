@@ -1,0 +1,131 @@
+# Windows · 리눅스 판(desktop/, Tauri 2)을 빌드한다. macOS 앱(Split/)은 test.yml · release.yml 이 맡는다.
+#
+# 언제 도나: desktop/ 이나 창 위치 계산 JS(맥 앱과 같이 쓰는 파일)가 바뀐 PR, 그런 변경이 master ·
+# release 에 올라갈 때, 손으로 돌릴 때(workflow_dispatch). 맥 앱만 바뀐 커밋에는 돌지 않는다.
+#
+# 만드는 것: 윈도우 설치 파일(NSIS .exe, .msi), 리눅스 패키지(.deb, .rpm, .AppImage), Wayland 용
+# GNOME 확장(.zip) · KWin 스크립트(.kwinscript). 결과는 실행 기록의 첨부(artifact)로만 남긴다.
+# GitHub Releases 에는 아직 올리지 않는다(사람이 스크린샷으로 먼저 확인해야 함). 맨 아래 publish 는 꺼 둔 상태.
+# 윈도우 설치 파일은 코드 서명 인증서가 없어 서명하지 않는다(처음 열 때 SmartScreen 경고가 뜬다).
+name: Desktop
+
+on:
+  push:
+    branches: [master, release]
+    paths:
+      - "desktop/**"
+      - "Split/Resources/Window Position Calculations/**"
+      - ".github/workflows/desktop.yml"
+  pull_request:
+    paths:
+      - "desktop/**"
+      - "Split/Resources/Window Position Calculations/**"
+      - ".github/workflows/desktop.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: desktop-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows
+            runner: windows-latest
+            bundles: nsis,msi
+          - os: linux
+            runner: ubuntu-22.04
+            bundles: deb,rpm,appimage
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+        working-directory: desktop
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: desktop/pnpm-lock.yaml
+
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop -> target.noindex
+
+      - name: Install the Linux system packages
+        if: matrix.os == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev libxdo-dev libssl-dev patchelf
+
+      - run: pnpm install --frozen-lockfile
+
+      # 창 위치 계산(맥 앱의 JS 를 QuickJS 로 돌림) · 자동 배치 · 되돌리기 테스트
+      - name: Test the shared window math
+        run: cargo test -p split-core
+
+      - name: Build
+        run: pnpm tauri build --bundles ${{ matrix.bundles }}
+
+      # 파일 이름을 split-desktop-<버전>-<OS>-<CPU>.<확장자> 로 맞춘다
+      - name: Collect the files
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./src-tauri/tauri.conf.json').version")-${GITHUB_SHA::7}"
+          B=target.noindex/release/bundle
+          OUT=../dist-desktop && mkdir -p $OUT
+          case ${{ matrix.os }} in
+            windows)
+              cp $B/nsis/*-setup.exe "$OUT/split-desktop-$VERSION-windows-x64-setup.exe"
+              cp $B/msi/*.msi "$OUT/split-desktop-$VERSION-windows-x64.msi" ;;
+            linux)
+              cp $B/deb/*.deb "$OUT/split-desktop-$VERSION-linux-amd64.deb"
+              cp $B/rpm/*.rpm "$OUT/split-desktop-$VERSION-linux-x86_64.rpm"
+              cp $B/appimage/*.AppImage "$OUT/split-desktop-$VERSION-linux-x86_64.AppImage"
+              (cd linux/gnome-extension/split@runners.im && zip -qr "../../../$OUT/split-gnome-extension-$VERSION.zip" .)
+              (cd linux/kwin-script/split && zip -qr "../../../$OUT/split-kwin-script-$VERSION.kwinscript" .) ;;
+          esac
+          ls -la $OUT
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: split-desktop-${{ matrix.os }}
+          path: dist-desktop/*
+          retention-days: 14
+
+  # 꺼 둔 배포 단계. 사람이 윈도우 · 리눅스에서 켜 보고 스크린샷을 확인한 다음에 켠다.
+  # 켜면: 위 build 의 첨부 파일을 맥 앱이 이미 만든 릴리스 태그(v<버전>)에 덧붙인다.
+  # 켜는 법: `if: false` 를 `if: github.ref == 'refs/heads/release'` 로 바꾸고, 맨 위 permissions 를
+  # contents: write 로 올리고, TAG 를 맥 release.yml 이 만든 태그와 맞춘다(지금은 가장 최근 릴리스).
+  publish:
+    needs: build
+    if: false
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: files
+          merge-multiple: true
+      - name: Attach the installers to the existing release
+        run: |
+          set -euo pipefail
+          TAG=$(gh release view --repo "$GITHUB_REPOSITORY" --json tagName -q .tagName)
+          ls -la files
+          gh release upload "$TAG" files/* --repo "$GITHUB_REPOSITORY" --clobber

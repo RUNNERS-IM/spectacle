@@ -1,0 +1,4 @@
+node_modules/
+dist/
+*.noindex/
+src-tauri/gen/
