@@ -139,4 +139,4 @@ Press ⌘R to run, ⌘U to run the tests. Releases are built with `scripts/relea
 
 Copyright (c) 2026 Runners Co., Ltd. All rights reserved. See [LICENSE.md](LICENSE.md).
 
-Split is based on Spectacle, which is under the MIT License. Its notice, and those of Sparkle and Lucide, are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and in the app under About Split → Open Source Notices.
+The notices of the open source code Split uses (Lucide, Sparkle and Spectacle) are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and in the app under About Split → Open Source Notices.
