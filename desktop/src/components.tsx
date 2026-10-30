@@ -2,6 +2,7 @@
 // cards with rows, switches, segmented controls and a floating confirm panel.
 import type { ReactNode } from "react";
 import { t } from "./i18n";
+import notices from "../THIRD_PARTY_NOTICES.md?raw";
 
 export function Section({ title, hint, children }: { title?: string; hint?: string; children: ReactNode }) {
   return (
@@ -96,6 +97,38 @@ export function Confirm({
           )}
           <button type="button" className="button primary" onClick={onConfirm} autoFocus>
             {t("button.ok")}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** The open source notices shipped next to the app, one "#" line per heading as in the macOS sheet. */
+export function Notices({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="overlay" role="presentation" onClick={onClose}>
+      <div
+        className="panel notices"
+        role="dialog"
+        aria-label={t("general.notices")}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="panel-title">{t("general.notices")}</div>
+        <div className="notices-text">
+          {notices.split("\n").map((line, i) =>
+            line.startsWith("#") ? (
+              <div key={i} className="notices-heading">
+                {line.replace(/^#+\s*/, "")}
+              </div>
+            ) : (
+              <div key={i}>{line || "\u00a0"}</div>
+            ),
+          )}
+        </div>
+        <div className="panel-buttons">
+          <button type="button" className="button primary" onClick={onClose} autoFocus>
+            {t("button.close")}
           </button>
         </div>
       </div>

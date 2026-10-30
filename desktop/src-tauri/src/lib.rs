@@ -41,6 +41,7 @@ struct AppState {
     backend: OnceLock<Arc<dyn Backend>>,
     /// Actions whose shortcut could not be turned on because something else holds the keys.
     failures: Mutex<Vec<Action>>,
+    refusing_app: Mutex<Option<String>>,
 }
 
 impl AppState {
@@ -83,9 +84,20 @@ fn perform(app: &AppHandle, action: Action) {
     };
     let settings = state.settings.lock().unwrap().clone();
     let outcome = state.engine.lock().unwrap().plan(action, &snapshot, settings.gap);
+    let active_app = snapshot.active.as_ref().map(|w| w.app.clone()).filter(|app| !app.is_empty());
     if let Err(error) = backend.apply(&outcome.moves) {
         eprintln!("split: {}: {error}", action.name());
+        // Why: shown in settings so a shortcut that does nothing has a reason, as on macOS.
+        if active_app.is_some() {
+            *state.refusing_app.lock().unwrap() = active_app;
+        }
         return;
+    }
+    {
+        let mut refusing = state.refusing_app.lock().unwrap();
+        if refusing.is_some() && *refusing == active_app {
+            *refusing = None;
+        }
     }
     if !backend.status().can_show_overlay {
         return;
@@ -139,7 +151,8 @@ fn register_shortcuts(state: &AppState) {
 }
 
 fn build_menu(app: &AppHandle, settings: &Settings) -> tauri::Result<Menu<tauri::Wry>> {
-    // Why: Split, Prompt and Monitor share this menu order: about, updates, app feature, settings, help, quit.
+    // Why: Split, Prompt and Monitor share this menu order: app features, then about, updates,
+    // settings and help together, then quit on its own.
     let about = PredefinedMenuItem::about(
         app,
         Some(&t("menu.about", &[])),
@@ -147,9 +160,8 @@ fn build_menu(app: &AppHandle, settings: &Settings) -> tauri::Result<Menu<tauri:
             AboutMetadataBuilder::new()
                 .name(Some("Split"))
                 .version(Some(app.package_info().version.to_string()))
-                .copyright(Some("RUNNERS"))
+                .copyright(Some("© 2026 RUNNERS. All rights reserved."))
                 .website(Some(WEBSITE_URL))
-                .license(Some("MIT"))
                 .build(),
         ),
     )?;
@@ -171,19 +183,17 @@ fn build_menu(app: &AppHandle, settings: &Settings) -> tauri::Result<Menu<tauri:
     let settings_item = MenuItem::with_id(app, "settings", t("menu.settings", &[]), true, None::<&str>)?;
     let help = MenuItem::with_id(app, "help", t("menu.help", &[]), true, None::<&str>)?;
     let quit = MenuItem::with_id(app, "quit", t("menu.quit", &[]), true, None::<&str>)?;
-    let separators = [
-        PredefinedMenuItem::separator(app)?,
-        PredefinedMenuItem::separator(app)?,
-        PredefinedMenuItem::separator(app)?,
-    ];
-    let mut items: Vec<&dyn tauri::menu::IsMenuItem<tauri::Wry>> = vec![&about, &updates, &separators[0]];
+    let separators = [PredefinedMenuItem::separator(app)?, PredefinedMenuItem::separator(app)?];
+    let mut items: Vec<&dyn tauri::menu::IsMenuItem<tauri::Wry>> = Vec::new();
     for item in &action_items {
         items.push(item);
     }
-    items.push(&separators[1]);
+    items.push(&separators[0]);
+    items.push(&about);
+    items.push(&updates);
     items.push(&settings_item);
     items.push(&help);
-    items.push(&separators[2]);
+    items.push(&separators[1]);
     items.push(&quit);
     Menu::with_items(app, &items)
 }
@@ -234,6 +244,8 @@ struct ViewState {
     sections: Vec<(&'static str, Vec<&'static str>)>,
     status: Status,
     failures: Vec<&'static str>,
+    /// The app whose window Split last failed to move, if it has not moved since.
+    refusing_app: Option<String>,
     version: String,
     platform: &'static str,
 }
@@ -245,6 +257,7 @@ fn view_state(app: &AppHandle, state: &AppState) -> ViewState {
         sections: SECTIONS.iter().map(|(key, actions)| (*key, actions.iter().map(|a| a.name()).collect())).collect(),
         status: state.backend().status(),
         failures: state.failures.lock().unwrap().iter().map(|a| a.name()).collect(),
+        refusing_app: state.refusing_app.lock().unwrap().clone(),
         version: app.package_info().version.to_string(),
         platform: if cfg!(windows) { "windows" } else { "linux" },
     }
@@ -357,6 +370,7 @@ pub fn run() {
                 engine: Mutex::new(Engine::new()),
                 backend: OnceLock::new(),
                 failures: Mutex::new(Vec::new()),
+                refusing_app: Mutex::new(None),
             });
 
             // One worker runs actions in the order the keys were pressed, off the key thread.
