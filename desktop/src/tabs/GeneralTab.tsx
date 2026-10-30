@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CircleAlert, CircleCheck } from "lucide-react";
 import { api, type Settings, type ViewState } from "../api";
-import { Confirm, Row, Section, Segmented, Switch } from "../components";
+import { Confirm, Notices, Row, Section, Segmented, Switch } from "../components";
 import { t, type Key } from "../i18n";
 
 const GAPS: { value: number; label: Key }[] = [
@@ -31,6 +31,7 @@ function statusText(state: ViewState): string {
 export default function GeneralTab({ state, save }: { state: ViewState; save: (s: Settings) => void }) {
   const { settings, status } = state;
   const [confirmHide, setConfirmHide] = useState(false);
+  const [showNotices, setShowNotices] = useState(false);
   const set = (patch: Partial<Settings>) => save({ ...settings, ...patch });
 
   return (
@@ -68,6 +69,13 @@ export default function GeneralTab({ state, save }: { state: ViewState; save: (s
           <div className="row-text">
             <div className="row-title">{status.desktop}</div>
             <div className="row-hint">{statusText(state)}</div>
+            {state.refusingApp && (
+              <div className="row-hint warn">
+                {t(state.platform === "windows" ? "general.refused.windows" : "general.refused.linux", {
+                  app: state.refusingApp,
+                })}
+              </div>
+            )}
           </div>
           {!status.ready && (
             <div className="row-control">
@@ -85,7 +93,15 @@ export default function GeneralTab({ state, save }: { state: ViewState; save: (s
         <button type="button" className="link" onClick={() => api.openLink("website")}>
           {t("general.website")}
         </button>
+        <div className="about-line">
+          © 2026 RUNNERS. All rights reserved. ·{" "}
+          <button type="button" className="link" onClick={() => setShowNotices(true)}>
+            {t("general.notices")}
+          </button>
+        </div>
       </footer>
+
+      {showNotices && <Notices onClose={() => setShowNotices(false)} />}
 
       {confirmHide && (
         <Confirm

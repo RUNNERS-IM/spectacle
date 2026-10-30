@@ -4,7 +4,7 @@
 
 Move and resize macOS windows with keyboard shortcuts. No mouse required.
 
-Split is a free, open-source window manager by RUNNERS-IM: a native Apple silicon app with notarized releases, auto-arrange, saved layouts and 18 languages.
+Split is a free window manager by RUNNERS: a native Apple silicon app with notarized releases, auto-arrange, saved layouts and 18 languages.
 
 ## Install
 
@@ -137,6 +137,6 @@ Press ⌘R to run, ⌘U to run the tests. Releases are built with `scripts/relea
 
 ## License
 
-Split is distributed under the MIT License. See [LICENSE.md](LICENSE.md).
+Copyright (c) 2026 Runners Co., Ltd. All rights reserved. See [LICENSE.md](LICENSE.md).
 
-Split is based on Spectacle. Copyright (c) 2017 Eric Czarny. Modifications copyright (c) 2026 RUNNERS-IM.
+Split is based on Spectacle, which is under the MIT License. Its notice, and those of Sparkle and Lucide, are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and in the app under About Split → Open Source Notices.

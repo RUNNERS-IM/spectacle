@@ -44,12 +44,26 @@
   return frontmostApplicationElement;
 }
 
+static NSString *applicationRefusingAccess;
+
++ (NSString *)applicationRefusingAccess
+{
+  return applicationRefusingAccess;
+}
+
 + (SplitAccessibilityElement *)frontmostWindowElement
 {
+  NSString *frontmostApplicationName = NSWorkspace.sharedWorkspace.frontmostApplication.localizedName;
   SplitAccessibilityElement *frontmostApplicationElement = [SplitAccessibilityElement frontmostApplicationElement];
   SplitAccessibilityElement *frontmostWindowElement = nil;
   if (frontmostApplicationElement) {
-    frontmostWindowElement = [frontmostApplicationElement elementWithAttribute:kAXFocusedWindowAttribute];
+    AXError error = kAXErrorSuccess;
+    frontmostWindowElement = [frontmostApplicationElement elementWithAttribute:kAXFocusedWindowAttribute error:&error];
+    if (error == kAXErrorAPIDisabled && AXIsProcessTrusted()) {
+      applicationRefusingAccess = frontmostApplicationName;
+    } else if (frontmostWindowElement && [applicationRefusingAccess isEqualToString:frontmostApplicationName]) {
+      applicationRefusingAccess = nil;
+    }
     if (!frontmostWindowElement) {
       NSLog(@"Invalid accessibility element provided, unable to determine the size and position of the window.");
     }
@@ -68,9 +82,17 @@
 
 - (SplitAccessibilityElement *)elementWithAttribute:(CFStringRef)attribute
 {
+  return [self elementWithAttribute:attribute error:NULL];
+}
+
+- (SplitAccessibilityElement *)elementWithAttribute:(CFStringRef)attribute error:(AXError *)error
+{
   SplitAccessibilityElement *newElement = nil;
   AXUIElementRef underlyingElement;
   AXError result = AXUIElementCopyAttributeValue(_underlyingElement, attribute, (CFTypeRef *)&underlyingElement);
+  if (error) {
+    *error = result;
+  }
   if (result == kAXErrorSuccess) {
     newElement = [SplitAccessibilityElement new];
     newElement.underlyingElement = underlyingElement;

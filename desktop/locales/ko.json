@@ -48,7 +48,7 @@
   "gap.normal": "보통",
   "gap.wide": "넓게",
   "general.connection": "창 옮기기 연결",
-  "general.aboutLine": "Split {{version}} · 무료 오픈소스",
+  "general.aboutLine": "Split {{version}} · 무료",
   "general.website": "웹사이트",
 
   "backend.windows": "Windows 창 관리자에 바로 연결돼 있어요.",
@@ -109,5 +109,9 @@
   "recorder.enterShortcut": "단축키를 누르세요",
   "recorder.clear": "지우기",
   "button.ok": "확인",
-  "button.cancel": "취소"
+  "button.cancel": "취소",
+  "button.close": "닫기",
+  "general.notices": "오픈소스 고지",
+  "general.refused.windows": "{{app}} 앱이 창 이동을 거절했어요. 관리자 권한으로 켠 앱이면 Split 도 관리자 권한으로 켜야 옮길 수 있어요.",
+  "general.refused.linux": "{{app}} 앱의 창을 옮기지 못했어요. {{app}} 앱을 껐다가 다시 켜 주세요."
 }

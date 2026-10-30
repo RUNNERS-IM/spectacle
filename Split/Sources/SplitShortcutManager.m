@@ -15,6 +15,7 @@ static EventHotKeyID currentShortcutID = {
 {
   id<SplitShortcutStorage> _shortcutStorage;
   NSMutableDictionary<NSString *, SplitShortcutHolder *> *_registeredShortcutsByName;
+  NSMutableDictionary<NSString *, SplitShortcut *> *_shortcutsFailedToRegisterByName;
   BOOL _areShorcutsEnabled;
 }
 
@@ -23,6 +24,7 @@ static EventHotKeyID currentShortcutID = {
   if (self = [super init]) {
     _shortcutStorage = shortcutStorage;
     _registeredShortcutsByName = [NSMutableDictionary new];
+    _shortcutsFailedToRegisterByName = [NSMutableDictionary new];
     _areShorcutsEnabled = YES;
     [self installApplicationEventHandler];
   }
@@ -86,6 +88,7 @@ static EventHotKeyID currentShortcutID = {
     eventHotKeyUnregistered = [self unregisterEventHotKey:shortcutHolder];
   }
   _registeredShortcutsByName[shortcutName] = [shortcutHolder copyWithClearedShortcut];
+  [_shortcutsFailedToRegisterByName removeObjectForKey:shortcutName];
   if (_areShorcutsEnabled && !eventHotKeyUnregistered) {
     _registeredShortcutsByName[shortcutName] = shortcutHolder;
   }
@@ -119,6 +122,15 @@ static EventHotKeyID currentShortcutID = {
     }
   }
   return NO;
+}
+
+- (NSArray<SplitShortcut *> *)shortcutsFailedToRegister
+{
+  NSMutableArray<SplitShortcut *> *shortcuts = [NSMutableArray new];
+  for (NSString *name in [_shortcutsFailedToRegisterByName.allKeys sortedArrayUsingSelector:@selector(compare:)]) {
+    [shortcuts addObject:_shortcutsFailedToRegisterByName[name]];
+  }
+  return shortcuts;
 }
 
 - (void)registerShortcuts
@@ -182,8 +194,12 @@ static EventHotKeyID currentShortcutID = {
                             &shortcutRef);
   if (err) {
     NSLog(@"There was a problem registering shortcut %@.", shortcut.shortcutName);
-    return [shortcutHolder copyWithClearedShortcut];
+    _shortcutsFailedToRegisterByName[shortcut.shortcutName] = shortcut;
+    // Keep the keys rather than clearing them, so they are not saved as cleared and lost the
+    // next time Split opens, when the other app may have let go of them.
+    return [shortcutHolder copyWithShortcutRef:NULL];
   }
+  [_shortcutsFailedToRegisterByName removeObjectForKey:shortcut.shortcutName];
   return [shortcutHolder copyWithShortcutRef:shortcutRef];
 }
 

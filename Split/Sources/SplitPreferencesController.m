@@ -1,5 +1,6 @@
 #import "SplitPreferencesController.h"
 
+#import "SplitAccessibilityElement.h"
 #import "SplitAccessibilityGuideController.h"
 #import "SplitDefaultShortcutHelpers.h"
 #import "SplitLoginItemHelper.h"
@@ -338,6 +339,8 @@ static void OpenRunnersApp(NSButton *sender)
   NSView *_permissionDot;
   NSTextField *_permissionHint;
   NSButton *_permissionButton;
+  NSTextField *_accessProblemLabel;
+  NSView *_generalContent;
   NSTimer *_permissionTimer;
 }
 
@@ -387,13 +390,51 @@ static void OpenRunnersApp(NSButton *sender)
   [self loadRegisteredShortcuts];
 }
 
+/// A tab no taller than the screen leaves room for, so the window never runs off a small display.
+static NSSize PreferredContentSize(NSView *view)
+{
+  NSSize size = view.fittingSize;
+  // The title bar and the tab icons above the content take about this much.
+  const CGFloat chromeHeight = 90.0;
+  CGFloat available = NSHeight(NSScreen.mainScreen.visibleFrame) - chromeHeight;
+  if (available > 0 && size.height > available) {
+    size.height = available;
+  }
+  return size;
+}
+
+/// `view` in a scroll view, so a tab taller than the screen allows can still be read to the end.
+/// The scroller only shows when there is more to see.
+static NSScrollView *ScrollingView(NSView *view)
+{
+  NSScrollView *scrollView = [NSScrollView new];
+  scrollView.hasVerticalScroller = YES;
+  scrollView.autohidesScrollers = YES;
+  scrollView.drawsBackground = NO;
+  SplitFlippedView *document = [SplitFlippedView new];
+  document.translatesAutoresizingMaskIntoConstraints = NO;
+  view.translatesAutoresizingMaskIntoConstraints = NO;
+  [document addSubview:view];
+  scrollView.documentView = document;
+  NSClipView *clipView = scrollView.contentView;
+  [NSLayoutConstraint activateConstraints:@[
+    [document.topAnchor constraintEqualToAnchor:clipView.topAnchor],
+    [document.leadingAnchor constraintEqualToAnchor:clipView.leadingAnchor],
+    [document.widthAnchor constraintEqualToAnchor:clipView.widthAnchor],
+    [view.topAnchor constraintEqualToAnchor:document.topAnchor],
+    [view.leadingAnchor constraintEqualToAnchor:document.leadingAnchor],
+    [view.bottomAnchor constraintEqualToAnchor:document.bottomAnchor],
+  ]];
+  return scrollView;
+}
+
 - (NSTabViewItem *)tabItemWithView:(NSView *)view title:(NSString *)title icon:(NSString *)icon
 {
   NSViewController *controller = [NSViewController new];
-  controller.view = view;
   // The window shows the selected controller's title; keep it "Split Settings" on every tab.
   controller.title = SplitLocalized(@"SettingsWindowTitle");
-  controller.preferredContentSize = view.fittingSize;
+  controller.view = ScrollingView(view);
+  controller.preferredContentSize = PreferredContentSize(view);
   NSTabViewItem *item = [NSTabViewItem tabViewItemWithViewController:controller];
   item.label = title;
   item.image = SplitIcon(icon, 22);
@@ -464,9 +505,13 @@ static void OpenRunnersApp(NSButton *sender)
     [_permissionDot.heightAnchor constraintEqualToConstant:10],
   ]];
   _permissionHint = Label(@"", 11, NSFontWeightRegular, NSColor.secondaryLabelColor);
+  // Shortcuts another app holds and apps that turn Split away, so "nothing happens" has a reason.
+  _accessProblemLabel = WrappingLabel(@"", 11, NSColor.systemOrangeColor, textWidth);
+  _accessProblemLabel.hidden = YES;
   NSStackView *permissionText = VerticalStack(@[
     Label(SplitLocalized(@"PermissionTitle"), 13, NSFontWeightRegular, NSColor.labelColor),
     HorizontalStack(@[_permissionDot, _permissionHint], 6),
+    _accessProblemLabel,
   ], 3);
   _permissionButton = [NSButton buttonWithTitle:SplitLocalized(@"PermissionOpen") target:self action:@selector(openAccessibilitySettings:)];
   _permissionButton.controlSize = NSControlSizeSmall;
@@ -508,6 +553,7 @@ static void OpenRunnersApp(NSButton *sender)
     [content.bottomAnchor constraintEqualToAnchor:container.bottomAnchor constant:-kOuterPadding],
     [content.leadingAnchor constraintEqualToAnchor:container.leadingAnchor constant:kOuterPadding],
   ]];
+  _generalContent = container;
   return container;
 }
 
@@ -532,6 +578,25 @@ static void OpenRunnersApp(NSButton *sender)
   _permissionDot.layer.backgroundColor = (granted ? NSColor.systemGreenColor : NSColor.systemRedColor).CGColor;
   _permissionHint.stringValue = SplitLocalized(granted ? @"PermissionOnHint" : @"PermissionOffHint");
   _permissionButton.hidden = granted;
+
+  NSMutableArray<NSString *> *problems = [NSMutableArray new];
+  NSMutableArray<NSString *> *failedShortcuts = [NSMutableArray new];
+  for (SplitShortcut *shortcut in _shortcutManager.shortcutsFailedToRegister) {
+    [failedShortcuts addObject:[NSString stringWithFormat:@"%@ %@", shortcut.displayString, SplitLocalized(shortcut.shortcutName)]];
+  }
+  if (failedShortcuts.count > 0) {
+    [problems addObject:[NSString stringWithFormat:SplitLocalized(@"ShortcutsNotRegistered"), [failedShortcuts componentsJoinedByString:@", "]]];
+  }
+  NSString *refusingApplication = SplitAccessibilityElement.applicationRefusingAccess;
+  if (granted && refusingApplication) {
+    [problems addObject:[NSString stringWithFormat:SplitLocalized(@"ApplicationRefusedAccess"), refusingApplication]];
+  }
+  NSString *problemText = [problems componentsJoinedByString:@"\n"];
+  if (![_accessProblemLabel.stringValue isEqualToString:problemText]) {
+    _accessProblemLabel.stringValue = problemText;
+    _accessProblemLabel.hidden = problemText.length == 0;
+    _tabViewController.tabViewItems.firstObject.viewController.preferredContentSize = PreferredContentSize(_generalContent);
+  }
 }
 
 - (void)startPermissionPolling
@@ -954,6 +1019,100 @@ static void SetRowEnabled(NSView *view, BOOL enabled)
 
 @end
 
+/// The copyright and license notices of the code Split is built on, read from the bundled
+/// THIRD_PARTY_NOTICES.md and shown as a sheet on the About window.
+@interface SplitOpenSourceNotices : NSObject
+@end
+
+@implementation SplitOpenSourceNotices
+{
+  NSPanel *_panel;
+}
+
++ (instancetype)shared
+{
+  static SplitOpenSourceNotices *shared;
+  if (!shared) {
+    shared = [SplitOpenSourceNotices new];
+  }
+  return shared;
+}
+
+- (NSPanel *)panel
+{
+  if (_panel) {
+    return _panel;
+  }
+  const CGFloat width = 480.0;
+  const CGFloat padding = 20.0;
+  _panel = [[NSPanel alloc] initWithContentRect:NSMakeRect(0, 0, width, 420)
+                                      styleMask:NSWindowStyleMaskTitled
+                                        backing:NSBackingStoreBuffered
+                                          defer:YES];
+  _panel.title = SplitLocalized(@"OpenSourceNotices");
+
+  NSString *path = [NSBundle.mainBundle pathForResource:@"THIRD_PARTY_NOTICES" ofType:@"md"];
+  NSString *notices = path ? [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL] : nil;
+  NSScrollView *scrollView = [NSTextView scrollableTextView];
+  NSTextView *textView = scrollView.documentView;
+  textView.editable = NO;
+  textView.drawsBackground = NO;
+  // The file is Markdown; show its "#" lines as headings instead of with the marks.
+  NSMutableAttributedString *text = [NSMutableAttributedString new];
+  NSDictionary *body = @{NSFontAttributeName: [NSFont systemFontOfSize:11], NSForegroundColorAttributeName: NSColor.secondaryLabelColor};
+  NSDictionary *heading = @{NSFontAttributeName: [NSFont systemFontOfSize:12 weight:NSFontWeightSemibold], NSForegroundColorAttributeName: NSColor.labelColor};
+  for (NSString *line in [notices ?: @"" componentsSeparatedByString:@"\n"]) {
+    NSRange marks = [line rangeOfString:@"^#+ " options:NSRegularExpressionSearch];
+    NSString *shown = marks.location == NSNotFound ? line : [line substringFromIndex:NSMaxRange(marks)];
+    [text appendAttributedString:[[NSAttributedString alloc] initWithString:[shown stringByAppendingString:@"\n"]
+                                                                 attributes:marks.location == NSNotFound ? body : heading]];
+  }
+  [textView.textStorage setAttributedString:text];
+  textView.textContainerInset = NSMakeSize(0, 4);
+  scrollView.drawsBackground = NO;
+  scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+
+  NSTextField *title = Label(SplitLocalized(@"OpenSourceNotices"), 13, NSFontWeightSemibold, NSColor.labelColor);
+  title.translatesAutoresizingMaskIntoConstraints = NO;
+  NSButton *close = [NSButton buttonWithTitle:SplitLocalized(@"Close") target:self action:@selector(close:)];
+  close.keyEquivalent = @"\r";
+  close.translatesAutoresizingMaskIntoConstraints = NO;
+
+  NSView *container = _panel.contentView;
+  [container addSubview:title];
+  [container addSubview:scrollView];
+  [container addSubview:close];
+  [NSLayoutConstraint activateConstraints:@[
+    [container.widthAnchor constraintEqualToConstant:width],
+    [container.heightAnchor constraintEqualToConstant:420],
+    [title.topAnchor constraintEqualToAnchor:container.topAnchor constant:padding],
+    [title.leadingAnchor constraintEqualToAnchor:container.leadingAnchor constant:padding],
+    [scrollView.topAnchor constraintEqualToAnchor:title.bottomAnchor constant:10],
+    [scrollView.leadingAnchor constraintEqualToAnchor:container.leadingAnchor constant:padding],
+    [scrollView.trailingAnchor constraintEqualToAnchor:container.trailingAnchor constant:-padding],
+    [close.topAnchor constraintEqualToAnchor:scrollView.bottomAnchor constant:14],
+    [close.trailingAnchor constraintEqualToAnchor:container.trailingAnchor constant:-padding],
+    [close.bottomAnchor constraintEqualToAnchor:container.bottomAnchor constant:-padding],
+  ]];
+  return _panel;
+}
+
+- (void)showOnWindow:(NSWindow *)window
+{
+  NSPanel *panel = self.panel;
+  if (panel.isVisible) {
+    return;
+  }
+  [window beginSheet:panel completionHandler:nil];
+}
+
+- (void)close:(id)sender
+{
+  [_panel.sheetParent endSheet:_panel];
+}
+
+@end
+
 @interface SplitAboutWindowController () <SplitRunnersAppTarget>
 @end
 
@@ -992,7 +1151,14 @@ static void SetRowEnabled(NSView *view, BOOL enabled)
   [header setCustomSpacing:14 afterView:version];
   [header.widthAnchor constraintEqualToConstant:cardWidth].active = YES;
 
-  NSTextField *credit = Label(@"Icons: Lucide (ISC License)", 10, NSFontWeightRegular, NSColor.tertiaryLabelColor);
+  NSTextField *copyright = Label(@"© 2026 RUNNERS. All rights reserved. ·", 10, NSFontWeightRegular, NSColor.tertiaryLabelColor);
+  NSButton *notices = [NSButton buttonWithTitle:@"" target:self action:@selector(showOpenSourceNotices:)];
+  notices.bordered = NO;
+  notices.attributedTitle = [[NSAttributedString alloc] initWithString:SplitLocalized(@"OpenSourceNotices")
+                                                            attributes:@{NSFontAttributeName: [NSFont systemFontOfSize:10],
+                                                                         NSForegroundColorAttributeName: NSColor.linkColor,
+                                                                         NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)}];
+  NSStackView *credit = HorizontalStack(@[copyright, notices], 3);
   NSMutableArray<NSView *> *views = [NSMutableArray arrayWithObject:header];
   [views addObjectsFromArray:RunnersAppSections(cardWidth, self)];
   [views addObject:credit];
@@ -1034,6 +1200,11 @@ static void SetRowEnabled(NSView *view, BOOL enabled)
 - (void)openGitHub:(id)sender
 {
   [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:kGitHubURL]];
+}
+
+- (void)showOpenSourceNotices:(id)sender
+{
+  [SplitOpenSourceNotices.shared showOnWindow:self.window];
 }
 
 @end

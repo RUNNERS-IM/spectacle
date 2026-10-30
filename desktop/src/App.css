@@ -413,6 +413,31 @@ button {
   margin-top: 16px;
 }
 
+/* Open source notices */
+.panel.notices {
+  width: min(480px, calc(100vw - 40px));
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 40px);
+}
+
+.notices-text {
+  margin-top: 10px;
+  overflow-y: auto;
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  user-select: text;
+}
+
+.notices-heading {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+
 /* Move highlight */
 .feedback {
   position: fixed;

@@ -4,6 +4,7 @@
 "DisableForAnHour" = "1 小时";
 "DisableForApplication" = "当“%@”在前台时";
 "Settings" = "设置…";
+"HelpFeedback" = "帮助与反馈";
 "QuitSplit" = "退出 Split";
 "MoveToCenter" = "居中";
 "MoveToFullscreen" = "全屏";
@@ -93,7 +94,7 @@
 "PermissionOnHint" = "已开启。Split 可以移动窗口。";
 "PermissionOffHint" = "已关闭。开启之前无法移动窗口。";
 "PermissionOpen" = "打开设置";
-"AboutLine" = "Split %@ · 免费开源";
+"AboutLine" = "Split %@ · 免费";
 "Website" = "网站";
 "SectionBasic" = "居中和全屏";
 "SectionHalves" = "半屏";
@@ -163,3 +164,8 @@
 "ProRestore" = "恢复购买";
 "ProContinue" = "继续使用";
 "ProFreeUntilLaunch" = "Pro 推出前可免费使用";
+
+"OpenSourceNotices" = "开源声明";
+"Close" = "关闭";
+"ShortcutsNotRegistered" = "这些快捷键已被其他应用占用：%@";
+"ApplicationRefusedAccess" = "%1$@ 拒绝 Split 移动其窗口。请退出 %1$@ 后重新打开。";

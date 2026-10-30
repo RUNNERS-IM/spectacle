@@ -48,7 +48,7 @@
   "gap.normal": "Normal",
   "gap.wide": "Wide",
   "general.connection": "Window control",
-  "general.aboutLine": "Split {{version}} · free and open source",
+  "general.aboutLine": "Split {{version}} · free",
   "general.website": "Website",
 
   "backend.windows": "Connected to the Windows window manager.",
@@ -109,5 +109,9 @@
   "recorder.enterShortcut": "Type shortcut",
   "recorder.clear": "Clear",
   "button.ok": "OK",
-  "button.cancel": "Cancel"
+  "button.cancel": "Cancel",
+  "button.close": "Close",
+  "general.notices": "Open Source Notices",
+  "general.refused.windows": "{{app}} refused to let Split move its window. If it runs as administrator, Split has to run as administrator too.",
+  "general.refused.linux": "Split could not move the window of {{app}}. Quit {{app}} and open it again."
 }

@@ -32,6 +32,8 @@ export type ViewState = {
   sections: [string, string[]][];
   status: Status;
   failures: string[];
+  /** The app whose window Split last failed to move, until one of its windows moves again. */
+  refusingApp: string | null;
   version: string;
   platform: "windows" | "linux";
 };

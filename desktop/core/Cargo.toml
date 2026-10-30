@@ -3,7 +3,7 @@ name = "split-core"
 version = "0.1.0"
 description = "Window position math and history shared by every Split desktop platform"
 authors = ["RUNNERS-IM"]
-license = "MIT"
+license-file = "../../LICENSE.md"
 edition = "2021"
 
 [dependencies]

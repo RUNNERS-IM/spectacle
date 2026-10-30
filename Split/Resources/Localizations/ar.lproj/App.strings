@@ -11,6 +11,7 @@
 /* Status menu: opens the settings window */
 "Settings" = "الإعدادات…";
 /* Status menu: quits the app */
+"HelpFeedback" = "المساعدة والملاحظات";
 "QuitSplit" = "إنهاء Split";
 
 /* Window actions (status menu, settings, on-screen label) */
@@ -109,7 +110,7 @@
 "PermissionOffHint" = "متوقف. لا يمكن نقل النوافذ حتى تقوم بتفعيله.";
 "PermissionOpen" = "فتح الإعدادات";
 /* %@ is the version number */
-"AboutLine" = "Split %@ · مجاني ومفتوح المصدر";
+"AboutLine" = "Split %@ · مجاني";
 "Website" = "موقع الويب";
 "SectionBasic" = "الوسط وملء الشاشة";
 "SectionHalves" = "الأنصاف";
@@ -184,3 +185,8 @@
 "ProRestore" = "استعادة الشراء";
 "ProContinue" = "متابعة الاستخدام";
 "ProFreeUntilLaunch" = "مجاني حتى إطلاق Pro";
+
+"OpenSourceNotices" = "إشعارات المصادر المفتوحة";
+"Close" = "إغلاق";
+"ShortcutsNotRegistered" = "اختصارات لم تُفعَّل لأن تطبيقًا آخر يستخدمها: %@";
+"ApplicationRefusedAccess" = "رفض %1$@ نقل النوافذ. أغلق %1$@ ثم افتحه من جديد.";

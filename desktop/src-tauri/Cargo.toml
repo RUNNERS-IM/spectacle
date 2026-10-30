@@ -3,7 +3,7 @@ name = "split"
 version = "0.1.0"
 description = "Move and resize windows with keyboard shortcuts"
 authors = ["RUNNERS-IM"]
-license = "MIT"
+license-file = "../../LICENSE.md"
 repository = "https://github.com/RUNNERS-IM/split"
 edition = "2021"
 
