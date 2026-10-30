@@ -1,0 +1,30 @@
+// Gives every Split page `window.split` (see src/shared/types.ts) and nothing else from Node.
+import { contextBridge, ipcRenderer, type IpcRendererEvent } from "electron";
+import type { OverlayPayload, SheetPayload, SplitApi, UpdateProgress, ViewState } from "../shared/types";
+
+function listen<T>(channel: string, listener: (value: T) => void): () => void {
+  const handler = (_event: IpcRendererEvent, value: T) => listener(value);
+  ipcRenderer.on(channel, handler);
+  return () => ipcRenderer.removeListener(channel, handler);
+}
+
+const api: SplitApi = {
+  getState: () => ipcRenderer.invoke("state:get"),
+  saveSettings: (settings) => ipcRenderer.invoke("settings:save", settings),
+  restoreDefaultShortcuts: () => ipcRenderer.invoke("shortcuts:restore"),
+  setRecording: (recording) => ipcRenderer.invoke("shortcuts:recording", recording),
+  previewFeedback: () => ipcRenderer.invoke("feedback:preview"),
+  openLink: (kind) => ipcRenderer.invoke("link:open", kind),
+  requestTrust: () => ipcRenderer.invoke("trust:request"),
+  answerUpdate: (install) => ipcRenderer.invoke("update:answer", install),
+  answerLayoutSave: (answer) => ipcRenderer.invoke("layout:answer", answer),
+  showPro: () => ipcRenderer.invoke("pro:show"),
+  guideLater: () => ipcRenderer.invoke("guide:later"),
+  guideReset: () => ipcRenderer.invoke("guide:reset"),
+  onState: (listener) => listen<ViewState>("state:changed", listener),
+  onOverlay: (listener) => listen<OverlayPayload | null>("overlay:show", listener),
+  onSheet: (listener) => listen<SheetPayload>("sheet:show", listener),
+  onUpdateProgress: (listener) => listen<UpdateProgress>("update:progress", listener),
+};
+
+contextBridge.exposeInMainWorld("split", api);

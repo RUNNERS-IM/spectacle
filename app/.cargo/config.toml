@@ -1,0 +1,3 @@
+[build]
+# Why: .noindex keeps Spotlight from indexing the Rust build folder; napi runs cargo from here.
+target-dir = "native/target.noindex"

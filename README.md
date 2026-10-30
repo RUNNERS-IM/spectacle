@@ -4,7 +4,7 @@
 
 Move and resize macOS windows with keyboard shortcuts. No mouse required.
 
-Split is a free window manager by RUNNERS: a native Apple silicon app with notarized releases, auto-arrange, saved layouts and 18 languages.
+Split is a free window manager by RUNNERS: a universal app for Apple silicon and Intel Macs with notarized releases, auto-arrange, saved layouts and 18 languages.
 
 ## Install
 
@@ -48,7 +48,7 @@ All shortcuts can be changed or cleared in Settings → Shortcuts.
 - Upper right — ⌃⌘→
 - Lower right — ⌃⇧⌘→
 
-Pressing a half or corner shortcut repeatedly cycles the window between 1/2, 1/3 and 2/3 of that region.
+Pressing a half or corner shortcut repeatedly cycles the window through 1/2, 2/3 and 1/3 of that region.
 
 ### Auto arrange
 
