@@ -87,7 +87,9 @@ jobs:
       matrix:
         include:
           - os: macos
-            runner: macos-26
+            # 사무실 맥(라벨 ci-ready). GitHub 호스팅 macos-26 은 2026-10-31 새벽 대기열에서 16분 만에 두 번 취소됐다.
+            # 키체인 · 키는 아래 임시 키체인에만 넣고 끝나면 지우므로 러너 맥의 로그인 키체인은 건드리지 않는다.
+            runner: '["self-hosted","macOS","ARM64","ci-ready"]'
             builder: --mac
           - os: windows
             runner: windows-latest
@@ -95,7 +97,7 @@ jobs:
           - os: linux
             runner: ubuntu-22.04  # 오래된 glibc 로 빌드해야 더 많은 배포판에서 켜진다
             builder: --linux
-    runs-on: ${{ matrix.runner }}
+    runs-on: ${{ startsWith(matrix.runner, '[') && fromJSON(matrix.runner) || matrix.runner }}
     timeout-minutes: 60
     defaults:
       run:
