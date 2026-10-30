@@ -99,6 +99,8 @@ body,
 body {
   background: var(--window);
   overflow: hidden;
+  /* Why: Korean lines break between words, not inside them. */
+  word-break: keep-all;
 }
 
 button {

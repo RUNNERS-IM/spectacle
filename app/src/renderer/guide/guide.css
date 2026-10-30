@@ -3,6 +3,8 @@ html,
 body {
   margin: 0;
   background: var(--rw-window-bg);
+  /* Why: Korean lines break between words, not inside them. */
+  word-break: keep-all;
   user-select: none;
   cursor: default;
 }
