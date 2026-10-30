@@ -106,7 +106,7 @@
 		5B85640D1D0531972F52F6CF /* SPTExample.m in Sources */ = {isa = PBXBuildFile; fileRef = FA10FF6B8A4A7CF2D5B3445E /* SPTExample.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		5E110A55EC8DA676FCF42EE6 /* SplitLoginItemHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DC8A0161B85097900ABEBD5 /* SplitLoginItemHelper.m */; };
 		647ECC3C75E6F2526C489DDD /* EXPMatchers+conformTo.m in Sources */ = {isa = PBXBuildFile; fileRef = 863C0FFF45455DDB074D591F /* EXPMatchers+conformTo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
-		64E38CEE98F1B0C35A2A9F7C /* Lucide-LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3B347D59818F0228FD4F67CF /* Lucide-LICENSE.txt */; };
+		64E38CEE98F1B0C35A2A9F7C /* THIRD_PARTY_NOTICES.md in Resources */ = {isa = PBXBuildFile; fileRef = 3B347D59818F0228FD4F67CF /* THIRD_PARTY_NOTICES.md */; };
 		6504FAA8FDFFE33026CA8F4F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F1ECADCF2C5155045991EBF /* Cocoa.framework */; };
 		6525FF8C0AFA869D57A7F958 /* SPTTestSuite.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D491F89B65570BB9E2467B5 /* SPTTestSuite.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		6568D0879CAAD7CABA3FF804 /* EXPMatchers+beCloseTo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E5A7A4A35DDE176F517B34E /* EXPMatchers+beCloseTo.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
@@ -116,7 +116,7 @@
 		7C1E39C43D1EA7DCE6E51FEF /* SplitJavaScriptEnvironment.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D8E2C631C7AAD5A0074129C /* SplitJavaScriptEnvironment.m */; };
 		7C54E8E15591CFE677011BA7 /* EXPMatchers+raiseWithReason.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C182DC150BA7346F44ACA /* EXPMatchers+raiseWithReason.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		83F48B8485BD87C458CF3C80 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 077938E51184FADB0013BC14 /* main.m */; };
-		8412BEEA9C2734C7923D9E44 /* Lucide-LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 3B347D59818F0228FD4F67CF /* Lucide-LICENSE.txt */; };
+		8412BEEA9C2734C7923D9E44 /* THIRD_PARTY_NOTICES.md in Resources */ = {isa = PBXBuildFile; fileRef = 3B347D59818F0228FD4F67CF /* THIRD_PARTY_NOTICES.md */; };
 		844BF9A1CA969F5B6C3C8DAC /* SpectaUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 75CC01C878738F2FB4C6672D /* SpectaUtility.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		85EB8CDD03553A408310F89C /* SpectaDSL.m in Sources */ = {isa = PBXBuildFile; fileRef = 843415BF7FCFE6CAC211E024 /* SpectaDSL.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		8735EB3C5CE0B6D0C3C8AF05 /* SplitShortcutKeyBindings.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DE03E4A1D7B98D6004E80D6 /* SplitShortcutKeyBindings.m */; };
@@ -338,7 +338,7 @@
 		2E4955061329995935BDD21D /* SpectaUtility.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = SpectaUtility.h; sourceTree = "<group>"; };
 		2E5A7A4A35DDE176F517B34E /* EXPMatchers+beCloseTo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beCloseTo.m"; sourceTree = "<group>"; };
 		3676E2C618CC67C8D802DFFE /* EXPMatchers+beNil.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EXPMatchers+beNil.m"; sourceTree = "<group>"; };
-		3B347D59818F0228FD4F67CF /* Lucide-LICENSE.txt */ = {isa = PBXFileReference; includeInIndex = 1; name = "Lucide-LICENSE.txt"; path = "Split/Resources/Lucide-LICENSE.txt"; sourceTree = SOURCE_ROOT; };
+		3B347D59818F0228FD4F67CF /* THIRD_PARTY_NOTICES.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = THIRD_PARTY_NOTICES.md; path = THIRD_PARTY_NOTICES.md; sourceTree = SOURCE_ROOT; };
 		3B4FD3D0D9C5000C9EA68F0F /* it */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = it; path = Split/Resources/Localizations/it.lproj/App.strings; sourceTree = "<group>"; };
 		3C8BEF4738550CA3035CA819 /* EXPFloatTuple.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EXPFloatTuple.m; sourceTree = "<group>"; };
 		3F096B5341B9DC6C41DEDD07 /* EXPMatchers+contain.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+contain.h"; sourceTree = "<group>"; };
@@ -587,7 +587,7 @@
 				9B6AA3E747837D486CFE15C7 /* AccessibilityGuide.strings */,
 				86846CAC882D84270EB65140 /* Migration.strings */,
 				47DCCDDAD963C84430ED5B8A /* Split.icon */,
-				3B347D59818F0228FD4F67CF /* Lucide-LICENSE.txt */,
+				3B347D59818F0228FD4F67CF /* THIRD_PARTY_NOTICES.md */,
 				25055C81ABA059FC8A1449E7 /* GuideSettings.png */,
 				4C1C40A992D0C1C6A0E57CC3 /* GuideSettingsDark.png */,
 				254BDC24569365EE8D8EA7DC /* App.strings */,
@@ -1105,7 +1105,7 @@
 				A6DED8596B997C026A4E4B8F /* AccessibilityGuide.strings in Resources */,
 				8A98A894217D367E28C5C57E /* Migration.strings in Resources */,
 				F1ED7133286CAAEF207CD96B /* Split.icon in Resources */,
-				8412BEEA9C2734C7923D9E44 /* Lucide-LICENSE.txt in Resources */,
+				8412BEEA9C2734C7923D9E44 /* THIRD_PARTY_NOTICES.md in Resources */,
 				E86B4FBF2D82BD7E7C4FED40 /* GuideSettings.png in Resources */,
 				9E9071BC2E33D6945D97F768 /* GuideSettingsDark.png in Resources */,
 				0DDCE63CCEACBA39CBD43528 /* App.strings in Resources */,
@@ -1132,7 +1132,7 @@
 				6949917BE888B37463015EB2 /* AccessibilityGuide.strings in Resources */,
 				F0EA6BC6DEB8E7F223AB6AE5 /* Migration.strings in Resources */,
 				564CEF444C2834203CBEAD58 /* Split.icon in Resources */,
-				64E38CEE98F1B0C35A2A9F7C /* Lucide-LICENSE.txt in Resources */,
+				64E38CEE98F1B0C35A2A9F7C /* THIRD_PARTY_NOTICES.md in Resources */,
 				E3E3C3017EE5A0CE5B6A8562 /* GuideSettings.png in Resources */,
 				5F336406AF08DE5541F67557 /* GuideSettingsDark.png in Resources */,
 				9B1A6349E15456BC72B69A08 /* App.strings in Resources */,

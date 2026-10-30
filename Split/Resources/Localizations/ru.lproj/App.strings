@@ -4,6 +4,7 @@
 "DisableForAnHour" = "На час";
 "DisableForApplication" = "Пока %@ на переднем плане";
 "Settings" = "Настройки…";
+"HelpFeedback" = "Справка и отзывы";
 "QuitSplit" = "Завершить Split";
 "MoveToCenter" = "По центру";
 "MoveToFullscreen" = "Во весь экран";
@@ -93,7 +94,7 @@
 "PermissionOnHint" = "Вкл. Split может перемещать окна.";
 "PermissionOffHint" = "Выкл. Окна нельзя перемещать, пока Вы не включите это.";
 "PermissionOpen" = "Открыть настройки";
-"AboutLine" = "Split %@ · бесплатно и с открытым кодом";
+"AboutLine" = "Split %@ · бесплатно";
 "Website" = "Веб-сайт";
 "SectionBasic" = "Центр и весь экран";
 "SectionHalves" = "Половины";
@@ -163,3 +164,8 @@
 "ProRestore" = "Восстановить покупку";
 "ProContinue" = "Продолжить";
 "ProFreeUntilLaunch" = "Бесплатно до запуска Pro";
+
+"OpenSourceNotices" = "Уведомления об открытом коде";
+"Close" = "Закрыть";
+"ShortcutsNotRegistered" = "Эти сочетания уже заняты другим приложением: %@";
+"ApplicationRefusedAccess" = "%1$@ не даёт Split перемещать окна. Закройте %1$@ и откройте снова.";

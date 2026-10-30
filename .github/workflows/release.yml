@@ -15,6 +15,8 @@ name: Release
 on:
   push:
     branches: [release]
+    # Windows · 리눅스 판(desktop/)만 바뀐 커밋으로는 맥 판을 다시 내지 않는다
+    paths-ignore: ["desktop/**", ".github/workflows/desktop.yml"]
   workflow_dispatch:
     inputs:
       publish:

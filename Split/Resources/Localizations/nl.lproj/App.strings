@@ -4,6 +4,7 @@
 "DisableForAnHour" = "Een uur";
 "DisableForApplication" = "Zolang %@ vooraan staat";
 "Settings" = "Instellingen…";
+"HelpFeedback" = "Help & feedback";
 "QuitSplit" = "Stop Split";
 "MoveToCenter" = "Centreer";
 "MoveToFullscreen" = "Schermvullend";
@@ -93,7 +94,7 @@
 "PermissionOnHint" = "Aan. Split kan vensters verplaatsen.";
 "PermissionOffHint" = "Uit. Vensters kunnen pas worden verplaatst als u dit aanzet.";
 "PermissionOpen" = "Open Instellingen";
-"AboutLine" = "Split %@ · gratis en opensource";
+"AboutLine" = "Split %@ · gratis";
 "Website" = "Website";
 "SectionBasic" = "Centreren en schermvullend";
 "SectionHalves" = "Helften";
@@ -163,3 +164,8 @@
 "ProRestore" = "Aankoop herstellen";
 "ProContinue" = "Blijven gebruiken";
 "ProFreeUntilLaunch" = "Tot Pro uitkomt, kunt u het gratis gebruiken";
+
+"OpenSourceNotices" = "Opensource-vermeldingen";
+"Close" = "Sluit";
+"ShortcutsNotRegistered" = "Een andere app gebruikt deze sneltoetsen al: %@";
+"ApplicationRefusedAccess" = "%1$@ laat Split de vensters niet verplaatsen. Stop %1$@ en open het opnieuw.";

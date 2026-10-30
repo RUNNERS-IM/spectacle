@@ -28,6 +28,8 @@
 	<string>10.9</string>
 	<key>LSUIElement</key>
 	<true/>
+	<key>NSHumanReadableCopyright</key>
+	<string>© 2026 RUNNERS. All rights reserved.</string>
 	<key>NSMainNibFile</key>
 	<string>Split</string>
 	<key>NSPrincipalClass</key>

@@ -179,6 +179,7 @@ static BOOL SplitIsRunningUnitTests(void)
   }];
   [_shortcutSheet startWatchingModifiers];
   [self insertShortcutSheetMenuItem];
+  [self moveCommonMenuItemsToBottom];
   [self localizeStatusMenu];
   [self decorateStatusMenu];
   SplitDisplayChangeArranger *displayChangeArranger = _displayChangeArranger;
@@ -741,6 +742,60 @@ static NSDictionary<NSString *, SplitWindowAction *> *SplitWindowActionsByShortc
   [_statusItemMenu insertItem:item atIndex:index >= 0 ? index : _statusItemMenu.numberOfItems];
 }
 
+/// Every RUNNERS app ends its menu the same way: About, Check for Updates, Settings, Help &
+/// Feedback, then Quit on its own. Split's own rows stay above them in their usual order.
+- (void)moveCommonMenuItemsToBottom
+{
+  NSMenuItem *about = nil;
+  NSMenuItem *settings = nil;
+  NSMenuItem *quit = nil;
+  for (NSMenuItem *item in _statusItemMenu.itemArray) {
+    if (item.action == @selector(orderFrontStandardAboutPanel:) || item.action == @selector(showAboutPanel:)) {
+      about = item;
+    } else if (item.action == @selector(showPreferencesWindow:)) {
+      settings = item;
+    } else if (item.action == @selector(terminate:)) {
+      quit = item;
+    }
+  }
+  NSMenuItem *help = [[NSMenuItem alloc] initWithTitle:SplitLocalized(@"HelpFeedback") action:@selector(openHelp:) keyEquivalent:@""];
+  help.target = self;
+  settings.keyEquivalent = @",";
+  settings.keyEquivalentModifierMask = NSEventModifierFlagCommand;
+  quit.keyEquivalent = @"q";
+  quit.keyEquivalentModifierMask = NSEventModifierFlagCommand;
+  NSArray<NSMenuItem *> *common = @[about, self.checkForUpdatesMenuItem, settings, help];
+  for (NSMenuItem *item in [common arrayByAddingObject:quit]) {
+    if (item.menu) {
+      [_statusItemMenu removeItem:item];
+    }
+  }
+  // Removing rows leaves separators next to each other or at the ends; keep one between groups.
+  for (NSInteger index = _statusItemMenu.numberOfItems - 1; index >= 0; index--) {
+    NSMenuItem *item = [_statusItemMenu itemAtIndex:index];
+    BOOL atEnd = index == 0 || index == _statusItemMenu.numberOfItems - 1;
+    if (item.isSeparatorItem && (atEnd || [_statusItemMenu itemAtIndex:index - 1].isSeparatorItem)) {
+      [_statusItemMenu removeItemAtIndex:index];
+    }
+  }
+  // Pausing the shortcuts and the list of shortcuts are both about shortcuts, so they sit together.
+  NSInteger sheetIndex = [_statusItemMenu indexOfItemWithTarget:self andAction:@selector(showShortcutSheet:)];
+  if (sheetIndex > 0 && [_statusItemMenu itemAtIndex:sheetIndex - 1].isSeparatorItem) {
+    [_statusItemMenu removeItemAtIndex:sheetIndex - 1];
+  }
+  [_statusItemMenu addItem:NSMenuItem.separatorItem];
+  for (NSMenuItem *item in common) {
+    [_statusItemMenu addItem:item];
+  }
+  [_statusItemMenu addItem:NSMenuItem.separatorItem];
+  [_statusItemMenu addItem:quit];
+}
+
+- (void)openHelp:(id)sender
+{
+  [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:@"https://github.com/RUNNERS-IM/split/issues"]];
+}
+
 - (void)showShortcutSheet:(id)sender
 {
   // The menu is still closing; show the card once it is gone.
@@ -803,14 +858,25 @@ static NSDictionary<NSString *, SplitWindowAction *> *SplitWindowActionsByShortc
   for (NSString *shortcutName in _shortcutMenuItems) {
     _shortcutMenuItems[shortcutName].image = SplitMenuImageForShortcutName(shortcutName);
   }
+  // The same meaning gets the same Lucide icon in every RUNNERS app (작업 가이드/공통.md).
   for (NSMenuItem *item in _statusItemMenu.itemArray) {
     NSString *icon = nil;
     if (item.action == @selector(showPreferencesWindow:)) {
       icon = @"settings";
     } else if (item.submenu && item.submenu == self.disableShortcutsForAnHourMenuItem.menu) {
       icon = @"circle-pause";
+    } else if (item.action == @selector(showAboutPanel:)) {
+      icon = @"info";
+    } else if (item == self.checkForUpdatesMenuItem) {
+      icon = @"refresh-cw";
+    } else if (item.action == @selector(openHelp:)) {
+      icon = @"circle-help";
+    } else if (item.action == @selector(terminate:)) {
+      icon = @"square-x";
+    } else if (item.action == @selector(showShortcutSheet:)) {
+      icon = @"keyboard";
     }
-    if (icon && !item.image) {
+    if (icon) {
       item.image = SplitIcon(icon, 16);
     }
   }

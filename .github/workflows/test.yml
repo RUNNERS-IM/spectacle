@@ -5,7 +5,10 @@ name: Test
 on:
   push:
     branches: ["**"]
+    # Windows · 리눅스 판(desktop/)만 바뀐 커밋은 desktop.yml 이 맡는다
+    paths-ignore: ["desktop/**", ".github/workflows/desktop.yml"]
   pull_request:
+    paths-ignore: ["desktop/**", ".github/workflows/desktop.yml"]
 
 concurrency:
   group: test-${{ github.ref }}
