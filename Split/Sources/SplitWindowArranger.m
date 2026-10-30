@@ -35,9 +35,9 @@ static const CGFloat kFloatingScale = 0.6;
 static const CGFloat kStackOffset = 30.0;
 static const CGFloat kMinimumWindowSide = 80.0;
 
-/// Not in the public headers, but part of HIServices since macOS 10.x and used by most window
-/// managers to tie an Accessibility window to its window-server number.
-extern AXError _AXUIElementGetWindow(AXUIElementRef element, CGWindowID *windowID);
+/// How far apart (in points) a window-server rectangle and an Accessibility rectangle may be
+/// and still be taken for the same window.
+static const CGFloat kSameWindowTolerance = 2.0;
 
 static CGRect GridCell(CGRect frame, NSUInteger columns, NSUInteger rows, NSUInteger column, NSUInteger row)
 {
@@ -169,11 +169,11 @@ static NSString *StringAttribute(AXUIElementRef element, CFStringRef attribute)
   return [object isKindOfClass:NSString.class] ? object : nil;
 }
 
-/// Accessibility windows of one app keyed by window-server number. Only ordinary windows that
-/// are not minimized or in full screen are kept.
-static NSDictionary<NSNumber *, SplitAccessibilityElement *> *StandardWindowsOfProcess(pid_t pid)
+/// Accessibility windows of one app, front to back. Only ordinary windows that are not
+/// minimized or in full screen are kept.
+static NSMutableArray<SplitAccessibilityElement *> *StandardWindowsOfProcess(pid_t pid)
 {
-  NSMutableDictionary *result = [NSMutableDictionary new];
+  NSMutableArray *result = [NSMutableArray new];
   AXUIElementRef application = AXUIElementCreateApplication(pid);
   if (!application) {
     return result;
@@ -182,10 +182,6 @@ static NSDictionary<NSNumber *, SplitAccessibilityElement *> *StandardWindowsOfP
   if (AXUIElementCopyAttributeValues(application, kAXWindowsAttribute, 0, 100, &windows) == kAXErrorSuccess && windows) {
     for (CFIndex index = 0; index < CFArrayGetCount(windows); index++) {
       AXUIElementRef window = (AXUIElementRef)CFArrayGetValueAtIndex(windows, index);
-      CGWindowID windowID = 0;
-      if (_AXUIElementGetWindow(window, &windowID) != kAXErrorSuccess || windowID == 0) {
-        continue;
-      }
       if (![StringAttribute(window, kAXSubroleAttribute) isEqualToString:(__bridge NSString *)kAXStandardWindowSubrole]) {
         continue;
       }
@@ -193,7 +189,7 @@ static NSDictionary<NSNumber *, SplitAccessibilityElement *> *StandardWindowsOfP
           || [BoolAttribute(window, CFSTR("AXFullScreen")) boolValue]) {
         continue;
       }
-      result[@(windowID)] = [SplitAccessibilityElement elementWithAXUIElement:window];
+      [result addObject:[SplitAccessibilityElement elementWithAXUIElement:window]];
     }
     CFRelease(windows);
   }
@@ -216,13 +212,33 @@ static BOOL PointIsOnAnyScreen(CGPoint point)
   return NO;
 }
 
+/// The Accessibility window of `windows` that sits exactly where the window server says a window
+/// is. Only public API is used, so the window-server number cannot be asked for; the place and
+/// size tie the two together instead. The match is taken out of `windows` so two windows of one
+/// app with the same frame are handed out one each, front to back.
+static SplitAccessibilityElement *TakeWindowAtRect(NSMutableArray<SplitAccessibilityElement *> *windows, CGRect bounds)
+{
+  for (NSUInteger index = 0; index < windows.count; index++) {
+    CGRect rect = [windows[index] rectOfElement];
+    if (fabs(rect.origin.x - bounds.origin.x) <= kSameWindowTolerance
+        && fabs(rect.origin.y - bounds.origin.y) <= kSameWindowTolerance
+        && fabs(rect.size.width - bounds.size.width) <= kSameWindowTolerance
+        && fabs(rect.size.height - bounds.size.height) <= kSameWindowTolerance) {
+      SplitAccessibilityElement *element = windows[index];
+      [windows removeObjectAtIndex:index];
+      return element;
+    }
+  }
+  return nil;
+}
+
 /// The window server lists windows in stacking order, which is the order they were last used in.
 NSArray<SplitArrangedWindow *> *SplitVisibleWindows(NSScreen *screen)
 {
   CGRect screenRect = screen ? TopLeftRectFromCocoaRect(screen.frame) : CGRectNull;
   pid_t ownPid = NSProcessInfo.processInfo.processIdentifier;
   NSArray<NSDictionary *> *infos = CFBridgingRelease(CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly | kCGWindowListExcludeDesktopElements, kCGNullWindowID));
-  NSMutableDictionary<NSNumber *, NSDictionary *> *windowsByProcess = [NSMutableDictionary new];
+  NSMutableDictionary<NSNumber *, NSMutableArray<SplitAccessibilityElement *> *> *windowsByProcess = [NSMutableDictionary new];
   NSMutableArray<SplitArrangedWindow *> *result = [NSMutableArray new];
   for (NSDictionary *info in infos) {
     if ([info[(id)kCGWindowLayer] integerValue] != 0 || [info[(id)kCGWindowAlpha] doubleValue] <= 0.0) {
@@ -239,12 +255,12 @@ NSArray<SplitArrangedWindow *> *SplitVisibleWindows(NSScreen *screen)
         || (!screen && !PointIsOnAnyScreen(CGPointMake(CGRectGetMidX(bounds), CGRectGetMidY(bounds))))) {
       continue;
     }
-    NSDictionary<NSNumber *, SplitAccessibilityElement *> *processWindows = windowsByProcess[@(pid)];
+    NSMutableArray<SplitAccessibilityElement *> *processWindows = windowsByProcess[@(pid)];
     if (!processWindows) {
       processWindows = StandardWindowsOfProcess(pid);
       windowsByProcess[@(pid)] = processWindows;
     }
-    SplitAccessibilityElement *element = processWindows[info[(id)kCGWindowNumber]];
+    SplitAccessibilityElement *element = TakeWindowAtRect(processWindows, bounds);
     if (!element) {
       continue;
     }
