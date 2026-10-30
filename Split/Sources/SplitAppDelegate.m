@@ -26,6 +26,7 @@
 {
   NSDictionary<NSString *, NSMenuItem *> *_shortcutMenuItems;
   NSStatusItem *_statusItem;
+  NSTimer *_statusItemTimer;
   id<SplitShortcutStorage> _shortcutStorage;
   SplitShortcutManager *_shortcutManager;
   SplitWindowPositionManager *_windowPositionManager;
@@ -409,18 +410,61 @@ static NSArray<SplitShortcut *> *SplitShortcutsAddingNewDefaults(NSArray<SplitSh
 #endif
 }
 
+#pragma mark - Status item
+
+/// The menu bar icon is a screen outline with a pane inside that slowly slides wider and narrower.
+/// Drawn on a 24-unit grid, scaled to an 18pt template image so macOS tints it for light and dark menu bars.
+static const NSTimeInterval SplitStatusItemCycle = 6.0;
+static const NSTimeInterval SplitStatusItemFrameInterval = 1.0 / 15.0;
+
+static NSImage *SplitStatusItemImage(CGFloat paneWidth)
+{
+  NSImage *image = [NSImage imageWithSize:NSMakeSize(18, 18) flipped:YES drawingHandler:^BOOL(NSRect rect) {
+    NSAffineTransform *transform = [NSAffineTransform transform];
+    [transform scaleBy:18.0 / 24.0];
+    [transform concat];
+    [NSColor.blackColor set];
+    NSBezierPath *screen = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(2.5, 4.5, 19, 15) xRadius:3 yRadius:3];
+    screen.lineWidth = 2;
+    [screen stroke];
+    [[NSBezierPath bezierPathWithRoundedRect:NSMakeRect(4.5, 6.5, paneWidth, 11) xRadius:1 yRadius:1] fill];
+    return YES;
+  }];
+  [image setTemplate:YES];
+  return image;
+}
+
+/// Pane width at a point in the cycle: 7 → 12 → 7 → 4 → 7, easing in and out between each stop.
+static CGFloat SplitStatusItemPaneWidth(NSTimeInterval time)
+{
+  static const CGFloat stops[] = {7, 12, 7, 4, 7};
+  NSTimeInterval progress = fmod(time, SplitStatusItemCycle) / SplitStatusItemCycle * 4;
+  NSInteger segment = MIN((NSInteger)progress, 3);
+  CGFloat t = progress - segment;
+  CGFloat eased = (1 - cos(M_PI * t)) / 2;
+  return stops[segment] + (stops[segment + 1] - stops[segment]) * eased;
+}
+
 - (void)enableStatusItem
 {
   _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
-  NSImage *statusImage = [NSBundle.mainBundle imageForResource:@"Split Status Item"];
-  [statusImage setTemplate:YES];
-  _statusItem.button.image = statusImage;
+  _statusItem.button.image = SplitStatusItemImage(SplitStatusItemPaneWidth(0));
   _statusItem.menu = _statusItemMenu;
   _statusItem.button.toolTip = [@"Split " stringByAppendingString:SplitUtilities.applicationVersion];
+  NSTimeInterval start = NSDate.timeIntervalSinceReferenceDate;
+  __weak NSStatusItem *statusItem = _statusItem;
+  _statusItemTimer = [NSTimer timerWithTimeInterval:SplitStatusItemFrameInterval repeats:YES block:^(NSTimer *timer) {
+    statusItem.button.image = SplitStatusItemImage(SplitStatusItemPaneWidth(NSDate.timeIntervalSinceReferenceDate - start));
+  }];
+  _statusItemTimer.tolerance = SplitStatusItemFrameInterval / 2;
+  // Common modes keep the pane moving while the status menu is open.
+  [NSRunLoop.mainRunLoop addTimer:_statusItemTimer forMode:NSRunLoopCommonModes];
 }
 
 - (void)disableStatusItem
 {
+  [_statusItemTimer invalidate];
+  _statusItemTimer = nil;
   [NSStatusBar.systemStatusBar removeStatusItem:_statusItem];
 }
 
