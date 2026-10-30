@@ -122,3 +122,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "Wpisz skrót";
 "ShortcutRecorderLabelStopRecording" = "Zatrzymaj nagrywanie";
 "ShortcutRecorderLabelUseExisting" = "Zachowaj obecny";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "Układy";
+"LayoutDisplays" = "Monitory";
+"LayoutShapes" = "Kształty";
+"LayoutSaved" = "Zapisane układy";
+"LayoutSavedEmpty" = "Jeszcze nie ma. Utwórz układ przez „Zapisz bieżący układ…” poniżej.";
+"LayoutShapeHalves" = "Połówki";
+"LayoutShapeThirds" = "Trzecie części";
+"LayoutShapeMainAndTwo" = "Duże + dwa";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "Jedno duże";
+"LayoutWindowCount" = "Okna: %lu";
+"LayoutSave" = "Zapisz bieżący układ…";
+"LayoutDelete" = "Usuń zapisany układ";
+"LayoutSaveTitle" = "Zapisać bieżący układ okien?";
+"LayoutSaveMessage" = "Zapisuje pod nazwą, gdzie są widoczne okna. Kliknięcie w menu przywraca je wszystkie naraz.";
+"LayoutSaveNamePlaceholder" = "Nazwa";
+"LayoutSaveDefaultName" = "Układ %lu";
+"LayoutSaveAuto" = "Wczytaj automatycznie po podłączeniu tych monitorów";
+"LayoutSaveButton" = "Zapisz";
+"LayoutSaveCancel" = "Anuluj";
+"ShortcutsOn" = "Skróty włączone";
+"ShortcutsOffForHour" = "Skróty wyłączone · włączą się o %@";
+"ShortcutsOffForApplication" = "Skróty wyłączone · podczas używania %@";
+"ShortcutsOffNoPermission" = "Skróty wyłączone · potrzebny dostęp Dostępności";

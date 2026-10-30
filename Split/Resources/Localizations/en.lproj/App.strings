@@ -143,3 +143,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "Type shortcut";
 "ShortcutRecorderLabelStopRecording" = "Stop recording";
 "ShortcutRecorderLabelUseExisting" = "Keep current";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "Layouts";
+"LayoutDisplays" = "Displays";
+"LayoutShapes" = "Shapes";
+"LayoutSaved" = "Saved layouts";
+"LayoutSavedEmpty" = "None yet. Make one with “Save Current Layout…” below.";
+"LayoutShapeHalves" = "Halves";
+"LayoutShapeThirds" = "Thirds";
+"LayoutShapeMainAndTwo" = "Big + two";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "One big";
+"LayoutWindowCount" = "%lu windows";
+"LayoutSave" = "Save Current Layout…";
+"LayoutDelete" = "Delete Saved Layout";
+"LayoutSaveTitle" = "Save the current window layout?";
+"LayoutSaveMessage" = "Saves where the visible windows are under a name. Click it in the menu to bring them all back at once.";
+"LayoutSaveNamePlaceholder" = "Name";
+"LayoutSaveDefaultName" = "Layout %lu";
+"LayoutSaveAuto" = "Load automatically when these displays are connected";
+"LayoutSaveButton" = "Save";
+"LayoutSaveCancel" = "Cancel";
+"ShortcutsOn" = "Shortcuts on";
+"ShortcutsOffForHour" = "Shortcuts off · back on at %@";
+"ShortcutsOffForApplication" = "Shortcuts off · while using %@";
+"ShortcutsOffNoPermission" = "Shortcuts off · Accessibility access needed";

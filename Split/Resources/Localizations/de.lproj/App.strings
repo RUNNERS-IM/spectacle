@@ -143,3 +143,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "Kurzbefehl eingeben";
 "ShortcutRecorderLabelStopRecording" = "Aufnahme beenden";
 "ShortcutRecorderLabelUseExisting" = "Aktuellen behalten";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "Layouts";
+"LayoutDisplays" = "Displays";
+"LayoutShapes" = "Formen";
+"LayoutSaved" = "Gespeicherte Layouts";
+"LayoutSavedEmpty" = "Noch keine. Erstelle eines mit „Aktuelles Layout sichern…“ unten.";
+"LayoutShapeHalves" = "Hälften";
+"LayoutShapeThirds" = "Drittel";
+"LayoutShapeMainAndTwo" = "Groß + zwei";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "Eins groß";
+"LayoutWindowCount" = "%lu Fenster";
+"LayoutSave" = "Aktuelles Layout sichern…";
+"LayoutDelete" = "Gespeichertes Layout löschen";
+"LayoutSaveTitle" = "Aktuelles Fensterlayout sichern?";
+"LayoutSaveMessage" = "Sichert die Positionen der sichtbaren Fenster unter einem Namen. Ein Klick im Menü stellt alle auf einmal wieder her.";
+"LayoutSaveNamePlaceholder" = "Name";
+"LayoutSaveDefaultName" = "Layout %lu";
+"LayoutSaveAuto" = "Automatisch laden, wenn diese Displays verbunden sind";
+"LayoutSaveButton" = "Sichern";
+"LayoutSaveCancel" = "Abbrechen";
+"ShortcutsOn" = "Kurzbefehle an";
+"ShortcutsOffForHour" = "Kurzbefehle aus · wieder an um %@";
+"ShortcutsOffForApplication" = "Kurzbefehle aus · solange %@ benutzt wird";
+"ShortcutsOffNoPermission" = "Kurzbefehle aus · Bedienungshilfen-Zugriff nötig";

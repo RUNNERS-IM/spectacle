@@ -122,3 +122,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "Nhập phím tắt";
 "ShortcutRecorderLabelStopRecording" = "Dừng ghi";
 "ShortcutRecorderLabelUseExisting" = "Giữ hiện tại";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "Bố cục";
+"LayoutDisplays" = "Màn hình";
+"LayoutShapes" = "Hình dạng";
+"LayoutSaved" = "Bố cục đã lưu";
+"LayoutSavedEmpty" = "Chưa có. Tạo bằng “Lưu bố cục hiện tại…” bên dưới.";
+"LayoutShapeHalves" = "Hai nửa";
+"LayoutShapeThirds" = "Ba phần";
+"LayoutShapeMainAndTwo" = "Lớn + hai";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "Một lớn";
+"LayoutWindowCount" = "%lu cửa sổ";
+"LayoutSave" = "Lưu bố cục hiện tại…";
+"LayoutDelete" = "Xóa bố cục đã lưu";
+"LayoutSaveTitle" = "Lưu bố cục cửa sổ hiện tại?";
+"LayoutSaveMessage" = "Lưu vị trí các cửa sổ đang hiện dưới một tên. Bấm trong menu để đưa tất cả về cùng lúc.";
+"LayoutSaveNamePlaceholder" = "Tên";
+"LayoutSaveDefaultName" = "Bố cục %lu";
+"LayoutSaveAuto" = "Tự động tải khi cắm các màn hình này";
+"LayoutSaveButton" = "Lưu";
+"LayoutSaveCancel" = "Hủy";
+"ShortcutsOn" = "Phím tắt đang bật";
+"ShortcutsOffForHour" = "Phím tắt tắt · bật lại lúc %@";
+"ShortcutsOffForApplication" = "Phím tắt tắt · khi dùng %@";
+"ShortcutsOffNoPermission" = "Phím tắt tắt · cần quyền Trợ năng";

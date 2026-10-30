@@ -143,3 +143,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "Ketik pintasan";
 "ShortcutRecorderLabelStopRecording" = "Hentikan perekaman";
 "ShortcutRecorderLabelUseExisting" = "Pertahankan saat ini";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "Tata letak";
+"LayoutDisplays" = "Layar";
+"LayoutShapes" = "Bentuk";
+"LayoutSaved" = "Tata letak tersimpan";
+"LayoutSavedEmpty" = "Belum ada. Buat lewat “Simpan Tata Letak Sekarang…” di bawah.";
+"LayoutShapeHalves" = "Separuh";
+"LayoutShapeThirds" = "Sepertiga";
+"LayoutShapeMainAndTwo" = "Besar + dua";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "Satu besar";
+"LayoutWindowCount" = "%lu jendela";
+"LayoutSave" = "Simpan Tata Letak Sekarang…";
+"LayoutDelete" = "Hapus Tata Letak Tersimpan";
+"LayoutSaveTitle" = "Simpan tata letak jendela sekarang?";
+"LayoutSaveMessage" = "Menyimpan posisi jendela yang terlihat dengan sebuah nama. Klik di menu untuk mengembalikan semuanya sekaligus.";
+"LayoutSaveNamePlaceholder" = "Nama";
+"LayoutSaveDefaultName" = "Tata letak %lu";
+"LayoutSaveAuto" = "Muat otomatis saat layar-layar ini tersambung";
+"LayoutSaveButton" = "Simpan";
+"LayoutSaveCancel" = "Batal";
+"ShortcutsOn" = "Pintasan aktif";
+"ShortcutsOffForHour" = "Pintasan mati · aktif lagi pukul %@";
+"ShortcutsOffForApplication" = "Pintasan mati · selama memakai %@";
+"ShortcutsOffNoPermission" = "Pintasan mati · perlu izin Aksesibilitas";
