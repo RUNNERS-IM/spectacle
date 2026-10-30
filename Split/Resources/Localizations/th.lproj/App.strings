@@ -148,3 +148,8 @@
 "ShortcutsOffForHour" = "ปุ่มลัดปิด · เปิดอีกครั้งเวลา %@";
 "ShortcutsOffForApplication" = "ปุ่มลัดปิด · ขณะใช้ %@";
 "ShortcutsOffNoPermission" = "ปุ่มลัดปิด · ต้องได้รับสิทธิ์การช่วยการเข้าถึง";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "แอปอื่นจาก RUNNERS";
+"RunnersServicesTitle" = "บริการจาก RUNNERS";
+"RunnersGet" = "รับ";

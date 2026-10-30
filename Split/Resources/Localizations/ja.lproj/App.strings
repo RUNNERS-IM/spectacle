@@ -148,3 +148,8 @@
 "ShortcutsOffForHour" = "ショートカット オフ · %@ に再びオン";
 "ShortcutsOffForApplication" = "ショートカット オフ · %@ の使用中";
 "ShortcutsOffNoPermission" = "ショートカット オフ · アクセシビリティの許可が必要です";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "RUNNERSのほかのApp";
+"RunnersServicesTitle" = "RUNNERSのサービス";
+"RunnersGet" = "入手";

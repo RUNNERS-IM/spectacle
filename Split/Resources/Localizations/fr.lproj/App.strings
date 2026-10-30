@@ -169,3 +169,8 @@
 "ShortcutsOffForHour" = "Raccourcis désactivés · réactivés à %@";
 "ShortcutsOffForApplication" = "Raccourcis désactivés · pendant l’utilisation de %@";
 "ShortcutsOffNoPermission" = "Raccourcis désactivés · accès Accessibilité requis";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "Autres apps de RUNNERS";
+"RunnersServicesTitle" = "Services de RUNNERS";
+"RunnersGet" = "Obtenir";

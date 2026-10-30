@@ -153,3 +153,8 @@
 "ShortcutsOffForHour" = "단축키 꺼짐 · %@에 다시 켜져요";
 "ShortcutsOffForApplication" = "단축키 꺼짐 · %@ 쓰는 동안";
 "ShortcutsOffNoPermission" = "단축키 꺼짐 · 손쉬운 사용 권한이 필요해요";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "RUNNERS의 다른 앱";
+"RunnersServicesTitle" = "RUNNERS의 서비스";
+"RunnersGet" = "받기";

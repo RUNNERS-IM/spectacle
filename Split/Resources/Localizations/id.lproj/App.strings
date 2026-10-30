@@ -169,3 +169,8 @@
 "ShortcutsOffForHour" = "Pintasan mati · aktif lagi pukul %@";
 "ShortcutsOffForApplication" = "Pintasan mati · selama memakai %@";
 "ShortcutsOffNoPermission" = "Pintasan mati · perlu izin Aksesibilitas";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "Aplikasi lain dari RUNNERS";
+"RunnersServicesTitle" = "Layanan dari RUNNERS";
+"RunnersGet" = "Dapatkan";

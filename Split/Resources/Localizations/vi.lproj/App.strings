@@ -148,3 +148,8 @@
 "ShortcutsOffForHour" = "Phím tắt tắt · bật lại lúc %@";
 "ShortcutsOffForApplication" = "Phím tắt tắt · khi dùng %@";
 "ShortcutsOffNoPermission" = "Phím tắt tắt · cần quyền Trợ năng";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "Ứng dụng khác của RUNNERS";
+"RunnersServicesTitle" = "Dịch vụ của RUNNERS";
+"RunnersGet" = "Tải";

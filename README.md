@@ -4,13 +4,13 @@
 
 Move and resize macOS windows with keyboard shortcuts. No mouse required.
 
-Split is the RUNNERS-IM continuation of Spectacle, the window manager created by [Eric Czarny](https://github.com/eczarny). Spectacle reached version 1.2 in 2016 and its repository ([eczarny/spectacle](https://github.com/eczarny/spectacle)) is archived. Split keeps its shortcuts and adds a native Apple silicon build, notarized releases and new features. When Split starts for the first time it copies your Spectacle shortcuts and preferences.
+Split is a free, open-source window manager by RUNNERS-IM: a native Apple silicon app with notarized releases, auto-arrange, saved layouts and 18 languages.
 
 ## Install
 
 1. Download `Split-<version>.dmg` from [Releases](https://github.com/RUNNERS-IM/split/releases), open it and drag Split to Applications. Split is signed and notarized, so it opens without a warning.
 2. When Split starts it opens **System Settings → Privacy & Security → Accessibility** for you. Turn on the switch next to Split. Split cannot move windows of other apps without this permission, and its guide window closes by itself once access is granted.
-3. If Spectacle is still running, Split offers to quit it so the two apps don't react to the same shortcuts.
+3. If another copy of a Spectacle-style window manager is still running, Split offers to quit it so the two apps don't react to the same shortcuts.
 
 Split runs natively on Apple silicon and Intel Macs with macOS 13 or later. Updates are installed from within the app.
 
@@ -97,7 +97,6 @@ Done:
 - Native Apple silicon build, Swift Package Manager, Sparkle 2
 - Developer ID signing, notarization and automatic updates (served through runners.im)
 - A step-by-step Accessibility permission guide
-- Copying shortcuts and preferences from Spectacle
 - Homebrew tap
 - New icon, a picture menu with a live preview, and a glow after each move
 - Auto arrange (⌥⌘A)

@@ -148,3 +148,8 @@
 "ShortcutsOffForHour" = "Сочетания выключены · включатся в %@";
 "ShortcutsOffForApplication" = "Сочетания выключены · пока используется %@";
 "ShortcutsOffNoPermission" = "Сочетания выключены · нужен доступ Универсального доступа";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "Другие приложения RUNNERS";
+"RunnersServicesTitle" = "Сервисы RUNNERS";
+"RunnersGet" = "Загрузить";
