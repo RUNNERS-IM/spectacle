@@ -158,3 +158,13 @@
 "RunnersAppsTitle" = "RUNNERS의 다른 앱";
 "RunnersServicesTitle" = "RUNNERS의 서비스";
 "RunnersGet" = "받기";
+
+/* Split Pro: the pill next to paid features and the sheet it opens */
+"ProFeatures" = "저장한 배치 되살리기, 모니터 조합마다 배치 자동 불러오기";
+"ProPriceMonthly" = "$1 / 월";
+"ProPriceYearly" = "$6 / 년";
+"ProComingSoon" = "곧 출시";
+"ProSignIn" = "로그인";
+"ProRestore" = "구매 복원";
+"ProContinue" = "계속 쓰기";
+"ProFreeUntilLaunch" = "출시 전까지는 무료로 열려 있어요";

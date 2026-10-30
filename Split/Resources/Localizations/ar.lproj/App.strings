@@ -174,3 +174,13 @@
 "RunnersAppsTitle" = "تطبيقات أخرى من RUNNERS";
 "RunnersServicesTitle" = "خدمات RUNNERS";
 "RunnersGet" = "احصل عليه";
+
+/* Split Pro: the pill next to paid features and the sheet it opens */
+"ProFeatures" = "حفظ التخطيطات واستعادتها، وتحميل تخطيط تلقائيًا لكل مجموعة شاشات";
+"ProPriceMonthly" = "1$ / شهر";
+"ProPriceYearly" = "6$ / سنة";
+"ProComingSoon" = "قريبًا";
+"ProSignIn" = "تسجيل الدخول";
+"ProRestore" = "استعادة الشراء";
+"ProContinue" = "متابعة الاستخدام";
+"ProFreeUntilLaunch" = "مجاني حتى إطلاق Pro";

@@ -174,3 +174,13 @@
 "RunnersAppsTitle" = "Aplikasi lain dari RUNNERS";
 "RunnersServicesTitle" = "Layanan dari RUNNERS";
 "RunnersGet" = "Dapatkan";
+
+/* Split Pro: the pill next to paid features and the sheet it opens */
+"ProFeatures" = "Simpan dan pulihkan tata letak, serta muat tata letak otomatis untuk setiap kombinasi layar";
+"ProPriceMonthly" = "$1 / bulan";
+"ProPriceYearly" = "$6 / tahun";
+"ProComingSoon" = "Segera hadir";
+"ProSignIn" = "Masuk";
+"ProRestore" = "Pulihkan Pembelian";
+"ProContinue" = "Terus Gunakan";
+"ProFreeUntilLaunch" = "Gratis sampai Pro diluncurkan";

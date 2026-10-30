@@ -153,3 +153,13 @@
 "RunnersAppsTitle" = "RUNNERSのほかのApp";
 "RunnersServicesTitle" = "RUNNERSのサービス";
 "RunnersGet" = "入手";
+
+/* Split Pro: the pill next to paid features and the sheet it opens */
+"ProFeatures" = "配置の保存と復元、ディスプレイの組み合わせごとの自動読み込み";
+"ProPriceMonthly" = "$1 / 月";
+"ProPriceYearly" = "$6 / 年";
+"ProComingSoon" = "近日公開";
+"ProSignIn" = "サインイン";
+"ProRestore" = "購入を復元";
+"ProContinue" = "このまま使う";
+"ProFreeUntilLaunch" = "Pro の公開までは無料で使えます";
