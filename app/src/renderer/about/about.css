@@ -161,7 +161,8 @@ body {
   flex: none;
   width: 32px;
   height: 32px;
-  border-radius: 7px;
+  /* Why: Sense and Pudding icons are plain squares; the macOS app icon shape makes them match Prompt and Monitor. */
+  -webkit-mask: url("./assets/icon-mask.png") center / 100% 100% no-repeat;
 }
 
 .app-letter {
