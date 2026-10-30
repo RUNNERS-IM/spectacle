@@ -5,6 +5,7 @@
   "version": "2.6.1030",
   "description": "Window arranging app by RUNNERS",
   "author": "RUNNERS",
+  "homepage": "https://github.com/RUNNERS-IM/split",
   "license": "UNLICENSED",
   "type": "module",
   "main": "./out/main/index.js",
