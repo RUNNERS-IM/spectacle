@@ -4,6 +4,7 @@
 // on screen → `Engine` (src/core) works out where windows go with the macOS JavaScript math →
 // the native module moves them → the overlay shows where they went.
 import { execFileSync } from "node:child_process";
+import { readdirSync } from "node:fs";
 import { createRequire } from "node:module";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -74,12 +75,14 @@ const MENU_GROUPS: Action[][] = [
 // Native module
 
 interface NativeRect { x: number; y: number; width: number; height: number }
-interface NativeWindow { id: number; rect: NativeRect; app: string }
+/** `app` is the name people see; `bundle` is the bundle id (macOS) or executable name. */
+interface NativeWindow { id: number; rect: NativeRect; app: string; bundle: string; title: string }
 interface NativeSnapshot {
-  active: NativeWindow | null;
-  screens: { frame: NativeRect; workArea: NativeRect; scale: number; primary: boolean }[];
+  active?: NativeWindow | null;
+  /** `id` stays the same when the same monitor comes back (the display UUID on macOS). */
+  screens: { frame: NativeRect; workArea: NativeRect; scale: number; primary: boolean; id: string }[];
   windows: NativeWindow[];
-  refusingApp: string | null;
+  refusingApp?: string | null;
 }
 type NativeEvent = { type: "modifiers"; flags: number } | { type: "activated"; app: { id: string; name: string } };
 interface Native {
@@ -94,9 +97,21 @@ function resourcePath(...parts: string[]): string {
   return app.isPackaged ? join(process.resourcesPath, ...parts) : join(app.getAppPath(), "resources", ...parts);
 }
 
-const native: Native = createRequire(import.meta.url)(
-  app.isPackaged ? join(process.resourcesPath, "split_native.node") : join(app.getAppPath(), "native/build/Release/split_native.node"),
-);
+/**
+ * The native module (native/, napi-rs). The build leaves one file per system and CPU, plus one
+ * file for both Mac CPUs; a dev run reads native/, a packaged app Resources/native/.
+ */
+function loadNative(): Native {
+  const dir = app.isPackaged ? join(process.resourcesPath, "native") : join(app.getAppPath(), "native");
+  const names = readdirSync(dir).filter((name) => name.endsWith(".node"));
+  const file =
+    names.find((name) => name.startsWith(`split-native.${process.platform}-${process.arch}`)) ??
+    names.find((name) => name === `split-native.${process.platform}-universal.node`);
+  if (!file) throw new Error(`no split-native.${process.platform}-${process.arch}*.node in ${dir}; run pnpm native`);
+  return createRequire(import.meta.url)(join(dir, file)) as Native;
+}
+
+const native = loadNative();
 
 function toSnapshot(raw: NativeSnapshot): Snapshot {
   const window = (w: NativeWindow) => ({ id: w.id, rect: Rect.from(w.rect), app: w.app });
@@ -731,7 +746,12 @@ function start(): void {
   });
   startDisplayWatcher({
     settings: () => settings,
-    snapshot: () => toSnapshot(native.snapshot(true)),
+    snapshot: () => {
+      const raw = native.snapshot(true);
+      const snapshot = toSnapshot(raw);
+      return { ...snapshot, screens: snapshot.screens.map((s, i) => ({ ...s, id: raw.screens[i].id })) };
+    },
+    displayIds: () => native.snapshot(false).screens.map((s) => s.id),
     apply: (moves) => native.apply(moves.map((m) => ({ id: m.id, rect: { x: m.rect.x, y: m.rect.y, width: m.rect.width, height: m.rect.height } }))),
     remember: (previous) => engine.rememberArrangement(previous),
     // A layout saved for exactly these monitors wins over rearranging by area.

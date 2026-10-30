@@ -9,7 +9,7 @@
   "type": "module",
   "main": "./out/main/index.js",
   "scripts": {
-    "native": "node-gyp rebuild --directory native --target=$(node -p \"require('electron/package.json').version\") --dist-url=https://electronjs.org/headers",
+    "native": "napi build --manifest-path native/Cargo.toml --package-json-path native/package.json --platform --release --output-dir native --no-js",
     "dev": "electron-vite dev",
     "build": "electron-vite build",
     "test": "tsx --test test/core/*.test.ts",
@@ -21,6 +21,7 @@
     "electron-updater": "^6.8.10"
   },
   "devDependencies": {
+    "@napi-rs/cli": "^3.10.9",
     "@types/node": "^24.19.2",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
@@ -29,8 +30,6 @@
     "electron-builder": "26.15.3",
     "electron-vite": "^6.0.0",
     "lucide-react": "^1.63.0",
-    "node-addon-api": "^8.0.0",
-    "node-gyp": "12.3.0",
     "react": "~19.2.8",
     "react-dom": "~19.2.8",
     "tsx": "^4.23.15",

@@ -1,15 +1,9 @@
 #!/bin/sh
-# Builds the window module for Apple silicon and Intel, then joins them into one file, so the
-# universal Split.app loads it on both.
-set -eu
+# Builds the native module for Apple silicon and Intel and joins them into one file, so the
+# universal app carries a single split-native.darwin-universal.node.
+set -e
 cd "$(dirname "$0")/.."
-ELECTRON=$(node -p "require('electron/package.json').version")
-OUT=native/build/Release/split_native.node
-TMP=$(mktemp -d)
-for ARCH in arm64 x64; do
-  node_modules/.bin/node-gyp rebuild --directory native --arch="$ARCH" --target="$ELECTRON" --dist-url=https://electronjs.org/headers >/dev/null
-  cp "$OUT" "$TMP/$ARCH.node"
+for TARGET in aarch64-apple-darwin x86_64-apple-darwin; do
+  node_modules/.bin/napi build --manifest-path native/Cargo.toml --package-json-path native/package.json --platform --release --output-dir native --no-js --target "$TARGET" >/dev/null
 done
-lipo -create "$TMP/arm64.node" "$TMP/x64.node" -output "$OUT"
-rm -rf "$TMP"
-lipo -archs "$OUT"
+lipo -create native/split-native.darwin-arm64.node native/split-native.darwin-x64.node -output native/split-native.darwin-universal.node

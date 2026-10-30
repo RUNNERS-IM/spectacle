@@ -26,9 +26,9 @@ interface NativeWindow {
   rect: NativeRect;
   /** The name people see. */
   app: string;
-  /** Bundle id (macOS). Not given by the module yet; `app` stands in for it until it is. */
+  /** Bundle id (macOS) or executable name, as the macOS app saved. */
   bundle?: string;
-  /** Window title. Not given by the module yet; without it windows match by order within their app only. */
+  /** Window title; windows match by app and title first, then by order within their app. */
   title?: string;
 }
 interface NativeScreen {
@@ -36,7 +36,7 @@ interface NativeScreen {
   workArea: NativeRect;
   scale: number;
   primary: boolean;
-  /** Display UUID (macOS), as the macOS app saved. Not given by the module yet; Electron's display id stands in. */
+  /** Display UUID (macOS), as the macOS app saved. Electron's display id stands in when it is missing. */
   id?: string;
 }
 export interface LayoutNative {

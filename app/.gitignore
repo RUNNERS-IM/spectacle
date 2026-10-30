@@ -1,4 +1,5 @@
 node_modules/
 out/
 dist/
-native/build/
+native/target.noindex/
+native/*.node

@@ -24,8 +24,10 @@ const RECORD_SOON_DELAY = 500;
 export interface DisplayWatcherOptions {
   /** The settings now; read on every record and change, since they can change at any time. */
   settings: () => Settings;
-  /** What is on screen, with `windows` filled. */
-  snapshot: () => Snapshot;
+  /** What is on screen, with `windows` filled and each screen's lasting id. */
+  snapshot: () => DisplaySnapshot;
+  /** The lasting id of every monitor now (the display UUID on macOS), without reading windows. */
+  displayIds: () => string[];
   apply: (moves: Move[]) => void;
   /** Where the moved windows were, so the next undo puts all of them back. */
   remember: (previous: Move[]) => void;
@@ -33,11 +35,12 @@ export interface DisplayWatcherOptions {
   onArranged: (movedCount: number, restored: boolean) => void;
   /**
    * Restores a layout saved for exactly these monitors and returns how many windows moved, or
-   * null when there is none. It wins over the automatic placing. Saved layouts are not in the
-   * Electron version yet, so this can be left out.
+   * null when there is none. It wins over the automatic placing.
    */
   restoreSavedLayout?: (displayIds: ReadonlySet<string>) => number | null;
 }
+
+export type DisplaySnapshot = Omit<Snapshot, "screens"> & { screens: DisplayScreen[] };
 
 let options: DisplayWatcherOptions | null = null;
 let places = new Map<number, WindowPlace>();
@@ -50,34 +53,16 @@ let soonTimer: NodeJS.Timeout | null = null;
 /** True from a screen event until it has been handled. */
 let settling = false;
 
-/**
- * Why: Electron's display id is the CGDirectDisplayID on macOS, which stays the same when the
- * same monitor is plugged back in. The macOS app used the display UUID instead.
- */
 function currentDisplayIds(): Set<string> {
-  return new Set(screen.getAllDisplays().map((d) => String(d.id)));
+  try {
+    return new Set(options?.displayIds() ?? []);
+  } catch (error) {
+    console.error("split: display change:", error);
+    return new Set();
+  }
 }
 
-/**
- * The native screens with Electron's id for each. Both are top-left based points from the main
- * monitor on macOS, so the frames match; a screen with no match is named by its frame.
- */
-function screensWithIds(snapshot: Snapshot): DisplayScreen[] {
-  const displays = screen.getAllDisplays();
-  return snapshot.screens.map((s) => {
-    const match = displays.find(
-      (d) =>
-        Math.round(d.bounds.x) === Math.round(s.frame.x) &&
-        Math.round(d.bounds.y) === Math.round(s.frame.y) &&
-        Math.round(d.bounds.width) === Math.round(s.frame.width) &&
-        Math.round(d.bounds.height) === Math.round(s.frame.height),
-    );
-    const id = match ? String(match.id) : `${s.frame.x},${s.frame.y},${s.frame.width}x${s.frame.height}`;
-    return { ...s, id };
-  });
-}
-
-function takeSnapshot(): Snapshot | null {
+function takeSnapshot(): DisplaySnapshot | null {
   try {
     return options?.snapshot() ?? null;
   } catch (error) {
@@ -92,7 +77,7 @@ function record(): void {
   if (!options || settling || !options.settings().rearrangeOnDisplayChange) return;
   const snapshot = takeSnapshot();
   if (!snapshot) return;
-  places = recordPlaces(snapshot.windows, screensWithIds(snapshot));
+  places = recordPlaces(snapshot.windows, snapshot.screens);
 }
 
 function screensChanged(): void {
@@ -130,7 +115,7 @@ function handleChange(): void {
     places,
     awayPlaces,
     windows: snapshot.windows,
-    screens: screensWithIds(snapshot),
+    screens: snapshot.screens,
     gap: options.settings().gap,
   });
   seenDisplayIds = result.seenIds;

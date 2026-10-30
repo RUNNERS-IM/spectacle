@@ -11,7 +11,7 @@ module.exports = {
   directories: { output: 'dist.noindex', buildResources: 'resources/build' },
   files: ['out/**', 'package.json'],
   extraResources: [
-    { from: 'native/build/Release/split_native.node', to: 'split_native.node' },
+    // The native module (native/split-native.<os>-<cpu>*.node) is added per system below.
     { from: '../Split/Resources/Window Position Calculations', to: 'Window Position Calculations' },
     { from: 'resources/menu', to: 'menu' },
     { from: 'resources/tray', to: 'tray' },
@@ -27,8 +27,9 @@ module.exports = {
       { target: 'dmg', arch: ['universal'] },
       { target: 'zip', arch: ['universal'] },
     ],
-    // The native module is built for both Apple silicon and Intel in one file.
-    x64ArchFiles: 'Contents/Resources/split_native.node',
+    // Why: pnpm native:mac-universal joins both CPUs into one file, so both halves of the universal app carry the same one.
+    extraResources: [{ from: 'native', to: 'native', filter: ['split-native.darwin-universal.node'] }],
+    x64ArchFiles: 'Contents/Resources/native/*.node',
     hardenedRuntime: true,
     entitlements: 'resources/build/entitlements.mac.plist',
     entitlementsInherit: 'resources/build/entitlements.mac.plist',
