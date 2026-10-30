@@ -4,8 +4,9 @@
 # release 에 올라갈 때, 손으로 돌릴 때(workflow_dispatch). 맥 앱만 바뀐 커밋에는 돌지 않는다.
 #
 # 만드는 것: 윈도우 설치 파일(NSIS .exe, .msi), 리눅스 패키지(.deb, .rpm, .AppImage), Wayland 용
-# GNOME 확장(.zip) · KWin 스크립트(.kwinscript). 결과는 실행 기록의 첨부(artifact)로만 남긴다.
-# GitHub Releases 에는 아직 올리지 않는다(사람이 스크린샷으로 먼저 확인해야 함). 맨 아래 publish 는 꺼 둔 상태.
+# GNOME 확장(.zip) · KWin 스크립트(.kwinscript). 평소에는 실행 기록의 첨부(artifact)로만 남긴다.
+# 맥 릴리스(release.yml)가 release 브랜치 push 로 끝나면 한 번 더 돌아서, 맥과 같은 버전으로 빌드해
+# 그 릴리스 태그(v<버전>)에 설치 파일을 덧붙인다(맨 아래 publish).
 # 윈도우 설치 파일은 코드 서명 인증서가 없어 서명하지 않는다(처음 열 때 SmartScreen 경고가 뜬다).
 name: Desktop
 
@@ -22,16 +23,43 @@ on:
       - "Split/Resources/Window Position Calculations/**"
       - ".github/workflows/desktop.yml"
   workflow_dispatch:
+  workflow_run:
+    workflows: [Release]
+    types: [completed]
+    branches: [release]
 
 permissions:
   contents: read
 
 concurrency:
-  group: desktop-${{ github.ref }}
+  group: desktop-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  # 맥 릴리스 뒤에 돌 때만 버전을 정한다. 태그·파일 이름은 맥과 같은 2.6.1030.2 꼴, 앱 안 버전은
+  # Tauri 가 semver 만 받으므로 2.6.1030+2 꼴(rpm 이 '-' 를 받지 않고, -2 는 시험판으로 쳐짐).
+  version:
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+    runs-on: ubuntu-24.04
+    outputs:
+      release: ${{ steps.pick.outputs.release }}
+      app: ${{ steps.pick.outputs.app }}
+    steps:
+      - uses: actions/checkout@v4
+        if: github.event_name == 'workflow_run'
+        with:
+          ref: release
+      - id: pick
+        if: github.event_name == 'workflow_run'
+        run: |
+          set -euo pipefail
+          RELEASE=$(grep -A1 CFBundleShortVersionString "Split/Supporting Files/Info.plist" | sed -n 's/.*<string>\(.*\)<\/string>.*/\1/p')
+          APP=$(echo "$RELEASE" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+)\.([0-9]+)$/\1+\2/')
+          echo "release=$RELEASE" >> "$GITHUB_OUTPUT"
+          echo "app=$APP" >> "$GITHUB_OUTPUT"
+
   build:
+    needs: version
     strategy:
       fail-fast: false
       matrix:
@@ -50,6 +78,13 @@ jobs:
         working-directory: desktop
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Why: after a macOS release the version bump commit is on release, not in the triggering commit.
+          ref: ${{ github.event_name == 'workflow_run' && 'release' || '' }}
+
+      - name: Use the version of the macOS release
+        if: needs.version.outputs.app != ''
+        run: node -e "const f='src-tauri/tauri.conf.json',c=require('./'+f);c.version='${{ needs.version.outputs.app }}';require('fs').writeFileSync(f,JSON.stringify(c,null,2)+'\n')"
 
       - uses: pnpm/action-setup@v4
         with:
@@ -84,7 +119,8 @@ jobs:
       - name: Collect the files
         run: |
           set -euo pipefail
-          VERSION="$(node -p "require('./src-tauri/tauri.conf.json').version")-${GITHUB_SHA::7}"
+          VERSION="${{ needs.version.outputs.release }}"
+          [ -n "$VERSION" ] || VERSION="$(node -p "require('./src-tauri/tauri.conf.json').version")-${GITHUB_SHA::7}"
           B=target.noindex/release/bundle
           OUT=../dist-desktop && mkdir -p $OUT
           case ${{ matrix.os }} in
@@ -106,26 +142,24 @@ jobs:
           path: dist-desktop/*
           retention-days: 14
 
-  # 꺼 둔 배포 단계. 사람이 윈도우 · 리눅스에서 켜 보고 스크린샷을 확인한 다음에 켠다.
-  # 켜면: 위 build 의 첨부 파일을 맥 앱이 이미 만든 릴리스 태그(v<버전>)에 덧붙인다.
-  # 켜는 법: `if: false` 를 `if: github.ref == 'refs/heads/release'` 로 바꾸고, 맨 위 permissions 를
-  # contents: write 로 올리고, TAG 를 맥 release.yml 이 만든 태그와 맞춘다(지금은 가장 최근 릴리스).
+  # 맥 릴리스 뒤에만: 위 build 의 첨부 파일을 맥 release.yml 이 만든 태그(v<버전>)에 덧붙인다.
+  # 윈도우 설치 파일은 서명이 없어 SmartScreen 경고가 뜨고, 자동 업데이트는 아직 없다.
   publish:
-    needs: build
-    if: false
+    needs: [version, build]
+    if: github.event_name == 'workflow_run' && needs.version.outputs.release != ''
     runs-on: ubuntu-24.04
     permissions:
       contents: write
     env:
       GH_TOKEN: ${{ github.token }}
+      TAG: v${{ needs.version.outputs.release }}
     steps:
       - uses: actions/download-artifact@v4
         with:
           path: files
           merge-multiple: true
-      - name: Attach the installers to the existing release
+      - name: Attach the installers to the macOS release
         run: |
           set -euo pipefail
-          TAG=$(gh release view --repo "$GITHUB_REPOSITORY" --json tagName -q .tagName)
           ls -la files
           gh release upload "$TAG" files/* --repo "$GITHUB_REPOSITORY" --clobber

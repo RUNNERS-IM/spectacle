@@ -141,4 +141,4 @@ open Split.xcodeproj
 
 Copyright (c) 2026 Runners Co., Ltd. All rights reserved. [LICENSE.md](LICENSE.md) 를 보세요.
 
-Split 은 MIT 라이선스인 Spectacle 을 바탕으로 합니다. Spectacle · Sparkle · Lucide 의 저작권 문구는 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 와 앱의 Split 정보 → 오픈소스 고지에 있습니다.
+Split 이 쓰는 오픈소스(Lucide · Sparkle · Spectacle)의 저작권 문구는 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 와 앱의 Split 정보 → 오픈소스 고지에 있습니다.
