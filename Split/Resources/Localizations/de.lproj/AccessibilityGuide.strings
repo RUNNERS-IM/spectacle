@@ -5,7 +5,7 @@
 "Title" = "Zugriff für Split aktivieren";
 
 /* Explanation below the headline of the Accessibility permission guide */
-"Description" = "Aktiviere einfach diesen einen Schalter in den Systemeinstellungen.";
+"Description" = "Aktivieren Sie einfach diesen einen Schalter in den Systemeinstellungen.";
 
 /* Secondary button that hides the Accessibility permission guide */
 "ButtonLater" = "Später";

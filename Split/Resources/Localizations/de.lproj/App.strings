@@ -47,9 +47,9 @@
 "TabEffects" = "Effekte";
 "TabShortcuts" = "Kurzbefehle";
 "LaunchAtLogin" = "Bei der Anmeldung öffnen";
-"LaunchAtLoginHint" = "Split startet automatisch, wenn du dich an diesem Mac anmeldest.";
+"LaunchAtLoginHint" = "Split startet automatisch, wenn Sie sich an diesem Mac anmelden.";
 "ShowMenuBarIcon" = "In der Menüleiste anzeigen";
-"ShowMenuBarIconHint" = "Wenn deaktiviert, öffne Split aus dem Ordner „Programme“, um zu diesen Einstellungen zurückzukehren.";
+"ShowMenuBarIconHint" = "Wenn deaktiviert, öffnen Sie Split aus dem Ordner „Programme“, um zu diesen Einstellungen zurückzukehren.";
 "MoveFeedback" = "Bewegte Fenster hervorheben";
 "MoveFeedbackHint" = "Erscheint kurz, nachdem ein Fenster bewegt wurde.";
 "FeedbackOff" = "Aus";
@@ -88,9 +88,9 @@
 "ShortcutSheetHoldHint" = "⌥⌘ eine Sekunde halten, um alle Kurzbefehle zu sehen.";
 "SpacesSection" = "Schreibtische (Spaces)";
 "SpacesReorder" = "Schreibtische ändern ständig die Reihenfolge?";
-"SpacesReorderHint" = "Die macOS-Einstellung „Spaces automatisch anhand der letzten Verwendung neu anordnen“ ist an. Aus lässt die Reihenfolge bestehen.";
+"SpacesReorderHint" = "Die macOS-Einstellung „Spaces automatisch anhand der letzten Verwendung neu anordnen“ ist an. Schalten Sie sie aus, damit die Reihenfolge bleibt.";
 "SpacesSeparate" = "Mehr Schreibtische nach dem Trennen eines Monitors?";
-"SpacesSeparateHint" = "Ist „Monitore verwenden verschiedene Spaces“ aus, gibt es einen Satz Schreibtische für alle Monitore. Danach abmelden.";
+"SpacesSeparateHint" = "Ist „Monitore verwenden verschiedene Spaces“ aus, gibt es einen Satz Schreibtische für alle Monitore. Melden Sie sich danach ab.";
 "ShortcutSheetTitle" = "Split-Kurzbefehle";
 "ShortcutSheetHint" = "⌥⌘ loslassen zum Schließen";
 "ShowShortcutSheet" = "Kurzbefehle anzeigen";
@@ -106,7 +106,7 @@
 "AutoUpdateHint" = "Split sucht einmal am Tag nach einer neuen Version und fragt vor der Installation.";
 "PermissionTitle" = "Zugriff auf Bedienungshilfen";
 "PermissionOnHint" = "Ein. Split kann Fenster bewegen.";
-"PermissionOffHint" = "Aus. Fenster können erst bewegt werden, wenn du den Zugriff erlaubst.";
+"PermissionOffHint" = "Aus. Fenster können erst bewegt werden, wenn Sie den Zugriff erlauben.";
 "PermissionOpen" = "Einstellungen öffnen";
 /* %@ is the version number */
 "AboutLine" = "Split %@ · kostenlos und Open Source";
@@ -122,7 +122,7 @@
 "SectionArrange" = "Anordnen";
 "SectionArrangeHint" = "Ordnet bis zu 9 sichtbare Fenster auf einmal auf dem aktuellen Bildschirm an: 1 im Vollbild, 2 nebeneinander, 3 als ein großes und zwei gestapelte, 4 als Raster. „Widerrufen“ setzt alle zurück.";
 "RestoreDefaults" = "Standards wiederherstellen";
-"ShortcutsHint" = "Klicke auf einen Kurzbefehl, um ihn zu ändern, oder auf ×, um ihn zu entfernen.";
+"ShortcutsHint" = "Klicken Sie auf einen Kurzbefehl, um ihn zu ändern, oder auf ×, um ihn zu entfernen.";
 "ModifierLegend" = "⌘ Command   ⌥ Option   ⌃ Control   ⇧ Shift";
 
 /* Alerts */
@@ -130,11 +130,11 @@
 "AlertMessageTextRestoreDefaults" = "Standardkurzbefehle wiederherstellen?";
 "AlertInformativeTextRestoreDefaults" = "Geänderte Kurzbefehle werden auf die ursprünglichen Einstellungen von Split zurückgesetzt.";
 "AlertMessageTextRunningInBackground" = "Split in der Menüleiste ausblenden?";
-"AlertInformativeTextRunningInBackground" = "Die Kurzbefehle funktionieren weiterhin. Um die Einstellungen wieder zu öffnen, öffne Split aus dem Ordner „Programme“.";
+"AlertInformativeTextRunningInBackground" = "Die Kurzbefehle funktionieren weiterhin. Um die Einstellungen wieder zu öffnen, öffnen Sie Split aus dem Ordner „Programme“.";
 /* %@ is the shortcut, for example ⌥⌘F */
 "AlertMessageTextShortcutValidationError" = "%@ wird bereits verwendet";
-"AlertInformativeTextShortcutAlreadyInUse" = "Eine andere Split-Aktion verwendet %@. Wähle einen anderen Kurzbefehl.";
-"AlertInformativeTextSystemWideShortcutAlreadyUsed" = "macOS verwendet %@ bereits. Wähle einen anderen Kurzbefehl oder ändere ihn unter „Systemeinstellungen“ › „Tastatur“ › „Tastaturkurzbefehle“.";
+"AlertInformativeTextShortcutAlreadyInUse" = "Eine andere Split-Aktion verwendet %@. Wählen Sie einen anderen Kurzbefehl.";
+"AlertInformativeTextSystemWideShortcutAlreadyUsed" = "macOS verwendet %@ bereits. Wählen Sie einen anderen Kurzbefehl oder ändern Sie ihn unter „Systemeinstellungen“ › „Tastatur“ › „Tastaturkurzbefehle“.";
 "ButtonLabelAffirmative" = "OK";
 "ButtonLabelNegative" = "Abbrechen";
 
@@ -149,7 +149,7 @@
 "LayoutDisplays" = "Displays";
 "LayoutShapes" = "Formen";
 "LayoutSaved" = "Gespeicherte Layouts";
-"LayoutSavedEmpty" = "Noch keine. Erstelle eines mit „Aktuelles Layout sichern…“ unten.";
+"LayoutSavedEmpty" = "Noch keine. Erstellen Sie eines mit „Aktuelles Layout sichern…“ unten.";
 "LayoutShapeHalves" = "Hälften";
 "LayoutShapeThirds" = "Drittel";
 "LayoutShapeMainAndTwo" = "Groß + zwei";

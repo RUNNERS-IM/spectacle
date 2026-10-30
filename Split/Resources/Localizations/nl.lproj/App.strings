@@ -32,9 +32,9 @@
 "TabEffects" = "Effecten";
 "TabShortcuts" = "Sneltoetsen";
 "LaunchAtLogin" = "Open bij inloggen";
-"LaunchAtLoginHint" = "Split start vanzelf wanneer je inlogt op deze Mac.";
+"LaunchAtLoginHint" = "Split start vanzelf wanneer u inlogt op deze Mac.";
 "ShowMenuBarIcon" = "Toon in menubalk";
-"ShowMenuBarIconHint" = "Als dit uit staat, open je Split vanuit de map Programma's om terug te gaan naar deze instellingen.";
+"ShowMenuBarIconHint" = "Als dit uit staat, opent u Split vanuit de map Programma's om terug te gaan naar deze instellingen.";
 "MoveFeedback" = "Markeer verplaatste vensters";
 "MoveFeedbackHint" = "Verschijnt even nadat een venster is verplaatst.";
 "FeedbackOff" = "Uit";
@@ -60,7 +60,7 @@
 "PositionTop" = "Boven";
 "PositionCenter" = "Midden";
 "FeedbackTry" = "Probeer";
-"FeedbackTryHint" = "Wijzigingen zie je meteen rond dit venster.";
+"FeedbackTryHint" = "Wijzigingen ziet u meteen rond dit venster.";
 "WindowGap" = "Ruimte tussen vensters";
 "WindowGapHint" = "Laat ruimte tussen vensters. Langs de schermranden sluiten ze aan.";
 "GapNone" = "Geen";
@@ -68,14 +68,14 @@
 "GapNormal" = "Normaal";
 "GapWide" = "Breed";
 "DisplayChange" = "Herschikken bij andere monitoren";
-"DisplayChangeHint" = "Vensters van een losgekoppelde monitor gaan naar de overige schermen en keren terug als je hem weer aansluit.";
+"DisplayChangeHint" = "Vensters van een losgekoppelde monitor gaan naar de overige schermen en keren terug als u hem weer aansluit.";
 "ShortcutSheetHold" = "Houd ⌥⌘ ingedrukt voor sneltoetsen";
 "ShortcutSheetHoldHint" = "Houd ⌥⌘ een seconde ingedrukt om alle sneltoetsen te zien.";
 "SpacesSection" = "Bureaubladen (Spaces)";
 "SpacesReorder" = "Volgorde van bureaubladen verandert steeds?";
 "SpacesReorderHint" = "De macOS-instelling 'Spaces automatisch herschikken op basis van recent gebruik' staat aan. Zet hem uit om de volgorde te houden.";
 "SpacesSeparate" = "Meer bureaubladen na loskoppelen van een monitor?";
-"SpacesSeparateHint" = "Als 'Beeldschermen hebben aparte Spaces' uit staat, is er één set bureaubladen voor alle monitoren. Daarna moet je afmelden.";
+"SpacesSeparateHint" = "Als 'Beeldschermen hebben aparte Spaces' uit staat, is er één set bureaubladen voor alle monitoren. Daarna moet u afmelden.";
 "ShortcutSheetTitle" = "Split-sneltoetsen";
 "ShortcutSheetHint" = "Laat ⌥⌘ los om te sluiten";
 "ShowShortcutSheet" = "Toon sneltoetsen";
@@ -91,7 +91,7 @@
 "AutoUpdateHint" = "Split zoekt één keer per dag naar een nieuwe versie en vraagt het eerst voordat die wordt geïnstalleerd.";
 "PermissionTitle" = "Toegankelijkheidstoestemming";
 "PermissionOnHint" = "Aan. Split kan vensters verplaatsen.";
-"PermissionOffHint" = "Uit. Vensters kunnen pas worden verplaatst als je dit aanzet.";
+"PermissionOffHint" = "Uit. Vensters kunnen pas worden verplaatst als u dit aanzet.";
 "PermissionOpen" = "Open Instellingen";
 "AboutLine" = "Split %@ · gratis en opensource";
 "Website" = "Website";
@@ -110,7 +110,7 @@
 "ModifierLegend" = "⌘ Command   ⌥ Option   ⌃ Control   ⇧ Shift";
 "UnexpectedError" = "Er is iets misgegaan";
 "AlertMessageTextRestoreDefaults" = "Standaardsneltoetsen herstellen?";
-"AlertInformativeTextRestoreDefaults" = "Sneltoetsen die je hebt gewijzigd, worden teruggezet naar de oorspronkelijke instellingen van Split.";
+"AlertInformativeTextRestoreDefaults" = "Sneltoetsen die u hebt gewijzigd, worden teruggezet naar de oorspronkelijke instellingen van Split.";
 "AlertMessageTextRunningInBackground" = "Split verbergen in de menubalk?";
 "AlertInformativeTextRunningInBackground" = "Sneltoetsen blijven werken. Open Split vanuit de map Programma's om de instellingen weer te openen.";
 "AlertMessageTextShortcutValidationError" = "%@ is al in gebruik";
@@ -146,5 +146,5 @@
 "LayoutSaveCancel" = "Annuleer";
 "ShortcutsOn" = "Sneltoetsen aan";
 "ShortcutsOffForHour" = "Sneltoetsen uit · weer aan om %@";
-"ShortcutsOffForApplication" = "Sneltoetsen uit · zolang je %@ gebruikt";
+"ShortcutsOffForApplication" = "Sneltoetsen uit · zolang u %@ gebruikt";
 "ShortcutsOffNoPermission" = "Sneltoetsen uit · toegang tot Toegankelijkheid nodig";
