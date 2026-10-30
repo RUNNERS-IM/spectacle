@@ -6,7 +6,7 @@ cask "split" do
 
   url "https://github.com/RUNNERS-IM/split/releases/download/v#{version}/Split-#{version}.dmg"
   name "Split"
-  desc "Move and resize windows with keyboard shortcuts (successor of Spectacle)"
+  desc "Move and resize windows with keyboard shortcuts"
   homepage "https://runners.im/tools/split"
 
   livecheck do
