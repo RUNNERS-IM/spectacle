@@ -242,6 +242,14 @@ jobs:
             case "$(basename "$f")" in builder-debug.yml|builder-effective-config.yaml) continue ;; esac
             cp "$f" "$OUT/"
           done
+          # 홈페이지의 받기 단추는 releases/latest/download/<이름> 으로 바로 받는다. 그래서 버전 없는 이름으로도
+          # 한 벌 올린다. 자동 업데이트(latest*.yml)와 Homebrew 는 버전 붙은 파일을 쓴다.
+          case "${{ matrix.os }}" in
+            macos) cp "dist.noindex/Split-$VERSION.dmg" "$OUT/split-macos.dmg" ;;
+            windows) cp "dist.noindex/Split-$VERSION-windows-x64-setup.exe" "$OUT/split-windows-x64-setup.exe" ;;
+            linux) cp "dist.noindex/Split-$VERSION-linux-x86_64.AppImage" "$OUT/split-linux-x86_64.AppImage"
+                   cp "dist.noindex/Split-$VERSION-linux-amd64.deb" "$OUT/split-linux-amd64.deb" ;;
+          esac
           ls -la $OUT
 
       - uses: actions/upload-artifact@v4
