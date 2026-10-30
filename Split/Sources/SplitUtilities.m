@@ -5,6 +5,14 @@ NSString *SplitLocalized(NSString *key)
   return [NSBundle.mainBundle localizedStringForKey:key value:nil table:@"App"];
 }
 
+NSImage *SplitIcon(NSString *name, CGFloat size)
+{
+  NSImage *image = [[NSImage imageNamed:[@"lucide-" stringByAppendingString:name]] copy];
+  image.size = NSMakeSize(size, size);
+  image.template = YES;
+  return image;
+}
+
 @implementation SplitUtilities
 
 + (NSString *)applicationVersion

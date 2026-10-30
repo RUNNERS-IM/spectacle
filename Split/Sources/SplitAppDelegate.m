@@ -740,14 +740,14 @@ static NSDictionary<NSString *, SplitWindowAction *> *SplitWindowActionsByShortc
     _shortcutMenuItems[shortcutName].image = SplitMenuImageForShortcutName(shortcutName);
   }
   for (NSMenuItem *item in _statusItemMenu.itemArray) {
-    NSString *symbol = nil;
+    NSString *icon = nil;
     if (item.action == @selector(showPreferencesWindow:)) {
-      symbol = @"gearshape";
+      icon = @"settings";
     } else if (item.submenu && item.submenu == self.disableShortcutsForAnHourMenuItem.menu) {
-      symbol = @"pause.circle";
+      icon = @"circle-pause";
     }
-    if (symbol && !item.image) {
-      item.image = [NSImage imageWithSystemSymbolName:symbol accessibilityDescription:nil];
+    if (icon && !item.image) {
+      item.image = SplitIcon(icon, 16);
     }
   }
 }
