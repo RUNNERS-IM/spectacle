@@ -143,3 +143,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "Escribe la función rápida";
 "ShortcutRecorderLabelStopRecording" = "Detener grabación";
 "ShortcutRecorderLabelUseExisting" = "Mantener la actual";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "Distribuciones";
+"LayoutDisplays" = "Pantallas";
+"LayoutShapes" = "Formas";
+"LayoutSaved" = "Distribuciones guardadas";
+"LayoutSavedEmpty" = "Aún no hay. Crea una con «Guardar distribución actual…» abajo.";
+"LayoutShapeHalves" = "Mitades";
+"LayoutShapeThirds" = "Tercios";
+"LayoutShapeMainAndTwo" = "Grande + dos";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "Una grande";
+"LayoutWindowCount" = "%lu ventanas";
+"LayoutSave" = "Guardar distribución actual…";
+"LayoutDelete" = "Eliminar distribución guardada";
+"LayoutSaveTitle" = "¿Guardar la distribución actual de ventanas?";
+"LayoutSaveMessage" = "Guarda con un nombre dónde están las ventanas visibles. Al pulsarla en el menú vuelven todas a la vez.";
+"LayoutSaveNamePlaceholder" = "Nombre";
+"LayoutSaveDefaultName" = "Distribución %lu";
+"LayoutSaveAuto" = "Cargar automáticamente al conectar estas pantallas";
+"LayoutSaveButton" = "Guardar";
+"LayoutSaveCancel" = "Cancelar";
+"ShortcutsOn" = "Atajos activados";
+"ShortcutsOffForHour" = "Atajos desactivados · vuelven a las %@";
+"ShortcutsOffForApplication" = "Atajos desactivados · mientras usas %@";
+"ShortcutsOffNoPermission" = "Atajos desactivados · se necesita acceso de Accesibilidad";

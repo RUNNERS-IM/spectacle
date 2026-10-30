@@ -96,6 +96,8 @@
 		47F036B9275B7FA4FCAAE92E /* EXPUnsupportedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DAA9E46E0F21396D067AF2C0 /* EXPUnsupportedObject.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
 		48123D3A2D1B8EC3D23563DC /* SplitPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07838602148BD517001E7BD7 /* SplitPreferencesController.m */; };
 		4E36CBE01D1E2E432937AAAA /* SplitWindowArranger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6769045AD7FE70F66EBE97EB /* SplitWindowArranger.m */; };
+		68B85FE9ECD1F5DB856F1F90 /* SplitLayoutMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 203DEBB0D14E1817AF39C385 /* SplitLayoutMenu.m */; };
+		F3A672DEA9D88F0ED023DF0D /* SplitLayouts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6A3832A3D949FB1B9743B9 /* SplitLayouts.m */; };
 		4E60D62FDEE6846BCB8624AC /* SplitRegisteredShortcutValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D1AE52415D715F400EAC5BD /* SplitRegisteredShortcutValidator.m */; };
 		564CEF444C2834203CBEAD58 /* Split.icon in Resources */ = {isa = PBXBuildFile; fileRef = 47DCCDDAD963C84430ED5B8A /* Split.icon */; };
 		578ECE39F8F8044B3A996DAC /* EXPBlockDefinedMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BDD940B4072FD97E1F13DB5 /* EXPBlockDefinedMatcher.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc -w"; }; };
@@ -149,6 +151,8 @@
 		C6979D2BC6ECD5EF23603B2F /* SplitLegacyPreferencesMigrator.m in Sources */ = {isa = PBXBuildFile; fileRef = EF951751B9EE5204F49F7ACB /* SplitLegacyPreferencesMigrator.m */; };
 		C85C9B9248E1272F0D4BDA30 /* SplitShortcutTranslations.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A0507194956E100CD96E7 /* SplitShortcutTranslations.m */; };
 		CAA869F1B8390993CCFAA4D8 /* SplitWindowArranger.m in Sources */ = {isa = PBXBuildFile; fileRef = 6769045AD7FE70F66EBE97EB /* SplitWindowArranger.m */; };
+		99B227E826DB660F3EBB480E /* SplitLayoutMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 203DEBB0D14E1817AF39C385 /* SplitLayoutMenu.m */; };
+		B5FC848705B22D8EF70FDC93 /* SplitLayouts.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C6A3832A3D949FB1B9743B9 /* SplitLayouts.m */; };
 		D127B468DDCF76A268E08614 /* SplitShortcutUserDefaultsStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D7C11491B86C7CD00B81E11 /* SplitShortcutUserDefaultsStorage.m */; };
 		D4EB9D697AB0F8AFF85375A1 /* SplitBestEffortWindowMover.m in Sources */ = {isa = PBXBuildFile; fileRef = 2DAC59F21BB23BE200C660ED /* SplitBestEffortWindowMover.m */; };
 		D4FAC730840F1BA9B242942B /* SplitLegacyPreferencesMigrator.m in Sources */ = {isa = PBXBuildFile; fileRef = EF951751B9EE5204F49F7ACB /* SplitLegacyPreferencesMigrator.m */; };
@@ -350,6 +354,8 @@
 		50C7E6063401C26AB69D2680 /* SplitWindowFeedback.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SplitWindowFeedback.m; path = Split/Sources/SplitWindowFeedback.m; sourceTree = SOURCE_ROOT; };
 		538EF7A71956CFA6456E20B4 /* EXPMatchers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EXPMatchers.h; sourceTree = "<group>"; };
 		53A347AE7DB63335ABF9A3D0 /* SplitWindowArranger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SplitWindowArranger.h; path = Split/Sources/SplitWindowArranger.h; sourceTree = "<group>"; };
+		213A1D6E447910F016D07C48 /* SplitLayoutMenu.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SplitLayoutMenu.h; path = Split/Sources/SplitLayoutMenu.h; sourceTree = "<group>"; };
+		0E2EA3F3170C062C37BF6527 /* SplitLayouts.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SplitLayouts.h; path = Split/Sources/SplitLayouts.h; sourceTree = "<group>"; };
 		57468B1AAF052486F47D37FF /* SPTCompiledExample.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SPTCompiledExample.m; sourceTree = "<group>"; };
 		574F6A1A1C57BE40001A5679 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = Split/Resources/Localizations/pt.lproj/Split.strings; sourceTree = "<group>"; };
 		574F6A1C1C57BE40001A5679 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = pt; path = Split/Resources/Localizations/pt.lproj/Credits.rtf; sourceTree = "<group>"; };
@@ -370,6 +376,8 @@
 		65BED5ED122130E14424977F /* ko */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = ko; path = Split/Resources/Localizations/ko.lproj/Migration.strings; sourceTree = SOURCE_ROOT; };
 		668DEE43698FB9D9575627E6 /* EXPMatchers+haveCountOf.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+haveCountOf.h"; sourceTree = "<group>"; };
 		6769045AD7FE70F66EBE97EB /* SplitWindowArranger.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SplitWindowArranger.m; path = Split/Sources/SplitWindowArranger.m; sourceTree = "<group>"; };
+		203DEBB0D14E1817AF39C385 /* SplitLayoutMenu.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SplitLayoutMenu.m; path = Split/Sources/SplitLayoutMenu.m; sourceTree = "<group>"; };
+		4C6A3832A3D949FB1B9743B9 /* SplitLayouts.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SplitLayouts.m; path = Split/Sources/SplitLayouts.m; sourceTree = "<group>"; };
 		6793FC6AD4BC6A8105EF1779 /* SPTSharedExampleGroups.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SPTSharedExampleGroups.m; sourceTree = "<group>"; };
 		6812F86DB4E4CADC42087170 /* EXPMatchers+conformTo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+conformTo.h"; sourceTree = "<group>"; };
 		69FF7531831CF4188EFA9895 /* EXPMatchers+beFalsy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EXPMatchers+beFalsy.h"; sourceTree = "<group>"; };
@@ -526,6 +534,10 @@
 				50C7E6063401C26AB69D2680 /* SplitWindowFeedback.m */,
 				53A347AE7DB63335ABF9A3D0 /* SplitWindowArranger.h */,
 				6769045AD7FE70F66EBE97EB /* SplitWindowArranger.m */,
+				213A1D6E447910F016D07C48 /* SplitLayoutMenu.h */,
+				203DEBB0D14E1817AF39C385 /* SplitLayoutMenu.m */,
+				0E2EA3F3170C062C37BF6527 /* SplitLayouts.h */,
+				4C6A3832A3D949FB1B9743B9 /* SplitLayouts.m */,
 			);
 			name = "Accessibility API";
 			sourceTree = "<group>";
@@ -1198,6 +1210,8 @@
 				D4FAC730840F1BA9B242942B /* SplitLegacyPreferencesMigrator.m in Sources */,
 				8820D26FFADE74ABDC864625 /* SplitWindowFeedback.m in Sources */,
 				4E36CBE01D1E2E432937AAAA /* SplitWindowArranger.m in Sources */,
+				68B85FE9ECD1F5DB856F1F90 /* SplitLayoutMenu.m in Sources */,
+				F3A672DEA9D88F0ED023DF0D /* SplitLayouts.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1240,6 +1254,8 @@
 				C6979D2BC6ECD5EF23603B2F /* SplitLegacyPreferencesMigrator.m in Sources */,
 				DDB9772D404A034F016C3B5E /* SplitWindowFeedback.m in Sources */,
 				CAA869F1B8390993CCFAA4D8 /* SplitWindowArranger.m in Sources */,
+				99B227E826DB660F3EBB480E /* SplitLayoutMenu.m in Sources */,
+				B5FC848705B22D8EF70FDC93 /* SplitLayouts.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

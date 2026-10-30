@@ -122,3 +122,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "Введите сочетание";
 "ShortcutRecorderLabelStopRecording" = "Остановить запись";
 "ShortcutRecorderLabelUseExisting" = "Оставить текущее";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "Раскладки";
+"LayoutDisplays" = "Мониторы";
+"LayoutShapes" = "Формы";
+"LayoutSaved" = "Сохранённые раскладки";
+"LayoutSavedEmpty" = "Пока нет. Создайте через «Сохранить текущую раскладку…» ниже.";
+"LayoutShapeHalves" = "Половины";
+"LayoutShapeThirds" = "Трети";
+"LayoutShapeMainAndTwo" = "Большое + два";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "Одно большое";
+"LayoutWindowCount" = "Окон: %lu";
+"LayoutSave" = "Сохранить текущую раскладку…";
+"LayoutDelete" = "Удалить сохранённую раскладку";
+"LayoutSaveTitle" = "Сохранить текущую раскладку окон?";
+"LayoutSaveMessage" = "Сохраняет под именем, где находятся видимые окна. Один щелчок в меню возвращает их все сразу.";
+"LayoutSaveNamePlaceholder" = "Название";
+"LayoutSaveDefaultName" = "Раскладка %lu";
+"LayoutSaveAuto" = "Загружать автоматически при подключении этих мониторов";
+"LayoutSaveButton" = "Сохранить";
+"LayoutSaveCancel" = "Отменить";
+"ShortcutsOn" = "Сочетания включены";
+"ShortcutsOffForHour" = "Сочетания выключены · включатся в %@";
+"ShortcutsOffForApplication" = "Сочетания выключены · пока используется %@";
+"ShortcutsOffNoPermission" = "Сочетания выключены · нужен доступ Универсального доступа";

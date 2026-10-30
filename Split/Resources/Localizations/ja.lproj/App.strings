@@ -122,3 +122,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "ショートカットを入力";
 "ShortcutRecorderLabelStopRecording" = "記録を停止";
 "ShortcutRecorderLabelUseExisting" = "現在のままにする";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "レイアウト";
+"LayoutDisplays" = "ディスプレイ";
+"LayoutShapes" = "形";
+"LayoutSaved" = "保存したレイアウト";
+"LayoutSavedEmpty" = "まだありません。下の「現在のレイアウトを保存…」で作れます。";
+"LayoutShapeHalves" = "左右半分";
+"LayoutShapeThirds" = "3等分";
+"LayoutShapeMainAndTwo" = "大 + 2つ";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "1つを大きく";
+"LayoutWindowCount" = "ウインドウ %lu 個";
+"LayoutSave" = "現在のレイアウトを保存…";
+"LayoutDelete" = "保存したレイアウトを削除";
+"LayoutSaveTitle" = "現在のウインドウ配置を保存しますか？";
+"LayoutSaveMessage" = "表示中のウインドウの位置を名前を付けて保存します。メニューで選ぶと一度に元に戻ります。";
+"LayoutSaveNamePlaceholder" = "名前";
+"LayoutSaveDefaultName" = "レイアウト %lu";
+"LayoutSaveAuto" = "このディスプレイの組み合わせになったら自動で読み込む";
+"LayoutSaveButton" = "保存";
+"LayoutSaveCancel" = "キャンセル";
+"ShortcutsOn" = "ショートカット オン";
+"ShortcutsOffForHour" = "ショートカット オフ · %@ に再びオン";
+"ShortcutsOffForApplication" = "ショートカット オフ · %@ の使用中";
+"ShortcutsOffNoPermission" = "ショートカット オフ · アクセシビリティの許可が必要です";

@@ -122,3 +122,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "พิมพ์คีย์ลัด";
 "ShortcutRecorderLabelStopRecording" = "หยุดบันทึก";
 "ShortcutRecorderLabelUseExisting" = "ใช้ค่าปัจจุบัน";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "เลย์เอาต์";
+"LayoutDisplays" = "จอภาพ";
+"LayoutShapes" = "รูปแบบ";
+"LayoutSaved" = "เลย์เอาต์ที่บันทึกไว้";
+"LayoutSavedEmpty" = "ยังไม่มี สร้างได้จาก “บันทึกเลย์เอาต์ปัจจุบัน…” ด้านล่าง";
+"LayoutShapeHalves" = "ครึ่ง · ครึ่ง";
+"LayoutShapeThirds" = "สามส่วน";
+"LayoutShapeMainAndTwo" = "ใหญ่ + สอง";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "ใหญ่หนึ่ง";
+"LayoutWindowCount" = "%lu หน้าต่าง";
+"LayoutSave" = "บันทึกเลย์เอาต์ปัจจุบัน…";
+"LayoutDelete" = "ลบเลย์เอาต์ที่บันทึกไว้";
+"LayoutSaveTitle" = "บันทึกเลย์เอาต์หน้าต่างปัจจุบันไหม";
+"LayoutSaveMessage" = "บันทึกตำแหน่งหน้าต่างที่มองเห็นไว้ด้วยชื่อ คลิกในเมนูเพื่อเรียกกลับทั้งหมดในครั้งเดียว";
+"LayoutSaveNamePlaceholder" = "ชื่อ";
+"LayoutSaveDefaultName" = "เลย์เอาต์ %lu";
+"LayoutSaveAuto" = "โหลดอัตโนมัติเมื่อต่อจอชุดนี้";
+"LayoutSaveButton" = "บันทึก";
+"LayoutSaveCancel" = "ยกเลิก";
+"ShortcutsOn" = "ปุ่มลัดเปิดอยู่";
+"ShortcutsOffForHour" = "ปุ่มลัดปิด · เปิดอีกครั้งเวลา %@";
+"ShortcutsOffForApplication" = "ปุ่มลัดปิด · ขณะใช้ %@";
+"ShortcutsOffNoPermission" = "ปุ่มลัดปิด · ต้องได้รับสิทธิ์การช่วยการเข้าถึง";

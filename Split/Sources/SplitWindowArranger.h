@@ -28,6 +28,7 @@ CGRect SplitRectWithGap(CGRect rect, CGRect visibleFrame, CGFloat gap);
 /// A window found on screen, with its Accessibility element and where it was (top-left based).
 @interface SplitArrangedWindow : NSObject
 @property (nonatomic, strong) SplitAccessibilityElement *element;
+@property (nonatomic, assign) pid_t pid;
 @property (nonatomic, assign) CGRect originalRect;
 @end
 
@@ -37,6 +38,15 @@ NSArray<SplitArrangedWindow *> *SplitVisibleWindows(NSScreen *_Nullable screen);
 
 /// A screen's visible frame (without menu bar and Dock) in top-left based coordinates.
 CGRect SplitTopLeftVisibleFrame(NSScreen *screen);
+
+/// A stable ID for a monitor (its display UUID), the same after unplugging and plugging back.
+NSString *SplitDisplayIDOfScreen(NSScreen *screen);
+
+/// IDs of the monitors connected now.
+NSSet<NSString *> *SplitCurrentDisplayIDs(void);
+
+/// The screen whose frame holds `point` (top-left based), or nil.
+NSScreen *_Nullable SplitScreenContainingPoint(CGPoint point);
 
 /// Arranges the visible windows on the screen that holds the frontmost window
 /// ("auto-arrange", ⌥⌘A by default) and remembers where they were so one undo puts all of

@@ -143,3 +143,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "Tapez le raccourci";
 "ShortcutRecorderLabelStopRecording" = "Arrêter l’enregistrement";
 "ShortcutRecorderLabelUseExisting" = "Conserver l’actuel";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "Dispositions";
+"LayoutDisplays" = "Écrans";
+"LayoutShapes" = "Formes";
+"LayoutSaved" = "Dispositions enregistrées";
+"LayoutSavedEmpty" = "Aucune pour l’instant. Créez-en une avec « Enregistrer la disposition actuelle… » ci-dessous.";
+"LayoutShapeHalves" = "Moitiés";
+"LayoutShapeThirds" = "Tiers";
+"LayoutShapeMainAndTwo" = "Grande + deux";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "Une grande";
+"LayoutWindowCount" = "%lu fenêtres";
+"LayoutSave" = "Enregistrer la disposition actuelle…";
+"LayoutDelete" = "Supprimer une disposition enregistrée";
+"LayoutSaveTitle" = "Enregistrer la disposition actuelle des fenêtres ?";
+"LayoutSaveMessage" = "Enregistre sous un nom l’emplacement des fenêtres visibles. Un clic dans le menu les remet toutes en place.";
+"LayoutSaveNamePlaceholder" = "Nom";
+"LayoutSaveDefaultName" = "Disposition %lu";
+"LayoutSaveAuto" = "Charger automatiquement quand ces écrans sont connectés";
+"LayoutSaveButton" = "Enregistrer";
+"LayoutSaveCancel" = "Annuler";
+"ShortcutsOn" = "Raccourcis activés";
+"ShortcutsOffForHour" = "Raccourcis désactivés · réactivés à %@";
+"ShortcutsOffForApplication" = "Raccourcis désactivés · pendant l’utilisation de %@";
+"ShortcutsOffNoPermission" = "Raccourcis désactivés · accès Accessibilité requis";

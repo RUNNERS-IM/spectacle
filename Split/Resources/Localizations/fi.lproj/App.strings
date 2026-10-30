@@ -143,3 +143,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "Kirjoita oikotie";
 "ShortcutRecorderLabelStopRecording" = "Lopeta tallennus";
 "ShortcutRecorderLabelUseExisting" = "Pidä nykyinen";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "Asettelut";
+"LayoutDisplays" = "Näytöt";
+"LayoutShapes" = "Muodot";
+"LayoutSaved" = "Tallennetut asettelut";
+"LayoutSavedEmpty" = "Ei vielä yhtään. Luo sellainen alta kohdasta ”Tallenna nykyinen asettelu…”.";
+"LayoutShapeHalves" = "Puolikkaat";
+"LayoutShapeThirds" = "Kolmannekset";
+"LayoutShapeMainAndTwo" = "Iso + kaksi";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "Yksi iso";
+"LayoutWindowCount" = "%lu ikkunaa";
+"LayoutSave" = "Tallenna nykyinen asettelu…";
+"LayoutDelete" = "Poista tallennettu asettelu";
+"LayoutSaveTitle" = "Tallennetaanko nykyinen ikkuna-asettelu?";
+"LayoutSaveMessage" = "Tallentaa näkyvien ikkunoiden paikat nimellä. Valikosta yksi klikkaus palauttaa ne kaikki kerralla.";
+"LayoutSaveNamePlaceholder" = "Nimi";
+"LayoutSaveDefaultName" = "Asettelu %lu";
+"LayoutSaveAuto" = "Lataa automaattisesti, kun nämä näytöt on liitetty";
+"LayoutSaveButton" = "Tallenna";
+"LayoutSaveCancel" = "Kumoa";
+"ShortcutsOn" = "Pikanäppäimet päällä";
+"ShortcutsOffForHour" = "Pikanäppäimet pois · taas päällä klo %@";
+"ShortcutsOffForApplication" = "Pikanäppäimet pois · kun käytät %@";
+"ShortcutsOffNoPermission" = "Pikanäppäimet pois · tarvitaan Käyttöapu-lupa";

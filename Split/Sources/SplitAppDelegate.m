@@ -20,6 +20,7 @@
 #import "SplitWindowPositionCalculator.h"
 #import "SplitWindowPositionManager.h"
 #import "SplitWindowFeedback.h"
+#import "SplitLayoutMenu.h"
 #import "SplitWindowArranger.h"
 
 @implementation SplitAppDelegate
@@ -36,6 +37,8 @@
   SplitDisplayChangeArranger *_displayChangeArranger;
   SplitShortcutSheet *_shortcutSheet;
   NSMenuItem *_arrangeWindowsMenuItem;
+  NSMenuItem *_shortcutStatusMenuItem;
+  SplitLayoutMenu *_layoutMenu;
 #if !SPLIT_APP_STORE
   SPUStandardUpdaterController *_updaterController;
 #endif
@@ -176,6 +179,12 @@ static BOOL SplitIsRunningUnitTests(void)
   [self insertShortcutSheetMenuItem];
   [self localizeStatusMenu];
   [self decorateStatusMenu];
+  SplitDisplayChangeArranger *displayChangeArranger = _displayChangeArranger;
+  _layoutMenu = [[SplitLayoutMenu alloc] initWithArranger:_windowArranger moved:^(NSUInteger count) {
+    [displayChangeArranger recordSoon];
+  }];
+  [_layoutMenu installInMenu:_statusItemMenu];
+  [self insertShortcutStatusMenuItem];
   // Ask after launch has finished; an alert run from inside applicationDidFinishLaunching
   // returned its first button straight away without the user touching it (macOS 26.1).
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -752,6 +761,56 @@ static NSDictionary<NSString *, SplitWindowAction *> *SplitWindowActionsByShortc
   }
 }
 
+#pragma mark - Shortcut status
+
+/// The first line of the status menu says whether the shortcuts work right now, and why not.
+- (void)insertShortcutStatusMenuItem
+{
+  _shortcutStatusMenuItem = [[NSMenuItem alloc] initWithTitle:@"" action:@selector(shortcutStatusClicked:) keyEquivalent:@""];
+  _shortcutStatusMenuItem.target = self;
+  [_statusItemMenu insertItem:_shortcutStatusMenuItem atIndex:0];
+  [_statusItemMenu insertItem:NSMenuItem.separatorItem atIndex:1];
+  [self updateShortcutStatusMenuItem];
+}
+
+- (void)updateShortcutStatusMenuItem
+{
+  NSRunningApplication *frontmostApplication = NSWorkspace.sharedWorkspace.frontmostApplication;
+  NSString *title = nil;
+  BOOL on = NO;
+  if (!AXIsProcessTrusted()) {
+    title = SplitLocalized(@"ShortcutsOffNoPermission");
+  } else if (_shortcutsAreDisabledForAnHour) {
+    NSString *time = [NSDateFormatter localizedStringFromDate:_disableShortcutsForAnHourTimer.fireDate ?: NSDate.date
+                                                    dateStyle:NSDateFormatterNoStyle
+                                                    timeStyle:NSDateFormatterShortStyle];
+    title = [NSString stringWithFormat:SplitLocalized(@"ShortcutsOffForHour"), time];
+  } else if ([_blacklistedApplications containsObject:frontmostApplication.bundleIdentifier]
+             || [_disabledApplications containsObject:frontmostApplication.bundleIdentifier]) {
+    title = [NSString stringWithFormat:SplitLocalized(@"ShortcutsOffForApplication"), frontmostApplication.localizedName ?: @""];
+  } else {
+    title = SplitLocalized(@"ShortcutsOn");
+    on = YES;
+  }
+  NSColor *dotColor = on ? NSColor.systemGreenColor : NSColor.systemOrangeColor;
+  NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:@"\u25CF  "
+                                                                          attributes:@{NSForegroundColorAttributeName: dotColor,
+                                                                                       NSFontAttributeName: [NSFont menuFontOfSize:10.0]}];
+  [text appendAttributedString:[[NSAttributedString alloc] initWithString:title
+                                                               attributes:@{NSFontAttributeName: [NSFont menuFontOfSize:0]}]];
+  _shortcutStatusMenuItem.attributedTitle = text;
+}
+
+/// Clicking the status line turns the shortcuts back on when that is something Split can do.
+- (void)shortcutStatusClicked:(id)sender
+{
+  if (!AXIsProcessTrusted()) {
+    [_accessibilityGuideController showGuide];
+  } else if (_shortcutsAreDisabledForAnHour) {
+    [self disableOrEnableShortcutsForAnHour:sender];
+  }
+}
+
 #pragma mark - NSMenuDelegate (preview)
 
 - (void)menu:(NSMenu *)menu willHighlightItem:(NSMenuItem *)item
@@ -778,6 +837,8 @@ static NSDictionary<NSString *, SplitWindowAction *> *SplitWindowActionsByShortc
 
 - (void)menuWillOpen:(NSMenu *)menu
 {
+  [self updateShortcutStatusMenuItem];
+  [_layoutMenu refresh];
   NSRunningApplication *frontmostApplication = [NSWorkspace sharedWorkspace].frontmostApplication;
   self.disableShortcutsForApplicationMenuItem.hidden = NO;
   if ([_blacklistedApplications containsObject:frontmostApplication.bundleIdentifier]) {
