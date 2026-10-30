@@ -174,3 +174,13 @@
 "RunnersAppsTitle" = "RUNNERS की और ऐप्स";
 "RunnersServicesTitle" = "RUNNERS की सेवाएँ";
 "RunnersGet" = "पाएँ";
+
+/* Split Pro: the pill next to paid features and the sheet it opens */
+"ProFeatures" = "लेआउट सहेजें और वापस लाएँ, और हर डिस्प्ले जोड़ी के लिए लेआउट अपने-आप लोड करें";
+"ProPriceMonthly" = "$1 / महीना";
+"ProPriceYearly" = "$6 / साल";
+"ProComingSoon" = "जल्द आ रहा है";
+"ProSignIn" = "साइन इन करें";
+"ProRestore" = "खरीदारी बहाल करें";
+"ProContinue" = "इस्तेमाल जारी रखें";
+"ProFreeUntilLaunch" = "Pro आने तक मुफ़्त";

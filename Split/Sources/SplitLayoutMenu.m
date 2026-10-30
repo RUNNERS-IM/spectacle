@@ -1,6 +1,7 @@
 #import "SplitLayoutMenu.h"
 
 #import "SplitLayouts.h"
+#import "SplitPro.h"
 #import "SplitUtilities.h"
 #import "SplitWindowArranger.h"
 #import "SplitWindowFeedback.h"
@@ -127,6 +128,7 @@ static NSTextField *SectionLabel(NSString *text)
   NSMenuItem *save = [[NSMenuItem alloc] initWithTitle:SplitLocalized(@"LayoutSave") action:@selector(saveLayout:) keyEquivalent:@""];
   save.target = self;
   save.image = SplitIcon(@"save", 16);
+  save.attributedTitle = SplitTitleWithProPill(save.title, [NSFont menuFontOfSize:0]);
   _deleteItem = [[NSMenuItem alloc] initWithTitle:SplitLocalized(@"LayoutDelete") action:nil keyEquivalent:@""];
   _deleteItem.image = SplitIcon(@"trash-2", 16);
   _deleteItem.submenu = [NSMenu new];
@@ -442,12 +444,14 @@ static NSScreen *ScreenUnderMouse(void)
   name.placeholderString = SplitLocalized(@"LayoutSaveNamePlaceholder");
   NSButton *automatic = [NSButton checkboxWithTitle:SplitLocalized(@"LayoutSaveAuto") target:nil action:nil];
   automatic.state = NSControlStateValueOn;
-  NSStackView *accessory = [NSStackView stackViewWithViews:@[name, automatic]];
+  NSStackView *automaticRow = [NSStackView stackViewWithViews:@[automatic, SplitProPill()]];
+  automaticRow.spacing = 6.0;
+  NSStackView *accessory = [NSStackView stackViewWithViews:@[name, automaticRow]];
   accessory.orientation = NSUserInterfaceLayoutOrientationVertical;
   accessory.alignment = NSLayoutAttributeLeading;
   accessory.spacing = 8.0;
   [name.widthAnchor constraintEqualToConstant:260.0].active = YES;
-  accessory.frame = NSMakeRect(0, 0, 260.0, accessory.fittingSize.height);
+  accessory.frame = NSMakeRect(0, 0, MAX(260.0, accessory.fittingSize.width), accessory.fittingSize.height);
   alert.accessoryView = accessory;
   alert.window.initialFirstResponder = name;
   [NSApp activateIgnoringOtherApps:YES];

@@ -153,3 +153,13 @@
 "RunnersAppsTitle" = "Ứng dụng khác của RUNNERS";
 "RunnersServicesTitle" = "Dịch vụ của RUNNERS";
 "RunnersGet" = "Tải";
+
+/* Split Pro: the pill next to paid features and the sheet it opens */
+"ProFeatures" = "Lưu và khôi phục bố cục, tự động tải bố cục cho từng bộ màn hình";
+"ProPriceMonthly" = "$1 / tháng";
+"ProPriceYearly" = "$6 / năm";
+"ProComingSoon" = "Sắp ra mắt";
+"ProSignIn" = "Đăng nhập";
+"ProRestore" = "Khôi phục giao dịch mua";
+"ProContinue" = "Tiếp tục dùng";
+"ProFreeUntilLaunch" = "Miễn phí cho đến khi Pro ra mắt";

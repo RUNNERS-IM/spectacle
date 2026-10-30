@@ -153,3 +153,13 @@
 "RunnersAppsTitle" = "Другие приложения RUNNERS";
 "RunnersServicesTitle" = "Сервисы RUNNERS";
 "RunnersGet" = "Загрузить";
+
+/* Split Pro: the pill next to paid features and the sheet it opens */
+"ProFeatures" = "Сохранение и восстановление раскладок и автоматическая загрузка для каждого набора мониторов";
+"ProPriceMonthly" = "$1 / месяц";
+"ProPriceYearly" = "$6 / год";
+"ProComingSoon" = "Скоро";
+"ProSignIn" = "Войти";
+"ProRestore" = "Восстановить покупку";
+"ProContinue" = "Продолжить";
+"ProFreeUntilLaunch" = "Бесплатно до запуска Pro";
