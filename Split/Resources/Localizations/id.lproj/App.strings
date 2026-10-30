@@ -11,6 +11,7 @@
 /* Status menu: opens the settings window */
 "Settings" = "Pengaturan…";
 /* Status menu: quits the app */
+"HelpFeedback" = "Bantuan & Masukan";
 "QuitSplit" = "Keluar dari Split";
 
 /* Window actions (status menu, settings, on-screen label) */

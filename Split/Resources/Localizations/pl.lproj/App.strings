@@ -4,6 +4,7 @@
 "DisableForAnHour" = "Na godzinę";
 "DisableForApplication" = "Gdy %@ jest na wierzchu";
 "Settings" = "Ustawienia…";
+"HelpFeedback" = "Pomoc i opinie";
 "QuitSplit" = "Zakończ Split";
 "MoveToCenter" = "Wyśrodkuj";
 "MoveToFullscreen" = "Pełny ekran";

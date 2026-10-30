@@ -4,6 +4,7 @@
 "DisableForAnHour" = "1時間";
 "DisableForApplication" = "%@が前面にある間";
 "Settings" = "設定…";
+"HelpFeedback" = "ヘルプとフィードバック";
 "QuitSplit" = "Splitを終了";
 "MoveToCenter" = "中央";
 "MoveToFullscreen" = "フルスクリーン";

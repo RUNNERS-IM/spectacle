@@ -4,6 +4,7 @@
 "DisableForAnHour" = "Por uma Hora";
 "DisableForApplication" = "Enquanto %@ Estiver em Primeiro Plano";
 "Settings" = "Ajustes…";
+"HelpFeedback" = "Ajuda e feedback";
 "QuitSplit" = "Encerrar Split";
 "MoveToCenter" = "Centralizar";
 "MoveToFullscreen" = "Tela Cheia";

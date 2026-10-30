@@ -4,6 +4,7 @@
 "DisableForAnHour" = "1시간 동안";
 "DisableForApplication" = "%@ 앱을 쓰는 동안";
 "Settings" = "설정…";
+"HelpFeedback" = "도움말 · 피드백";
 "QuitSplit" = "Split 종료";
 
 "MoveToCenter" = "가운데";

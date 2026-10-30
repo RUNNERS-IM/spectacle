@@ -4,6 +4,7 @@
 "DisableForAnHour" = "На час";
 "DisableForApplication" = "Пока %@ на переднем плане";
 "Settings" = "Настройки…";
+"HelpFeedback" = "Справка и отзывы";
 "QuitSplit" = "Завершить Split";
 "MoveToCenter" = "По центру";
 "MoveToFullscreen" = "Во весь экран";

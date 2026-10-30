@@ -11,6 +11,7 @@
 /* Status menu: opens the settings window */
 "Settings" = "Settings…";
 /* Status menu: quits the app */
+"HelpFeedback" = "Help & Feedback";
 "QuitSplit" = "Quit Split";
 
 /* Window actions (status menu, settings, on-screen label) */

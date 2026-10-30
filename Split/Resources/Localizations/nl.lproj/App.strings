@@ -4,6 +4,7 @@
 "DisableForAnHour" = "Een uur";
 "DisableForApplication" = "Zolang %@ vooraan staat";
 "Settings" = "Instellingen…";
+"HelpFeedback" = "Help & feedback";
 "QuitSplit" = "Stop Split";
 "MoveToCenter" = "Centreer";
 "MoveToFullscreen" = "Schermvullend";
