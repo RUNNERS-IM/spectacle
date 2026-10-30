@@ -169,3 +169,8 @@
 "ShortcutsOffForHour" = "Pikanäppäimet pois · taas päällä klo %@";
 "ShortcutsOffForApplication" = "Pikanäppäimet pois · kun käytät %@";
 "ShortcutsOffNoPermission" = "Pikanäppäimet pois · tarvitaan Käyttöapu-lupa";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "Lisää RUNNERSin appeja";
+"RunnersServicesTitle" = "RUNNERSin palvelut";
+"RunnersGet" = "Hae";

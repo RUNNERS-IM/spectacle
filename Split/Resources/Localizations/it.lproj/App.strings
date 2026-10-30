@@ -169,3 +169,8 @@
 "ShortcutsOffForHour" = "Scorciatoie disattivate · di nuovo attive alle %@";
 "ShortcutsOffForApplication" = "Scorciatoie disattivate · mentre usi %@";
 "ShortcutsOffNoPermission" = "Scorciatoie disattivate · serve l’accesso Accessibilità";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "Altre app di RUNNERS";
+"RunnersServicesTitle" = "Servizi di RUNNERS";
+"RunnersGet" = "Ottieni";

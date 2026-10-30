@@ -148,3 +148,8 @@
 "ShortcutsOffForHour" = "Skróty wyłączone · włączą się o %@";
 "ShortcutsOffForApplication" = "Skróty wyłączone · podczas używania %@";
 "ShortcutsOffNoPermission" = "Skróty wyłączone · potrzebny dostęp Dostępności";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "Więcej aplikacji RUNNERS";
+"RunnersServicesTitle" = "Usługi RUNNERS";
+"RunnersGet" = "Pobierz";

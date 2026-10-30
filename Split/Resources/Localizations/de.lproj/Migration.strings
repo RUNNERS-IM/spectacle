@@ -2,7 +2,7 @@
 "LegacyRunningTitle" = "Spectacle läuft noch";
 
 /* Body of the alert shown when the original Spectacle app is still running */
-"LegacyRunningBody" = "Split und Spectacle würden auf dieselben Kurzbefehle reagieren. Beende Spectacle und bewege es in den Papierkorb, damit nur Split verwendet wird. Deine Spectacle-Kurzbefehle wurden bereits in Split übernommen.";
+"LegacyRunningBody" = "Split und Spectacle würden auf dieselben Kurzbefehle reagieren. Beenden Sie Spectacle und bewegen Sie es in den Papierkorb, damit nur Split verwendet wird. Ihre Spectacle-Kurzbefehle wurden bereits in Split übernommen.";
 
 /* Button that quits the original Spectacle */
 "LegacyRunningQuit" = "Spectacle beenden";

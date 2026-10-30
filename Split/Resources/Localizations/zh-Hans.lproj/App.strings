@@ -148,3 +148,8 @@
 "ShortcutsOffForHour" = "快捷键已关闭 · %@ 恢复";
 "ShortcutsOffForApplication" = "快捷键已关闭 · 使用 %@ 时";
 "ShortcutsOffNoPermission" = "快捷键已关闭 · 需要辅助功能权限";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "RUNNERS 的更多 App";
+"RunnersServicesTitle" = "RUNNERS 的服务";
+"RunnersGet" = "获取";

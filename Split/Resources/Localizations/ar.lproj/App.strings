@@ -169,3 +169,8 @@
 "ShortcutsOffForHour" = "الاختصارات متوقفة · تعود في %@";
 "ShortcutsOffForApplication" = "الاختصارات متوقفة · أثناء استخدام %@";
 "ShortcutsOffNoPermission" = "الاختصارات متوقفة · يلزم إذن إمكانية الوصول";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "تطبيقات أخرى من RUNNERS";
+"RunnersServicesTitle" = "خدمات RUNNERS";
+"RunnersGet" = "احصل عليه";

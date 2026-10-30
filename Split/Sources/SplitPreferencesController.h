@@ -31,6 +31,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// optional hint key, shortcut names.
 NSArray<NSArray *> *SplitShortcutSections(void);
 
+/// The About window: icon, version, website and GitHub links, then other RUNNERS apps and
+/// services in the same cards as Settings. Replaces the standard About panel, which is too
+/// narrow for the app list.
+@interface SplitAboutWindowController : NSWindowController
+@end
+
 /// Posted when "Check for updates automatically" changes. The new value is in the user default
 /// "AutomaticUpdateCheckEnabled".
 extern NSNotificationName const SplitAutomaticUpdateCheckChangedNotification;

@@ -4,13 +4,13 @@
 
 키보드 단축키로 macOS 창을 옮기고 크기를 맞추는 앱입니다. 마우스가 필요 없습니다.
 
-Split 은 [Eric Czarny](https://github.com/eczarny) 가 만든 창 정렬 앱 Spectacle 을 RUNNERS-IM 이 이어서 만드는 앱입니다. Spectacle 은 2016년 1.2 가 마지막이고 원본 저장소([eczarny/spectacle](https://github.com/eczarny/spectacle))는 보관 상태입니다. Split 은 같은 단축키를 그대로 쓰고, 애플 실리콘 네이티브 빌드·공증된 배포·새 기능을 더합니다. 처음 켤 때 Spectacle 의 단축키와 환경설정을 한 번 복사해 옵니다.
+Split 은 RUNNERS-IM 이 만드는 무료 오픈소스 창 정렬 앱입니다. Apple 실리콘 전용 빌드, 공증된 배포판, 창 자동 배치 · 배치 저장, 18개 언어를 지원합니다.
 
 ## 설치
 
 1. [Releases](https://github.com/RUNNERS-IM/split/releases) 에서 `Split-<버전>.dmg` 를 받아 열고 Split 을 응용 프로그램 폴더로 끌어 놓습니다. 서명·공증된 앱이라 경고 없이 열립니다.
 2. 처음 켜면 **시스템 설정 → 개인정보 보호 및 보안 → 손쉬운 사용** 이 자동으로 열립니다. Split 옆 스위치를 켜면 됩니다. 이 권한이 없으면 다른 앱의 창을 움직일 수 없고, 켜는 순간 안내 창이 스스로 닫힙니다.
-3. Spectacle 이 아직 켜져 있으면 Split 이 끌지 물어봅니다. 두 앱이 같은 단축키에 함께 반응하지 않게 하려는 것입니다.
+3. 예전 창 정렬 앱이 아직 켜져 있으면 Split 이 끌지 물어봅니다. 두 앱이 같은 단축키에 함께 반응하지 않게 하려는 것입니다.
 
 애플 실리콘·인텔 맥 모두에서 네이티브로 돌고, macOS 13 이상이 필요합니다. 업데이트는 앱 안에서 설치됩니다.
 
@@ -97,7 +97,6 @@ Split 은 한국어, 영어, 일본어, 중국어(간체), 독일어, 프랑스�
 - 애플 실리콘 네이티브 빌드, Swift Package Manager, Sparkle 2
 - Developer ID 서명·공증, runners.im 을 거치는 자동 업데이트
 - 단계별 손쉬운 사용 권한 안내 창
-- Spectacle 단축키·환경설정 옮겨 오기
 - Homebrew tap
 - 새 아이콘, 미리 보기가 나오는 그림 메뉴, 옮긴 뒤 반짝임
 - 자동 배치(⌥⌘A)
