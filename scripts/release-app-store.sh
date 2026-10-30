@@ -13,7 +13,7 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 ASC_API_KEY_ID="${ASC_API_KEY_ID:-K8NGP73726}"
 ASC_API_ISSUER_ID="${ASC_API_ISSUER_ID:-6474b3ad-9daa-4bf4-ba04-f1e12d35099c}"
 ASC_KEY="$HOME/.runners/secrets/AuthKey_${ASC_API_KEY_ID}.p8"
-OUT="$REPO_ROOT/build/app-store/$VERSION"
+OUT="$REPO_ROOT/build.noindex/app-store/$VERSION"
 ARCHIVE="$OUT/Split-AppStore.xcarchive"
 AUTH=(-allowProvisioningUpdates -authenticationKeyPath "$ASC_KEY" -authenticationKeyID "$ASC_API_KEY_ID" -authenticationKeyIssuerID "$ASC_API_ISSUER_ID")
 

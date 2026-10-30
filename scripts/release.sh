@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Split 릴리스: 빌드 → Developer ID 서명 → 애플 공증 → zip/dmg → Sparkle 업데이트 서명 → appcast.
 #
-#   scripts/release.sh 2.0            # build/release/2.0/ 에 파일만 만든다 (GitHub 에 안 올림)
+#   scripts/release.sh 2.0            # build.noindex/release/2.0/ 에 파일만 만든다 (GitHub 에 안 올림)
 #   scripts/release.sh 2.0 --publish  # 위 + GitHub Releases v2.0 으로 올린다
 #
 # 보통은 이 스크립트를 직접 돌리지 않는다. master 를 release 브랜치로 합치면
@@ -28,8 +28,10 @@ if [ -n "${NOTARY_KEYCHAIN:-}" ]; then NOTARY_ARGS+=(--keychain "$NOTARY_KEYCHAI
 SPARKLE_KEY="${SPARKLE_KEY_FILE:-$HOME/.runners/secrets/sparkle_eddsa_private.key}"
 INFO_PLIST="$REPO_ROOT/Split/Supporting Files/Info.plist"
 
-OUT="$REPO_ROOT/build/release/$VERSION"
-DERIVED="$REPO_ROOT/build/DerivedData"
+# 폴더 이름이 .noindex 로 끝나면 Spotlight 가 안을 보지 않는다. 그래서 여기서 만든 Split.app 이
+# Launchpad · Spotlight 에 Split 이 하나 더 있는 것처럼 뜨지 않는다.
+OUT="$REPO_ROOT/build.noindex/release/$VERSION"
+DERIVED="$REPO_ROOT/build.noindex/DerivedData"
 ARCHIVE="$OUT/Split.xcarchive"
 APP="$OUT/export/Split.app"
 ZIP="$OUT/Split-$VERSION.zip"

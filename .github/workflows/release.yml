@@ -111,8 +111,8 @@ jobs:
         with:
           name: split-${{ steps.current.outputs.version }}-test
           path: |
-            build/release/*/Split-*.dmg
-            build/release/*/appcast.xml
+            build.noindex/release/*/Split-*.dmg
+            build.noindex/release/*/appcast.xml
           retention-days: 3
 
       - name: Upload the App Store build
