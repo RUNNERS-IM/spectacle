@@ -1,29 +1,73 @@
 {
-  "fill" : {
-    "solid" : "extended-srgb:1.00000,1.00000,1.00000,1.00000"
+  "fill": {
+    "automatic-gradient": "extended-srgb:0.16,0.17,0.22,1.00000"
   },
-  "groups" : [
+  "groups": [
     {
-      "layers" : [
+      "layers": [
         {
-          "glass" : false,
-          "hidden" : false,
-          "image-name" : "screen.svg",
-          "name" : "screen",
-          "position" : { "scale" : 1, "translation-in-points" : [ 0, 0 ] }
-        },
-        {
-          "glass" : false,
-          "hidden" : false,
-          "image-name" : "pane.svg",
-          "name" : "pane",
-          "position" : { "scale" : 1, "translation-in-points" : [ 0, 0 ] }
+          "glass": true,
+          "hidden": false,
+          "image-name": "pane-left.svg",
+          "name": "pane-left",
+          "position": {
+            "scale": 1,
+            "translation-in-points": [
+              0,
+              0
+            ]
+          }
         }
       ],
-      "shadow" : { "kind" : "neutral", "opacity" : 0.5 }
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "translucency": {
+        "enabled": true,
+        "value": 0.3
+      }
+    },
+    {
+      "layers": [
+        {
+          "glass": true,
+          "hidden": false,
+          "image-name": "pane-right-top.svg",
+          "name": "pane-right-top",
+          "position": {
+            "scale": 1,
+            "translation-in-points": [
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "glass": true,
+          "hidden": false,
+          "image-name": "pane-right-bottom.svg",
+          "name": "pane-right-bottom",
+          "position": {
+            "scale": 1,
+            "translation-in-points": [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "translucency": {
+        "enabled": true,
+        "value": 0.55
+      }
     }
   ],
-  "supported-platforms" : {
-    "squares" : "shared"
+  "supported-platforms": {
+    "squares": "shared"
   }
 }
