@@ -1,0 +1,125 @@
+/* Builds on ../update/update.css (colours, icon, title, buttons) so every small Split window looks alike. */
+
+:root {
+  --field-bg: #ffffff;
+  --pill-bg: #ffe8cc;
+  --pill-fg: #994a00;
+  --tertiary: rgba(0, 0, 0, 0.26);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --field-bg: rgba(255, 255, 255, 0.06);
+    --pill-bg: #593b12;
+    --pill-fg: #ffcf99;
+    --tertiary: rgba(255, 255, 255, 0.26);
+  }
+}
+
+/* The name field and the checkbox sit where an NSAlert puts its accessory view. */
+.layout-fields {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  gap: 8px;
+  margin-top: 14px;
+  text-align: left;
+  -webkit-app-region: no-drag;
+}
+
+.layout-fields input[type="text"] {
+  height: 24px;
+  padding: 0 7px;
+  border: 0.5px solid var(--rw-separator);
+  border-radius: 5px;
+  background: var(--field-bg);
+  color: var(--rw-text);
+  font: inherit;
+  font-size: 13px;
+  user-select: text;
+}
+
+.layout-fields input[type="text"]:focus {
+  outline: 3px solid color-mix(in srgb, var(--rw-accent) 50%, transparent);
+  outline-offset: 0;
+}
+
+.layout-auto {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.layout-auto label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.layout-auto input[type="checkbox"] {
+  margin: 0;
+  accent-color: var(--rw-accent);
+}
+
+/* The small "Pro" pill of SplitPro.m: 16 points tall, 10-point bold text. */
+.pro-pill {
+  flex: none;
+  height: 16px;
+  padding: 0 6px;
+  border: none;
+  border-radius: 8px;
+  background: var(--pill-bg);
+  color: var(--pill-fg);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 16px;
+  cursor: pointer;
+}
+
+/* Split Pro: 360 wide, 24 around, as kSheetWidth and kSheetPadding. */
+.pro {
+  padding: 24px;
+}
+
+.pro .pro-title {
+  margin: 8px 0 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.pro-features {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--rw-text-secondary);
+}
+
+.pro-prices {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.pro-prices span {
+  padding: 6px 14px;
+  border: 1px solid var(--rw-separator);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pro .pro-buy {
+  margin-top: 16px;
+}
+
+.pro .pro-buttons {
+  margin-top: 8px;
+}
+
+.pro-note {
+  margin: 14px 0 0;
+  font-size: 11px;
+  color: var(--tertiary);
+}
