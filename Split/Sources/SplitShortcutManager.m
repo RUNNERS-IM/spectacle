@@ -195,7 +195,9 @@ static EventHotKeyID currentShortcutID = {
   if (err) {
     NSLog(@"There was a problem registering shortcut %@.", shortcut.shortcutName);
     _shortcutsFailedToRegisterByName[shortcut.shortcutName] = shortcut;
-    return [shortcutHolder copyWithClearedShortcut];
+    // Keep the keys rather than clearing them, so they are not saved as cleared and lost the
+    // next time Split opens, when the other app may have let go of them.
+    return [shortcutHolder copyWithShortcutRef:NULL];
   }
   [_shortcutsFailedToRegisterByName removeObjectForKey:shortcut.shortcutName];
   return [shortcutHolder copyWithShortcutRef:shortcutRef];
