@@ -94,7 +94,7 @@
 "PermissionOnHint" = "เปิด Split ย้ายหน้าต่างได้";
 "PermissionOffHint" = "ปิด ย้ายหน้าต่างไม่ได้จนกว่าคุณจะเปิด";
 "PermissionOpen" = "เปิดการตั้งค่า";
-"AboutLine" = "Split %@ · ฟรีและเป็นโอเพนซอร์ส";
+"AboutLine" = "Split %@ · ฟรี";
 "Website" = "เว็บไซต์";
 "SectionBasic" = "กึ่งกลางและเต็มหน้าจอ";
 "SectionHalves" = "ครึ่งหนึ่ง";
@@ -164,3 +164,8 @@
 "ProRestore" = "กู้คืนการซื้อ";
 "ProContinue" = "ใช้ต่อ";
 "ProFreeUntilLaunch" = "ใช้ฟรีจนกว่า Pro จะเปิดตัว";
+
+"OpenSourceNotices" = "ประกาศโอเพนซอร์ส";
+"Close" = "ปิด";
+"ShortcutsNotRegistered" = "แอปอื่นใช้ปุ่มลัดเหล่านี้อยู่แล้ว: %@";
+"ApplicationRefusedAccess" = "%1$@ ไม่ยอมให้ Split ย้ายหน้าต่าง ปิด %1$@ แล้วเปิดใหม่";

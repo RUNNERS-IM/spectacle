@@ -110,7 +110,7 @@
 "PermissionOffHint" = "Désactivée. Les fenêtres ne peuvent pas être déplacées tant que vous ne l’activez pas.";
 "PermissionOpen" = "Ouvrir les réglages";
 /* %@ is the version number */
-"AboutLine" = "Split %@ · gratuit et open source";
+"AboutLine" = "Split %@ · gratuit";
 "Website" = "Site web";
 "SectionBasic" = "Centre et plein écran";
 "SectionHalves" = "Moitiés";
@@ -185,3 +185,8 @@
 "ProRestore" = "Restaurer l’achat";
 "ProContinue" = "Continuer";
 "ProFreeUntilLaunch" = "Gratuit jusqu’au lancement de Pro";
+
+"OpenSourceNotices" = "Mentions open source";
+"Close" = "Fermer";
+"ShortcutsNotRegistered" = "Une autre app utilise déjà ces raccourcis : %@";
+"ApplicationRefusedAccess" = "%1$@ refuse que Split déplace ses fenêtres. Quittez %1$@ puis rouvrez-la.";

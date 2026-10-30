@@ -110,7 +110,7 @@
 "PermissionOffHint" = "Pois. Ikkunoita ei voi siirtää, ennen kuin laitat sen päälle.";
 "PermissionOpen" = "Avaa asetukset";
 /* %@ is the version number */
-"AboutLine" = "Split %@ · ilmainen ja avointa lähdekoodia";
+"AboutLine" = "Split %@ · ilmainen";
 "Website" = "Verkkosivusto";
 "SectionBasic" = "Keskelle ja koko näyttö";
 "SectionHalves" = "Puoliskot";
@@ -185,3 +185,8 @@
 "ProRestore" = "Palauta osto";
 "ProContinue" = "Jatka käyttöä";
 "ProFreeUntilLaunch" = "Ilmainen Pron julkaisuun asti";
+
+"OpenSourceNotices" = "Avoimen lähdekoodin ilmoitukset";
+"Close" = "Sulje";
+"ShortcutsNotRegistered" = "Toinen app käyttää jo näitä pikanäppäimiä: %@";
+"ApplicationRefusedAccess" = "%1$@ ei anna Splitin siirtää ikkunoitaan. Lopeta %1$@ ja avaa se uudelleen.";

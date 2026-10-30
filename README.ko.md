@@ -4,7 +4,7 @@
 
 키보드 단축키로 macOS 창을 옮기고 크기를 맞추는 앱입니다. 마우스가 필요 없습니다.
 
-Split 은 RUNNERS-IM 이 만드는 무료 오픈소스 창 정렬 앱입니다. Apple 실리콘 전용 빌드, 공증된 배포판, 창 자동 배치 · 배치 저장, 18개 언어를 지원합니다.
+Split 은 RUNNERS 가 만드는 무료 창 정렬 앱입니다. Apple 실리콘 전용 빌드, 공증된 배포판, 창 자동 배치 · 배치 저장, 18개 언어를 지원합니다.
 
 ## 설치
 
@@ -139,6 +139,6 @@ open Split.xcodeproj
 
 ## 라이선스
 
-Split 은 MIT 라이선스로 배포됩니다. [LICENSE.md](LICENSE.md) 를 보세요.
+Copyright (c) 2026 Runners Co., Ltd. All rights reserved. [LICENSE.md](LICENSE.md) 를 보세요.
 
-Split 은 Spectacle 을 바탕으로 합니다. Copyright (c) 2017 Eric Czarny. Modifications copyright (c) 2026 RUNNERS-IM.
+Split 은 MIT 라이선스인 Spectacle 을 바탕으로 합니다. Spectacle · Sparkle · Lucide 의 저작권 문구는 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 와 앱의 Split 정보 → 오픈소스 고지에 있습니다.

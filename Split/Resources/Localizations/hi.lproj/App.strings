@@ -110,7 +110,7 @@
 "PermissionOffHint" = "बंद। जब तक आप इसे चालू नहीं करते, विंडो नहीं हिल सकतीं।";
 "PermissionOpen" = "सेटिंग्ज़ खोलें";
 /* %@ is the version number */
-"AboutLine" = "Split %@ · मुफ़्त और ओपन सोर्स";
+"AboutLine" = "Split %@ · मुफ़्त";
 "Website" = "वेबसाइट";
 "SectionBasic" = "बीच में और पूर्ण स्क्रीन";
 "SectionHalves" = "आधे भाग";
@@ -185,3 +185,8 @@
 "ProRestore" = "खरीदारी बहाल करें";
 "ProContinue" = "इस्तेमाल जारी रखें";
 "ProFreeUntilLaunch" = "Pro आने तक मुफ़्त";
+
+"OpenSourceNotices" = "ओपन सोर्स सूचनाएँ";
+"Close" = "बंद करें";
+"ShortcutsNotRegistered" = "ये शॉर्टकट पहले से किसी दूसरे ऐप में इस्तेमाल हो रहे हैं: %@";
+"ApplicationRefusedAccess" = "%1$@ ने Split को विंडो हिलाने नहीं दिया। %1$@ बंद करके फिर से खोलें।";

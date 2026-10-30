@@ -110,7 +110,7 @@
 "PermissionOffHint" = "Nonaktif. Jendela tidak dapat dipindahkan hingga Anda mengaktifkannya.";
 "PermissionOpen" = "Buka Pengaturan";
 /* %@ is the version number */
-"AboutLine" = "Split %@ · gratis dan sumber terbuka";
+"AboutLine" = "Split %@ · gratis";
 "Website" = "Situs Web";
 "SectionBasic" = "Tengah dan layar penuh";
 "SectionHalves" = "Separuh";
@@ -185,3 +185,8 @@
 "ProRestore" = "Pulihkan Pembelian";
 "ProContinue" = "Terus Gunakan";
 "ProFreeUntilLaunch" = "Gratis sampai Pro diluncurkan";
+
+"OpenSourceNotices" = "Pemberitahuan sumber terbuka";
+"Close" = "Tutup";
+"ShortcutsNotRegistered" = "Pintasan ini sudah dipakai app lain: %@";
+"ApplicationRefusedAccess" = "%1$@ menolak Split memindahkan jendelanya. Tutup %1$@ lalu buka lagi.";

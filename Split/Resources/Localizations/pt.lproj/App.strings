@@ -94,7 +94,7 @@
 "PermissionOnHint" = "Ativada. O Split pode mover janelas.";
 "PermissionOffHint" = "Desativada. As janelas não podem ser movidas até você ativá-la.";
 "PermissionOpen" = "Abrir Ajustes";
-"AboutLine" = "Split %@ · gratuito e de código aberto";
+"AboutLine" = "Split %@ · gratuito";
 "Website" = "Site";
 "SectionBasic" = "Centro e tela cheia";
 "SectionHalves" = "Metades";
@@ -164,3 +164,8 @@
 "ProRestore" = "Restaurar compra";
 "ProContinue" = "Continuar usando";
 "ProFreeUntilLaunch" = "Grátis até o lançamento do Pro";
+
+"OpenSourceNotices" = "Avisos de código aberto";
+"Close" = "Fechar";
+"ShortcutsNotRegistered" = "Outra app já usa estes atalhos: %@";
+"ApplicationRefusedAccess" = "%1$@ não deixa o Split mover as janelas. Feche %1$@ e abra de novo.";

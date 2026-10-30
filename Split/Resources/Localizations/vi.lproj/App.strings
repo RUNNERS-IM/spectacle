@@ -94,7 +94,7 @@
 "PermissionOnHint" = "Bật. Split có thể di chuyển cửa sổ.";
 "PermissionOffHint" = "Tắt. Cửa sổ không thể di chuyển cho đến khi bạn bật.";
 "PermissionOpen" = "Mở Cài đặt";
-"AboutLine" = "Split %@ · miễn phí và mã nguồn mở";
+"AboutLine" = "Split %@ · miễn phí";
 "Website" = "Trang web";
 "SectionBasic" = "Giữa và toàn màn hình";
 "SectionHalves" = "Một nửa";
@@ -164,3 +164,8 @@
 "ProRestore" = "Khôi phục giao dịch mua";
 "ProContinue" = "Tiếp tục dùng";
 "ProFreeUntilLaunch" = "Miễn phí cho đến khi Pro ra mắt";
+
+"OpenSourceNotices" = "Thông báo mã nguồn mở";
+"Close" = "Đóng";
+"ShortcutsNotRegistered" = "Ứng dụng khác đã dùng các phím tắt này: %@";
+"ApplicationRefusedAccess" = "%1$@ không cho Split di chuyển cửa sổ. Hãy thoát %1$@ rồi mở lại.";

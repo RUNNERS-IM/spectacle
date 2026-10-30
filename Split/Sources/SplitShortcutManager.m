@@ -15,6 +15,7 @@ static EventHotKeyID currentShortcutID = {
 {
   id<SplitShortcutStorage> _shortcutStorage;
   NSMutableDictionary<NSString *, SplitShortcutHolder *> *_registeredShortcutsByName;
+  NSMutableDictionary<NSString *, SplitShortcut *> *_shortcutsFailedToRegisterByName;
   BOOL _areShorcutsEnabled;
 }
 
@@ -23,6 +24,7 @@ static EventHotKeyID currentShortcutID = {
   if (self = [super init]) {
     _shortcutStorage = shortcutStorage;
     _registeredShortcutsByName = [NSMutableDictionary new];
+    _shortcutsFailedToRegisterByName = [NSMutableDictionary new];
     _areShorcutsEnabled = YES;
     [self installApplicationEventHandler];
   }
@@ -86,6 +88,7 @@ static EventHotKeyID currentShortcutID = {
     eventHotKeyUnregistered = [self unregisterEventHotKey:shortcutHolder];
   }
   _registeredShortcutsByName[shortcutName] = [shortcutHolder copyWithClearedShortcut];
+  [_shortcutsFailedToRegisterByName removeObjectForKey:shortcutName];
   if (_areShorcutsEnabled && !eventHotKeyUnregistered) {
     _registeredShortcutsByName[shortcutName] = shortcutHolder;
   }
@@ -119,6 +122,15 @@ static EventHotKeyID currentShortcutID = {
     }
   }
   return NO;
+}
+
+- (NSArray<SplitShortcut *> *)shortcutsFailedToRegister
+{
+  NSMutableArray<SplitShortcut *> *shortcuts = [NSMutableArray new];
+  for (NSString *name in [_shortcutsFailedToRegisterByName.allKeys sortedArrayUsingSelector:@selector(compare:)]) {
+    [shortcuts addObject:_shortcutsFailedToRegisterByName[name]];
+  }
+  return shortcuts;
 }
 
 - (void)registerShortcuts
@@ -182,8 +194,10 @@ static EventHotKeyID currentShortcutID = {
                             &shortcutRef);
   if (err) {
     NSLog(@"There was a problem registering shortcut %@.", shortcut.shortcutName);
+    _shortcutsFailedToRegisterByName[shortcut.shortcutName] = shortcut;
     return [shortcutHolder copyWithClearedShortcut];
   }
+  [_shortcutsFailedToRegisterByName removeObjectForKey:shortcut.shortcutName];
   return [shortcutHolder copyWithShortcutRef:shortcutRef];
 }
 

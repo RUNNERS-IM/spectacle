@@ -110,7 +110,7 @@
 "PermissionOffHint" = "Aus. Fenster können erst bewegt werden, wenn Sie den Zugriff erlauben.";
 "PermissionOpen" = "Einstellungen öffnen";
 /* %@ is the version number */
-"AboutLine" = "Split %@ · kostenlos und Open Source";
+"AboutLine" = "Split %@ · kostenlos";
 "Website" = "Website";
 "SectionBasic" = "Zentrieren und Vollbild";
 "SectionHalves" = "Hälften";
@@ -185,3 +185,8 @@
 "ProRestore" = "Kauf wiederherstellen";
 "ProContinue" = "Weiter verwenden";
 "ProFreeUntilLaunch" = "Bis zum Start von Pro können Sie es kostenlos nutzen";
+
+"OpenSourceNotices" = "Open-Source-Hinweise";
+"Close" = "Schließen";
+"ShortcutsNotRegistered" = "Diese Kurzbefehle nutzt bereits eine andere App: %@";
+"ApplicationRefusedAccess" = "%1$@ lässt das Verschieben von Fenstern nicht zu. Beenden Sie %1$@ und öffnen Sie es erneut.";

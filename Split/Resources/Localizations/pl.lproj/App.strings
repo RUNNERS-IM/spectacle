@@ -94,7 +94,7 @@
 "PermissionOnHint" = "Włączone. Split może przenosić okna.";
 "PermissionOffHint" = "Wyłączone. Okien nie można przenosić, dopóki tego nie włączysz.";
 "PermissionOpen" = "Otwórz Ustawienia";
-"AboutLine" = "Split %@ · darmowy i otwartoźródłowy";
+"AboutLine" = "Split %@ · darmowy";
 "Website" = "Witryna";
 "SectionBasic" = "Środek i pełny ekran";
 "SectionHalves" = "Połowy";
@@ -164,3 +164,8 @@
 "ProRestore" = "Przywróć zakup";
 "ProContinue" = "Używaj dalej";
 "ProFreeUntilLaunch" = "Za darmo do premiery Pro";
+
+"OpenSourceNotices" = "Informacje o otwartym oprogramowaniu";
+"Close" = "Zamknij";
+"ShortcutsNotRegistered" = "Inna aplikacja używa już tych skrótów: %@";
+"ApplicationRefusedAccess" = "%1$@ nie pozwala Split przesuwać swoich okien. Zamknij %1$@ i otwórz ponownie.";

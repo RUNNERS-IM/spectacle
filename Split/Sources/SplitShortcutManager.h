@@ -24,6 +24,10 @@ SPECTACLE_INIT_AND_NEW_UNAVAILABLE
 
 - (BOOL)doesShortcutExist:(SplitShortcut *)shortcut;
 
+/// Shortcuts macOS refused to register, most often because another app already uses the same
+/// keys. They do nothing until the other app lets go of them or they are changed.
+- (NSArray<SplitShortcut *> *)shortcutsFailedToRegister;
+
 - (void)registerShortcuts;
 - (void)unregisterShortcuts;
 

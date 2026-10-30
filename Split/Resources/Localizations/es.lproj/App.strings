@@ -110,7 +110,7 @@
 "PermissionOffHint" = "Desactivado. Las ventanas no se pueden mover hasta que lo actives.";
 "PermissionOpen" = "Abrir Ajustes";
 /* %@ is the version number */
-"AboutLine" = "Split %@ · gratuito y de código abierto";
+"AboutLine" = "Split %@ · gratuito";
 "Website" = "Sitio web";
 "SectionBasic" = "Centrar y pantalla completa";
 "SectionHalves" = "Mitades";
@@ -185,3 +185,8 @@
 "ProRestore" = "Restaurar compra";
 "ProContinue" = "Seguir usando";
 "ProFreeUntilLaunch" = "Gratis hasta que se lance Pro";
+
+"OpenSourceNotices" = "Avisos de código abierto";
+"Close" = "Cerrar";
+"ShortcutsNotRegistered" = "Otra app ya usa estos atajos: %@";
+"ApplicationRefusedAccess" = "%1$@ no deja que Split mueva sus ventanas. Cierra %1$@ y vuelve a abrirla.";

@@ -110,7 +110,7 @@
 "PermissionOffHint" = "Non attivo. Le finestre non possono essere spostate finché non lo attivi.";
 "PermissionOpen" = "Apri Impostazioni";
 /* %@ is the version number */
-"AboutLine" = "Split %@ · gratuito e open source";
+"AboutLine" = "Split %@ · gratuito";
 "Website" = "Sito web";
 "SectionBasic" = "Centro e schermo intero";
 "SectionHalves" = "Metà";
@@ -185,3 +185,8 @@
 "ProRestore" = "Ripristina acquisto";
 "ProContinue" = "Continua a usare";
 "ProFreeUntilLaunch" = "Gratis fino al lancio di Pro";
+
+"OpenSourceNotices" = "Note open source";
+"Close" = "Chiudi";
+"ShortcutsNotRegistered" = "Un’altra app usa già queste scorciatoie: %@";
+"ApplicationRefusedAccess" = "%1$@ non permette a Split di spostare le sue finestre. Chiudi %1$@ e riaprila.";

@@ -110,7 +110,7 @@
 "PermissionOffHint" = "Off. Windows can't move until you turn it on.";
 "PermissionOpen" = "Open Settings";
 /* %@ is the version number */
-"AboutLine" = "Split %@ · free and open source";
+"AboutLine" = "Split %@ · free";
 "Website" = "Website";
 "SectionBasic" = "Center and full screen";
 "SectionHalves" = "Halves";
@@ -185,3 +185,8 @@
 "ProRestore" = "Restore Purchase";
 "ProContinue" = "Keep Using";
 "ProFreeUntilLaunch" = "Free to use until Pro launches";
+
+"OpenSourceNotices" = "Open Source Notices";
+"Close" = "Close";
+"ShortcutsNotRegistered" = "Another app already uses these shortcuts: %@";
+"ApplicationRefusedAccess" = "%1$@ refused to let Split move its windows. Quit %1$@ and open it again.";
