@@ -170,7 +170,50 @@ std::vector<Window> VisibleWindows(const std::vector<Screen> &screens) {
 
 std::string refusingApp;
 
+AppInfo InfoOf(NSRunningApplication *application) {
+  return {application.bundleIdentifier.UTF8String ?: "", application.localizedName.UTF8String ?: ""};
+}
+
+int FlagsOf(NSEventModifierFlags modifiers) {
+  return ((modifiers & NSEventModifierFlagControl) ? 1 : 0) | ((modifiers & NSEventModifierFlagOption) ? 2 : 0) |
+         ((modifiers & NSEventModifierFlagShift) ? 4 : 0) | ((modifiers & NSEventModifierFlagCommand) ? 8 : 0);
+}
+
+EventSink sink;
+id globalMonitor;
+id localMonitor;
+id activationObserver;
+
 }  // namespace
+
+std::optional<AppInfo> FrontmostApp() {
+  NSRunningApplication *front = NSWorkspace.sharedWorkspace.frontmostApplication;
+  if (!front) return std::nullopt;
+  return InfoOf(front);
+}
+
+void StartWatching(EventSink newSink) {
+  sink = std::move(newSink);
+  if (activationObserver) return;
+  auto modifiers = ^(NSEvent *event) {
+    if (sink) sink(Event{Event::Modifiers, FlagsOf(event.modifierFlags), {}});
+  };
+  // Why: the global monitor only hears keys meant for other apps; the local one covers Split's own windows.
+  globalMonitor = [NSEvent addGlobalMonitorForEventsMatchingMask:NSEventMaskFlagsChanged handler:modifiers];
+  localMonitor = [NSEvent addLocalMonitorForEventsMatchingMask:NSEventMaskFlagsChanged
+                                                       handler:^NSEvent *(NSEvent *event) {
+                                                         modifiers(event);
+                                                         return event;
+                                                       }];
+  activationObserver = [NSWorkspace.sharedWorkspace.notificationCenter
+      addObserverForName:NSWorkspaceDidActivateApplicationNotification
+                  object:nil
+                   queue:NSOperationQueue.mainQueue
+              usingBlock:^(NSNotification *note) {
+                NSRunningApplication *application = note.userInfo[NSWorkspaceApplicationKey];
+                if (sink && application) sink(Event{Event::Activated, 0, InfoOf(application)});
+              }];
+}
 
 bool IsTrusted(bool prompt) {
   NSDictionary *options = @{(__bridge NSString *)kAXTrustedCheckOptionPrompt : @(prompt)};

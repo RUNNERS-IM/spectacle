@@ -3,6 +3,7 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
 #include <optional>
 #include <string>
 #include <vector>
@@ -42,10 +43,30 @@ struct Move {
   Rect rect;
 };
 
+/// The app in front: bundle id (macOS), executable name (Windows/Linux) and the name people see.
+struct AppInfo {
+  std::string id;
+  std::string name;
+};
+
+/// Something the main process wants to hear about without polling.
+struct Event {
+  enum Kind { Modifiers, Activated } kind = Modifiers;
+  /// For Modifiers: ctrl = 1, alt = 2, shift = 4, logo (⌘ / Super) = 8.
+  int flags = 0;
+  /// For Activated: the app now in front.
+  AppInfo app;
+};
+
+using EventSink = std::function<void(const Event &)>;
+
 /// Each returns an empty string on success, or a message saying what went wrong.
 std::string TakeSnapshot(bool withWindows, Snapshot &out);
 std::string Apply(const std::vector<Move> &moves);
 /// Whether Split may move other apps' windows; `prompt` asks the user where the OS can.
 bool IsTrusted(bool prompt);
+std::optional<AppInfo> FrontmostApp();
+/// Starts sending modifier and app-switch events to `sink` on the main thread. Calling it again replaces the sink.
+void StartWatching(EventSink sink);
 
 }  // namespace split

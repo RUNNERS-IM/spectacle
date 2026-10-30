@@ -79,10 +79,51 @@ Napi::Value IsTrusted(const Napi::CallbackInfo &info) {
   return Napi::Boolean::New(info.Env(), split::IsTrusted(prompt));
 }
 
+Napi::Value AppToJs(Napi::Env env, const split::AppInfo &app) {
+  auto o = Napi::Object::New(env);
+  o.Set("id", app.id);
+  o.Set("name", app.name);
+  return o;
+}
+
+Napi::Value FrontmostApp(const Napi::CallbackInfo &info) {
+  auto app = split::FrontmostApp();
+  return app ? AppToJs(info.Env(), *app) : info.Env().Null();
+}
+
+Napi::ThreadSafeFunction watcher;
+
+// watch(callback): callback({type: "modifiers", flags} | {type: "activated", app}).
+Napi::Value Watch(const Napi::CallbackInfo &info) {
+  auto env = info.Env();
+  if (watcher) watcher.Release();
+  watcher = Napi::ThreadSafeFunction::New(env, info[0].As<Napi::Function>(), "split-watch", 0, 1);
+  // Why: an open watcher would otherwise keep Node from ever exiting.
+  watcher.Unref(env);
+  split::StartWatching([](const split::Event &event) {
+    auto copy = new split::Event(event);
+    watcher.NonBlockingCall(copy, [](Napi::Env env, Napi::Function callback, split::Event *e) {
+      auto o = Napi::Object::New(env);
+      if (e->kind == split::Event::Modifiers) {
+        o.Set("type", "modifiers");
+        o.Set("flags", e->flags);
+      } else {
+        o.Set("type", "activated");
+        o.Set("app", AppToJs(env, e->app));
+      }
+      delete e;
+      callback.Call({o});
+    });
+  });
+  return env.Undefined();
+}
+
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
   exports.Set("snapshot", Napi::Function::New(env, Snapshot));
   exports.Set("apply", Napi::Function::New(env, Apply));
   exports.Set("isTrusted", Napi::Function::New(env, IsTrusted));
+  exports.Set("frontmostApp", Napi::Function::New(env, FrontmostApp));
+  exports.Set("watch", Napi::Function::New(env, Watch));
   return exports;
 }
 
