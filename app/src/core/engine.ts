@@ -307,6 +307,14 @@ export class Engine {
     return { moves: [item], feedback: { kind: "Moved" } };
   }
 
+  /**
+   * Remembers where windows were before something other than a shortcut moved them, so one
+   * undo puts all of them back. Port of `moveWindows:toRects:` (used when monitors change).
+   */
+  rememberArrangement(previous: readonly Move[]): void {
+    this.lastArrangement = previous.slice();
+  }
+
   private arrange(snapshot: Snapshot, gap: number): Outcome {
     const ordered = screensInConsistentOrder(snapshot.screens);
     const main = ordered[0] ?? null;
