@@ -1,4 +1,4 @@
-//! Windows and Linux are not written yet: no screens, no windows, nothing moves.
+//! Systems other than macOS, Windows and Linux: no screens, no windows, nothing moves.
 use crate::{AppInfo, Event, Move, Snapshot};
 
 pub fn snapshot(_with_windows: bool) -> Result<Snapshot, String> {
@@ -17,4 +17,4 @@ pub fn frontmost_app() -> Option<AppInfo> {
     None
 }
 
-pub fn watch(_sink: Box<dyn Fn(Event)>) {}
+pub fn watch(_sink: Box<dyn Fn(Event) + Send + Sync>) {}

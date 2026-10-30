@@ -15,6 +15,8 @@
     "test": "tsx --test test/core/*.test.ts",
     "dist:mac": "pnpm run native:mac-universal && electron-vite build && electron-builder --mac --config builder.config.cjs",
     "native:mac-universal": "sh scripts/native-mac-universal.sh",
+    "dist:win": "pnpm run native && electron-vite build && electron-builder --win --config builder.config.cjs",
+    "dist:linux": "pnpm run native && electron-vite build && electron-builder --linux --config builder.config.cjs",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {

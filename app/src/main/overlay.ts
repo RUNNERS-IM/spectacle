@@ -124,6 +124,26 @@ function displayFor(rects: Rect[]): Display {
   return screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
 }
 
+/**
+ * The native module gives physical pixels on Windows and Linux, while Electron places windows in
+ * DIPs (pixels divided by the display scale). macOS gives points, which already are DIPs.
+ */
+function toDip(rect: Rect): Rect {
+  if (isMac) return rect;
+  if (process.platform === "win32") return screen.screenToDipRect(null, rect);
+  // Why: Electron on Linux uses one scale for every monitor, the primary display's.
+  const scale = screen.getPrimaryDisplay().scaleFactor;
+  return { x: rect.x / scale, y: rect.y / scale, width: rect.width / scale, height: rect.height / scale };
+}
+
+/** The other way: an Electron rect (a window's bounds, a display's work area) in native coordinates. */
+export function fromDip(rect: Rect): Rect {
+  if (isMac) return rect;
+  if (process.platform === "win32") return screen.dipToScreenRect(null, rect);
+  const scale = screen.getPrimaryDisplay().scaleFactor;
+  return { x: rect.x * scale, y: rect.y * scale, width: rect.width * scale, height: rect.height * scale };
+}
+
 function relativeTo(rect: Rect, origin: Rect): Rect {
   return { x: rect.x - origin.x, y: rect.y - origin.y, width: rect.width, height: rect.height };
 }
@@ -149,12 +169,13 @@ export function showFeedback(request: FeedbackRequest): void {
     return;
   }
   const window = ensureOverlayWindow();
-  const display = displayFor(request.rects);
+  const rects = request.rects.map(toDip);
+  const display = displayFor(rects);
   const bounds = display.bounds;
   const message: OverlayMessage = {
     ...request,
     duration: request.duration > 0 ? request.duration : durationMs(request.feedback.duration),
-    rects: request.rects.map((rect) => relativeTo(rect, bounds)),
+    rects: rects.map((rect) => relativeTo(rect, bounds)),
     area: relativeTo(display.workArea, bounds),
   };
   const generation = ++overlayGeneration;

@@ -3,14 +3,22 @@
 //! in front and the modifier keys held. The math, history and arrange live in TypeScript (src/core).
 //! Everything here runs on the main thread, where Electron calls it.
 
+#[cfg(target_os = "linux")]
+mod linux;
 #[cfg(target_os = "macos")]
 mod mac;
-#[cfg(not(target_os = "macos"))]
+#[cfg(not(any(target_os = "macos", windows, target_os = "linux")))]
 mod other;
+#[cfg(windows)]
+mod win;
+#[cfg(target_os = "linux")]
+use linux as platform;
 #[cfg(target_os = "macos")]
 use mac as platform;
-#[cfg(not(target_os = "macos"))]
+#[cfg(not(any(target_os = "macos", windows, target_os = "linux")))]
 use other as platform;
+#[cfg(windows)]
+use win as platform;
 
 use napi::bindgen_prelude::*;
 use napi::threadsafe_function::{ThreadsafeFunction, ThreadsafeFunctionCallMode};

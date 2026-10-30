@@ -35,7 +35,7 @@ import { layoutMenuItems, layoutRestoringForDisplays, restoreLayout, setupLayout
 import { guideGranted, openAccessibilitySettings, registerGuideIpc, showGuide } from "./guide.ts";
 import { currentLanguage, loadLanguage, strings, t } from "./i18n.ts";
 import { accelerator, displayShortcut, displayText } from "./keys.ts";
-import { createOverlay, hideFeedback, hideSheet, showAbout, showFeedback, showNotices, showSheet } from "./overlay.ts";
+import { createOverlay, fromDip, hideFeedback, hideSheet, showAbout, showFeedback, showNotices, showSheet } from "./overlay.ts";
 import { bindings, loadSettings, sanitize, saveSettings, shortcutText } from "./settings.ts";
 import { checkForUpdatesNow, startUpdater } from "./updater.ts";
 
@@ -628,7 +628,7 @@ function registerIpc(): void {
     showFeedback({
       ...overlayBase(),
       kind: "frame",
-      rects: [Rect.from(bounds)],
+      rects: [Rect.from(fromDip(bounds))],
       title: t("MoveToCenter"),
       shortcut: shortcutLabel("MoveToCenter"),
       tip: "",
@@ -763,7 +763,7 @@ function start(): void {
       const label = displayChangeLabel(settings, count, restored, shortcutLabel("UndoLastMove"));
       if (!label) return;
       const area = screen.getDisplayNearestPoint(screen.getCursorScreenPoint()).workArea;
-      showFeedback({ ...overlayBase(), kind: "label", rects: [Rect.from(area)], title: label.title, shortcut: "", tip: label.tip });
+      showFeedback({ ...overlayBase(), kind: "label", rects: [Rect.from(fromDip(area))], title: label.title, shortcut: "", tip: label.tip });
     },
   });
   syncShortcuts();
