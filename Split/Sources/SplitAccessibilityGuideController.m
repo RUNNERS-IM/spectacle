@@ -36,6 +36,22 @@ static NSTextField *WrappingLabel(NSString *string, CGFloat width)
 
 @end
 
+/// The light or dark screenshot, picked each time it is drawn so it follows the system appearance.
+static NSImage *SettingsShotMatchingAppearance(void)
+{
+  NSImage *light = [NSBundle.mainBundle imageForResource:@"GuideSettings"];
+  NSImage *dark = [NSBundle.mainBundle imageForResource:@"GuideSettingsDark"] ?: light;
+  if (!light) {
+    return nil;
+  }
+  return [NSImage imageWithSize:light.size flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
+    NSAppearanceName match = [NSAppearance.currentDrawingAppearance
+        bestMatchFromAppearancesWithNames:@[NSAppearanceNameAqua, NSAppearanceNameDarkAqua]];
+    [([match isEqualToString:NSAppearanceNameDarkAqua] ? dark : light) drawInRect:dstRect];
+    return YES;
+  }];
+}
+
 @implementation SplitAccessibilityGuideController
 
 + (BOOL)isAccessibilityPermissionGranted
@@ -220,9 +236,9 @@ static NSTextField *WrappingLabel(NSString *string, CGFloat width)
   description.alignment = NSTextAlignmentCenter;
 
   // A real screenshot of the Accessibility list (only the header and the Split row), so people
-  // can see exactly which switch to turn on. English and Korean images; others use English.
+  // can see exactly which switch to turn on. English and Korean images, light and dark; others use English.
   NSMutableArray<NSView *> *rows = [NSMutableArray arrayWithObjects:icon, title, description, nil];
-  NSImage *settingsShot = [NSBundle.mainBundle imageForResource:@"GuideSettings"];
+  NSImage *settingsShot = SettingsShotMatchingAppearance();
   if (settingsShot) {
     NSImageView *shotView = [NSImageView imageViewWithImage:settingsShot];
     shotView.imageScaling = NSImageScaleProportionallyUpOrDown;
