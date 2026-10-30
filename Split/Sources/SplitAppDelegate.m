@@ -21,6 +21,7 @@
 #import "SplitWindowPositionManager.h"
 #import "SplitWindowFeedback.h"
 #import "SplitLayoutMenu.h"
+#import "SplitLayouts.h"
 #import "SplitWindowArranger.h"
 
 @implementation SplitAppDelegate
@@ -421,12 +422,63 @@ static NSArray<SplitShortcut *> *SplitShortcutsAddingNewDefaults(NSArray<SplitSh
 
 #pragma mark - Status item
 
-/// The menu bar icon is a screen outline with a pane inside that slowly slides wider and narrower.
+/// The menu bar icon is a screen outline whose inside splits into the layout shapes in turn:
+/// halves → one large and two stacked → 2 × 2, sliding from one to the next.
 /// Drawn on a 24-unit grid, scaled to an 18pt template image so macOS tints it for light and dark menu bars.
-static const NSTimeInterval SplitStatusItemCycle = 6.0;
+static const NSTimeInterval SplitStatusItemHold = 1.2;
+static const NSTimeInterval SplitStatusItemSlide = 0.35;
 static const NSTimeInterval SplitStatusItemFrameInterval = 1.0 / 15.0;
+#define SplitStatusItemPaneCount 4
 
-static NSImage *SplitStatusItemImage(CGFloat paneWidth)
+typedef struct {
+  NSRect panes[SplitStatusItemPaneCount];
+} SplitStatusItemPanes;
+
+/// Each shape's cells spread over four panes, so every step is a pane sliding or splitting in two.
+static SplitStatusItemPanes SplitStatusItemShapePanes(NSUInteger step)
+{
+  static const NSUInteger cellForPane[3][SplitStatusItemPaneCount] = {{0, 1, 1, 0}, {0, 1, 2, 0}, {0, 1, 3, 2}};
+  SplitLayoutShape shapes[] = {SplitLayoutShapeHalves, SplitLayoutShapeMainAndTwo, SplitLayoutShapeGrid};
+  NSArray<NSValue *> *cells = SplitLayoutShapeFractions(shapes[step]);
+  // The inside of the outline, and the gap between panes.
+  const NSRect inside = NSMakeRect(4.5, 6.5, 15, 11);
+  const CGFloat gap = 1.5;
+  SplitStatusItemPanes result = {0};
+  for (NSUInteger i = 0; i < SplitStatusItemPaneCount; i++) {
+    NSRect cell = cells[cellForPane[step][i]].rectValue;
+    result.panes[i] = NSMakeRect(NSMinX(inside) + NSMinX(cell) * (NSWidth(inside) + gap),
+                                 NSMinY(inside) + NSMinY(cell) * (NSHeight(inside) + gap),
+                                 NSWidth(cell) * (NSWidth(inside) + gap) - gap,
+                                 NSHeight(cell) * (NSHeight(inside) + gap) - gap);
+  }
+  return result;
+}
+
+/// Panes at a point in the cycle: each shape holds, then eases into the next.
+static SplitStatusItemPanes SplitStatusItemPanesAtTime(NSTimeInterval time)
+{
+  const NSTimeInterval step = SplitStatusItemHold + SplitStatusItemSlide;
+  NSTimeInterval progress = fmod(time, step * 3);
+  NSUInteger index = MIN((NSUInteger)(progress / step), 2);
+  SplitStatusItemPanes from = SplitStatusItemShapePanes(index);
+  NSTimeInterval slide = progress - index * step - SplitStatusItemHold;
+  if (slide <= 0) {
+    return from;
+  }
+  SplitStatusItemPanes to = SplitStatusItemShapePanes((index + 1) % 3);
+  CGFloat t = (1 - cos(M_PI * MIN(slide / SplitStatusItemSlide, 1))) / 2;
+  SplitStatusItemPanes result = {0};
+  for (NSUInteger i = 0; i < SplitStatusItemPaneCount; i++) {
+    NSRect a = from.panes[i], b = to.panes[i];
+    result.panes[i] = NSMakeRect(NSMinX(a) + (NSMinX(b) - NSMinX(a)) * t,
+                                 NSMinY(a) + (NSMinY(b) - NSMinY(a)) * t,
+                                 NSWidth(a) + (NSWidth(b) - NSWidth(a)) * t,
+                                 NSHeight(a) + (NSHeight(b) - NSHeight(a)) * t);
+  }
+  return result;
+}
+
+static NSImage *SplitStatusItemImage(SplitStatusItemPanes panes)
 {
   NSImage *image = [NSImage imageWithSize:NSMakeSize(18, 18) flipped:YES drawingHandler:^BOOL(NSRect rect) {
     NSAffineTransform *transform = [NSAffineTransform transform];
@@ -436,34 +488,25 @@ static NSImage *SplitStatusItemImage(CGFloat paneWidth)
     NSBezierPath *screen = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(2.5, 4.5, 19, 15) xRadius:3 yRadius:3];
     screen.lineWidth = 2;
     [screen stroke];
-    [[NSBezierPath bezierPathWithRoundedRect:NSMakeRect(4.5, 6.5, paneWidth, 11) xRadius:1 yRadius:1] fill];
+    for (NSUInteger i = 0; i < SplitStatusItemPaneCount; i++) {
+      [[NSBezierPath bezierPathWithRoundedRect:panes.panes[i] xRadius:1 yRadius:1] fill];
+    }
     return YES;
   }];
   [image setTemplate:YES];
   return image;
 }
 
-/// Pane width at a point in the cycle: 7 → 12 → 7 → 4 → 7, easing in and out between each stop.
-static CGFloat SplitStatusItemPaneWidth(NSTimeInterval time)
-{
-  static const CGFloat stops[] = {7, 12, 7, 4, 7};
-  NSTimeInterval progress = fmod(time, SplitStatusItemCycle) / SplitStatusItemCycle * 4;
-  NSInteger segment = MIN((NSInteger)progress, 3);
-  CGFloat t = progress - segment;
-  CGFloat eased = (1 - cos(M_PI * t)) / 2;
-  return stops[segment] + (stops[segment + 1] - stops[segment]) * eased;
-}
-
 - (void)enableStatusItem
 {
   _statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
-  _statusItem.button.image = SplitStatusItemImage(SplitStatusItemPaneWidth(0));
+  _statusItem.button.image = SplitStatusItemImage(SplitStatusItemPanesAtTime(0));
   _statusItem.menu = _statusItemMenu;
   _statusItem.button.toolTip = [@"Split " stringByAppendingString:SplitUtilities.applicationVersion];
   NSTimeInterval start = NSDate.timeIntervalSinceReferenceDate;
   __weak NSStatusItem *statusItem = _statusItem;
   _statusItemTimer = [NSTimer timerWithTimeInterval:SplitStatusItemFrameInterval repeats:YES block:^(NSTimer *timer) {
-    statusItem.button.image = SplitStatusItemImage(SplitStatusItemPaneWidth(NSDate.timeIntervalSinceReferenceDate - start));
+    statusItem.button.image = SplitStatusItemImage(SplitStatusItemPanesAtTime(NSDate.timeIntervalSinceReferenceDate - start));
   }];
   _statusItemTimer.tolerance = SplitStatusItemFrameInterval / 2;
   // Common modes keep the pane moving while the status menu is open.
