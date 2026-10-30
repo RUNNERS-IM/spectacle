@@ -29,9 +29,12 @@ pub struct Show {
 }
 
 pub fn create(app: &AppHandle) -> tauri::Result<()> {
-    let window = WebviewWindowBuilder::new(app, LABEL, WebviewUrl::App("index.html".into()))
+    let builder = WebviewWindowBuilder::new(app, LABEL, WebviewUrl::App("index.html".into()));
+    // Why: macOS is not a target of this app, and there transparency needs a private API feature.
+    #[cfg(not(target_os = "macos"))]
+    let builder = builder.transparent(true);
+    let window = builder
         .title("Split")
-        .transparent(true)
         .decorations(false)
         .always_on_top(true)
         .skip_taskbar(true)
