@@ -295,7 +295,8 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
 {
   NSViewController *controller = [NSViewController new];
   controller.view = view;
-  controller.title = title;
+  // The window shows the selected controller's title; keep it "Split Settings" on every tab.
+  controller.title = SplitLocalized(@"SettingsWindowTitle");
   controller.preferredContentSize = view.fittingSize;
   NSTabViewItem *item = [NSTabViewItem tabViewItemWithViewController:controller];
   item.label = title;
