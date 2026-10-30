@@ -3,6 +3,7 @@
 #import <ApplicationServices/ApplicationServices.h>
 
 #import "SplitAccessibilityElement.h"
+#import "SplitLayouts.h"
 
 const NSUInteger kSplitArrangeMaximumWindowCount = 9;
 
@@ -249,6 +250,7 @@ NSArray<SplitArrangedWindow *> *SplitVisibleWindows(NSScreen *screen)
     }
     SplitArrangedWindow *window = [SplitArrangedWindow new];
     window.element = element;
+    window.pid = pid;
     window.originalRect = bounds;
     [result addObject:window];
   }
@@ -340,7 +342,7 @@ static const NSTimeInterval kSettleDelay = 1.0;
 @implementation SplitWindowPlace
 @end
 
-static NSString *DisplayIDOfScreen(NSScreen *screen)
+NSString *SplitDisplayIDOfScreen(NSScreen *screen)
 {
   NSNumber *number = screen.deviceDescription[@"NSScreenNumber"];
   CFUUIDRef uuid = number ? CGDisplayCreateUUIDFromDisplayID(number.unsignedIntValue) : NULL;
@@ -352,7 +354,7 @@ static NSString *DisplayIDOfScreen(NSScreen *screen)
   return string;
 }
 
-static NSScreen *ScreenContainingPoint(CGPoint point)
+NSScreen *SplitScreenContainingPoint(CGPoint point)
 {
   for (NSScreen *screen in NSScreen.screens) {
     if (CGRectContainsPoint(TopLeftRectFromCocoaRect(screen.frame), point)) {
@@ -362,11 +364,11 @@ static NSScreen *ScreenContainingPoint(CGPoint point)
   return nil;
 }
 
-static NSSet<NSString *> *CurrentDisplayIDs(void)
+NSSet<NSString *> *SplitCurrentDisplayIDs(void)
 {
   NSMutableSet *ids = [NSMutableSet new];
   for (NSScreen *screen in NSScreen.screens) {
-    [ids addObject:DisplayIDOfScreen(screen)];
+    [ids addObject:SplitDisplayIDOfScreen(screen)];
   }
   return ids;
 }
@@ -405,7 +407,7 @@ static NSSet<NSString *> *CurrentDisplayIDs(void)
 
 - (void)start
 {
-  _displayIDs = CurrentDisplayIDs();
+  _displayIDs = SplitCurrentDisplayIDs();
   [_seenDisplayIDs unionSet:_displayIDs];
   [self record];
   _recordTimer = [NSTimer scheduledTimerWithTimeInterval:kRecordInterval target:self selector:@selector(record) userInfo:nil repeats:YES];
@@ -432,12 +434,12 @@ static NSSet<NSString *> *CurrentDisplayIDs(void)
   }
   NSMapTable *places = [NSMapTable strongToStrongObjectsMapTable];
   for (SplitArrangedWindow *window in SplitVisibleWindows(nil)) {
-    NSScreen *screen = ScreenContainingPoint(CGPointMake(CGRectGetMidX(window.originalRect), CGRectGetMidY(window.originalRect)));
+    NSScreen *screen = SplitScreenContainingPoint(CGPointMake(CGRectGetMidX(window.originalRect), CGRectGetMidY(window.originalRect)));
     if (!screen) {
       continue;
     }
     SplitWindowPlace *place = [SplitWindowPlace new];
-    place.displayID = DisplayIDOfScreen(screen);
+    place.displayID = SplitDisplayIDOfScreen(screen);
     place.rect = window.originalRect;
     [places setObject:place forKey:window.element];
   }
@@ -511,11 +513,22 @@ static void AddLayout(NSArray<SplitArrangedWindow *> *windows, NSScreen *screen,
 
 - (void)handleChange
 {
-  NSSet<NSString *> *newIDs = CurrentDisplayIDs();
+  NSSet<NSString *> *newIDs = SplitCurrentDisplayIDs();
   NSSet<NSString *> *oldIDs = _displayIDs ?: newIDs;
   _displayIDs = newIDs;
-  if (!SplitDisplayChangeArranger.enabled || [newIDs isEqualToSet:oldIDs]) {
+  if ([newIDs isEqualToSet:oldIDs]) {
     // Same monitors (waking from sleep, a resolution change): leave everything alone.
+    return;
+  }
+  // A layout saved for exactly these monitors wins over the automatic placing below.
+  SplitSavedLayout *savedLayout = [SplitLayoutStore.sharedStore layoutRestoringForDisplays:newIDs];
+  if (savedLayout) {
+    [_seenDisplayIDs unionSet:newIDs];
+    [_awayPlaces removeAllObjects];
+    _completion(SplitRestoreLayout(savedLayout, _arranger), YES);
+    return;
+  }
+  if (!SplitDisplayChangeArranger.enabled) {
     return;
   }
   NSMutableSet<NSString *> *removed = [oldIDs mutableCopy];
@@ -561,8 +574,8 @@ static void AddLayout(NSArray<SplitArrangedWindow *> *windows, NSScreen *screen,
         [_awayPlaces setObject:place forKey:window.element];
       }
     } else {
-      NSScreen *screen = ScreenContainingPoint(CGPointMake(CGRectGetMidX(window.originalRect), CGRectGetMidY(window.originalRect)));
-      NSString *displayID = screen ? DisplayIDOfScreen(screen) : @"";
+      NSScreen *screen = SplitScreenContainingPoint(CGPointMake(CGRectGetMidX(window.originalRect), CGRectGetMidY(window.originalRect)));
+      NSString *displayID = screen ? SplitDisplayIDOfScreen(screen) : @"";
       if (!stayingByDisplay[displayID]) {
         stayingByDisplay[displayID] = [NSMutableArray new];
       }
@@ -582,7 +595,7 @@ static void AddLayout(NSArray<SplitArrangedWindow *> *windows, NSScreen *screen,
       }
       NSMutableSet *incoming = [NSMutableSet setWithArray:[homeless subarrayWithRange:NSMakeRange(next, share)]];
       next += share;
-      NSArray *staying = stayingByDisplay[DisplayIDOfScreen(screens[index])] ?: @[];
+      NSArray *staying = stayingByDisplay[SplitDisplayIDOfScreen(screens[index])] ?: @[];
       NSMutableArray<SplitArrangedWindow *> *together = [NSMutableArray new];
       for (SplitArrangedWindow *window in windows) {
         if ([incoming containsObject:window] || [staying containsObject:window]) {

@@ -143,3 +143,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "Digita l’abbreviazione";
 "ShortcutRecorderLabelStopRecording" = "Interrompi registrazione";
 "ShortcutRecorderLabelUseExisting" = "Mantieni l’attuale";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "Disposizioni";
+"LayoutDisplays" = "Monitor";
+"LayoutShapes" = "Forme";
+"LayoutSaved" = "Disposizioni salvate";
+"LayoutSavedEmpty" = "Nessuna per ora. Creane una con «Salva disposizione attuale…» qui sotto.";
+"LayoutShapeHalves" = "Metà";
+"LayoutShapeThirds" = "Terzi";
+"LayoutShapeMainAndTwo" = "Grande + due";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "Una grande";
+"LayoutWindowCount" = "%lu finestre";
+"LayoutSave" = "Salva disposizione attuale…";
+"LayoutDelete" = "Elimina disposizione salvata";
+"LayoutSaveTitle" = "Salvare la disposizione attuale delle finestre?";
+"LayoutSaveMessage" = "Salva con un nome dove si trovano le finestre visibili. Un clic nel menu le riporta tutte insieme.";
+"LayoutSaveNamePlaceholder" = "Nome";
+"LayoutSaveDefaultName" = "Disposizione %lu";
+"LayoutSaveAuto" = "Carica automaticamente quando sono collegati questi monitor";
+"LayoutSaveButton" = "Salva";
+"LayoutSaveCancel" = "Annulla";
+"ShortcutsOn" = "Scorciatoie attive";
+"ShortcutsOffForHour" = "Scorciatoie disattivate · di nuovo attive alle %@";
+"ShortcutsOffForApplication" = "Scorciatoie disattivate · mentre usi %@";
+"ShortcutsOffNoPermission" = "Scorciatoie disattivate · serve l’accesso Accessibilità";

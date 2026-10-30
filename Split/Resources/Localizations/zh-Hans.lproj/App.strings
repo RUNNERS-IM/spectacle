@@ -122,3 +122,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "输入快捷键";
 "ShortcutRecorderLabelStopRecording" = "停止录制";
 "ShortcutRecorderLabelUseExisting" = "保留当前";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "布局";
+"LayoutDisplays" = "显示器";
+"LayoutShapes" = "形状";
+"LayoutSaved" = "已保存的布局";
+"LayoutSavedEmpty" = "还没有。用下方的“保存当前布局…”来创建。";
+"LayoutShapeHalves" = "左右各半";
+"LayoutShapeThirds" = "三等分";
+"LayoutShapeMainAndTwo" = "大 + 两个";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "一个最大";
+"LayoutWindowCount" = "%lu 个窗口";
+"LayoutSave" = "保存当前布局…";
+"LayoutDelete" = "删除已保存的布局";
+"LayoutSaveTitle" = "要保存当前的窗口布局吗？";
+"LayoutSaveMessage" = "以一个名称保存可见窗口的位置。在菜单中点按即可一次全部恢复。";
+"LayoutSaveNamePlaceholder" = "名称";
+"LayoutSaveDefaultName" = "布局 %lu";
+"LayoutSaveAuto" = "连接这些显示器时自动载入";
+"LayoutSaveButton" = "保存";
+"LayoutSaveCancel" = "取消";
+"ShortcutsOn" = "快捷键已开启";
+"ShortcutsOffForHour" = "快捷键已关闭 · %@ 恢复";
+"ShortcutsOffForApplication" = "快捷键已关闭 · 使用 %@ 时";
+"ShortcutsOffNoPermission" = "快捷键已关闭 · 需要辅助功能权限";

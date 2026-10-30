@@ -127,3 +127,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "단축키를 누르세요";
 "ShortcutRecorderLabelStopRecording" = "입력 그만";
 "ShortcutRecorderLabelUseExisting" = "그대로 두기";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "배치";
+"LayoutDisplays" = "모니터";
+"LayoutShapes" = "모양";
+"LayoutSaved" = "저장한 배치";
+"LayoutSavedEmpty" = "아직 없어요. 아래 「지금 배치 저장…」으로 만들어요.";
+"LayoutShapeHalves" = "반 · 반";
+"LayoutShapeThirds" = "3등분";
+"LayoutShapeMainAndTwo" = "큰 창 + 둘";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "하나 크게";
+"LayoutWindowCount" = "창 %lu개";
+"LayoutSave" = "지금 배치 저장…";
+"LayoutDelete" = "저장한 배치 지우기";
+"LayoutSaveTitle" = "지금 창 배치를 저장할까요?";
+"LayoutSaveMessage" = "보이는 창의 자리를 이름을 붙여 저장해요. 메뉴에서 누르면 한 번에 되살아나요.";
+"LayoutSaveNamePlaceholder" = "이름";
+"LayoutSaveDefaultName" = "배치 %lu";
+"LayoutSaveAuto" = "이 모니터 조합이 되면 자동으로 불러오기";
+"LayoutSaveButton" = "저장";
+"LayoutSaveCancel" = "취소";
+"ShortcutsOn" = "단축키 켜짐";
+"ShortcutsOffForHour" = "단축키 꺼짐 · %@에 다시 켜져요";
+"ShortcutsOffForApplication" = "단축키 꺼짐 · %@ 쓰는 동안";
+"ShortcutsOffNoPermission" = "단축키 꺼짐 · 손쉬운 사용 권한이 필요해요";

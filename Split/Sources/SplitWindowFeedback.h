@@ -90,4 +90,7 @@ NSColor *SplitMoveFeedbackColorForName(NSString *name);
 /// Small template images that show where a window goes, for the status menu.
 NSImage *_Nullable SplitMenuImageForShortcutName(NSString *shortcutName);
 
+/// A template image of a small screen with `fractions` (0…1, top-left based) filled in.
+NSImage *SplitMiniScreenImage(NSArray<NSValue *> *fractions, NSSize size);
+
 NS_ASSUME_NONNULL_END

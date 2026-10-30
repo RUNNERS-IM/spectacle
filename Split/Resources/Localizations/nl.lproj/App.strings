@@ -122,3 +122,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "Typ sneltoets";
 "ShortcutRecorderLabelStopRecording" = "Stop opnemen";
 "ShortcutRecorderLabelUseExisting" = "Behoud huidige";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "Indelingen";
+"LayoutDisplays" = "Beeldschermen";
+"LayoutShapes" = "Vormen";
+"LayoutSaved" = "Bewaarde indelingen";
+"LayoutSavedEmpty" = "Nog geen. Maak er een met ‘Huidige indeling bewaren…’ hieronder.";
+"LayoutShapeHalves" = "Helften";
+"LayoutShapeThirds" = "Derden";
+"LayoutShapeMainAndTwo" = "Groot + twee";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "Eén groot";
+"LayoutWindowCount" = "%lu vensters";
+"LayoutSave" = "Huidige indeling bewaren…";
+"LayoutDelete" = "Bewaarde indeling verwijderen";
+"LayoutSaveTitle" = "Huidige vensterindeling bewaren?";
+"LayoutSaveMessage" = "Bewaart onder een naam waar de zichtbare vensters staan. Eén klik in het menu zet ze allemaal terug.";
+"LayoutSaveNamePlaceholder" = "Naam";
+"LayoutSaveDefaultName" = "Indeling %lu";
+"LayoutSaveAuto" = "Automatisch laden als deze beeldschermen zijn aangesloten";
+"LayoutSaveButton" = "Bewaar";
+"LayoutSaveCancel" = "Annuleer";
+"ShortcutsOn" = "Sneltoetsen aan";
+"ShortcutsOffForHour" = "Sneltoetsen uit · weer aan om %@";
+"ShortcutsOffForApplication" = "Sneltoetsen uit · zolang je %@ gebruikt";
+"ShortcutsOffNoPermission" = "Sneltoetsen uit · toegang tot Toegankelijkheid nodig";

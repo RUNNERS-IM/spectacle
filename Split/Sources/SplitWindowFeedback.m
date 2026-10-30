@@ -772,7 +772,11 @@ static NSDictionary<NSString *, NSString *> *IconNames(void)
 
 static NSImage *MiniScreenImage(NSArray<NSValue *> *fractions)
 {
-  NSSize size = NSMakeSize(22.0, 15.0);
+  return SplitMiniScreenImage(fractions, NSMakeSize(22.0, 15.0));
+}
+
+NSImage *SplitMiniScreenImage(NSArray<NSValue *> *fractions, NSSize size)
+{
   NSImage *image = [NSImage imageWithSize:size flipped:YES drawingHandler:^BOOL(NSRect dstRect) {
     NSRect screen = NSInsetRect(dstRect, 0.75, 0.75);
     NSBezierPath *outline = [NSBezierPath bezierPathWithRoundedRect:screen xRadius:2.5 yRadius:2.5];

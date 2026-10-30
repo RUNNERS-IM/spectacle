@@ -143,3 +143,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "शॉर्टकट टाइप करें";
 "ShortcutRecorderLabelStopRecording" = "रिकॉर्डिंग रोकें";
 "ShortcutRecorderLabelUseExisting" = "मौजूदा रखें";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "लेआउट";
+"LayoutDisplays" = "डिस्प्ले";
+"LayoutShapes" = "आकार";
+"LayoutSaved" = "सहेजे गए लेआउट";
+"LayoutSavedEmpty" = "अभी कोई नहीं। नीचे “मौजूदा लेआउट सहेजें…” से बनाएँ।";
+"LayoutShapeHalves" = "आधे-आधे";
+"LayoutShapeThirds" = "तिहाई";
+"LayoutShapeMainAndTwo" = "बड़ा + दो";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "एक बड़ा";
+"LayoutWindowCount" = "%lu विंडो";
+"LayoutSave" = "मौजूदा लेआउट सहेजें…";
+"LayoutDelete" = "सहेजा गया लेआउट हटाएँ";
+"LayoutSaveTitle" = "मौजूदा विंडो लेआउट सहेजें?";
+"LayoutSaveMessage" = "दिखने वाली विंडो की जगह एक नाम से सहेजता है। मेनू में क्लिक करने पर सब एक साथ वापस आ जाती हैं।";
+"LayoutSaveNamePlaceholder" = "नाम";
+"LayoutSaveDefaultName" = "लेआउट %lu";
+"LayoutSaveAuto" = "ये डिस्प्ले जुड़ने पर अपने आप लोड करें";
+"LayoutSaveButton" = "सहेजें";
+"LayoutSaveCancel" = "रद्द करें";
+"ShortcutsOn" = "शॉर्टकट चालू";
+"ShortcutsOffForHour" = "शॉर्टकट बंद · %@ पर फिर चालू";
+"ShortcutsOffForApplication" = "शॉर्टकट बंद · %@ इस्तेमाल करते समय";
+"ShortcutsOffNoPermission" = "शॉर्टकट बंद · एक्सेसिबिलिटी अनुमति चाहिए";

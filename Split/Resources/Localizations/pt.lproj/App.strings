@@ -122,3 +122,29 @@
 "ShortcutRecorderLabelEnterShortcut" = "Digite o atalho";
 "ShortcutRecorderLabelStopRecording" = "Parar gravação";
 "ShortcutRecorderLabelUseExisting" = "Manter atual";
+
+/* Layouts section at the top of the status menu and the shortcut status line */
+"LayoutSection" = "Disposições";
+"LayoutDisplays" = "Monitores";
+"LayoutShapes" = "Formas";
+"LayoutSaved" = "Disposições salvas";
+"LayoutSavedEmpty" = "Nenhuma ainda. Crie uma com “Salvar disposição atual…” abaixo.";
+"LayoutShapeHalves" = "Metades";
+"LayoutShapeThirds" = "Terços";
+"LayoutShapeMainAndTwo" = "Grande + duas";
+"LayoutShapeGrid" = "2 × 2";
+"LayoutShapeSingle" = "Uma grande";
+"LayoutWindowCount" = "%lu janelas";
+"LayoutSave" = "Salvar disposição atual…";
+"LayoutDelete" = "Apagar disposição salva";
+"LayoutSaveTitle" = "Salvar a disposição atual das janelas?";
+"LayoutSaveMessage" = "Salva com um nome onde estão as janelas visíveis. Um clique no menu traz todas de volta de uma vez.";
+"LayoutSaveNamePlaceholder" = "Nome";
+"LayoutSaveDefaultName" = "Disposição %lu";
+"LayoutSaveAuto" = "Carregar automaticamente quando estes monitores estiverem conectados";
+"LayoutSaveButton" = "Salvar";
+"LayoutSaveCancel" = "Cancelar";
+"ShortcutsOn" = "Atalhos ativados";
+"ShortcutsOffForHour" = "Atalhos desativados · voltam às %@";
+"ShortcutsOffForApplication" = "Atalhos desativados · enquanto usa %@";
+"ShortcutsOffNoPermission" = "Atalhos desativados · precisa de acesso de Acessibilidade";
