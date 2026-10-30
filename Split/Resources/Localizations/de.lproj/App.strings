@@ -169,3 +169,8 @@
 "ShortcutsOffForHour" = "Kurzbefehle aus · wieder an um %@";
 "ShortcutsOffForApplication" = "Kurzbefehle aus · solange %@ benutzt wird";
 "ShortcutsOffNoPermission" = "Kurzbefehle aus · Bedienungshilfen-Zugriff nötig";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "Weitere Apps von RUNNERS";
+"RunnersServicesTitle" = "Dienste von RUNNERS";
+"RunnersGet" = "Laden";

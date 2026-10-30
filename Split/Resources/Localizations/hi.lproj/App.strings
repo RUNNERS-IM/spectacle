@@ -169,3 +169,8 @@
 "ShortcutsOffForHour" = "शॉर्टकट बंद · %@ पर फिर चालू";
 "ShortcutsOffForApplication" = "शॉर्टकट बंद · %@ इस्तेमाल करते समय";
 "ShortcutsOffNoPermission" = "शॉर्टकट बंद · एक्सेसिबिलिटी अनुमति चाहिए";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "RUNNERS की और ऐप्स";
+"RunnersServicesTitle" = "RUNNERS की सेवाएँ";
+"RunnersGet" = "पाएँ";

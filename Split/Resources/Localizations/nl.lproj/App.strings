@@ -148,3 +148,8 @@
 "ShortcutsOffForHour" = "Sneltoetsen uit · weer aan om %@";
 "ShortcutsOffForApplication" = "Sneltoetsen uit · zolang u %@ gebruikt";
 "ShortcutsOffNoPermission" = "Sneltoetsen uit · toegang tot Toegankelijkheid nodig";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "Meer apps van RUNNERS";
+"RunnersServicesTitle" = "Diensten van RUNNERS";
+"RunnersGet" = "Download";

@@ -169,3 +169,8 @@
 "ShortcutsOffForHour" = "Shortcuts off · back on at %@";
 "ShortcutsOffForApplication" = "Shortcuts off · while using %@";
 "ShortcutsOffNoPermission" = "Shortcuts off · Accessibility access needed";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "More apps from RUNNERS";
+"RunnersServicesTitle" = "Services from RUNNERS";
+"RunnersGet" = "Get";

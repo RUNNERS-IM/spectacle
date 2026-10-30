@@ -29,6 +29,7 @@
   NSDictionary<NSString *, NSMenuItem *> *_shortcutMenuItems;
   NSStatusItem *_statusItem;
   NSTimer *_statusItemTimer;
+  SplitAboutWindowController *_aboutWindowController;
   id<SplitShortcutStorage> _shortcutStorage;
   SplitShortcutManager *_shortcutManager;
   SplitWindowPositionManager *_windowPositionManager;
@@ -780,10 +781,21 @@ static NSDictionary<NSString *, SplitWindowAction *> *SplitWindowActionsByShortc
       item.title = SplitLocalized(@"Settings");
     } else if (item.action == @selector(terminate:)) {
       item.title = SplitLocalized(@"QuitSplit");
-    } else if (item.action == @selector(orderFrontStandardAboutPanel:)) {
+    } else if (item.action == @selector(orderFrontStandardAboutPanel:) || item.action == @selector(showAboutPanel:)) {
       item.title = SplitLocalized(@"AboutSplit");
+      item.target = self;
+      item.action = @selector(showAboutPanel:);
     }
   }
+}
+
+/// Split's own About window, with other RUNNERS apps and services under the version.
+- (void)showAboutPanel:(id)sender
+{
+  if (!_aboutWindowController) {
+    _aboutWindowController = [SplitAboutWindowController new];
+  }
+  [_aboutWindowController showWindow:sender];
 }
 
 - (void)decorateStatusMenu

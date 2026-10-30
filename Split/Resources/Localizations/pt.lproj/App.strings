@@ -148,3 +148,8 @@
 "ShortcutsOffForHour" = "Atalhos desativados · voltam às %@";
 "ShortcutsOffForApplication" = "Atalhos desativados · enquanto usa %@";
 "ShortcutsOffNoPermission" = "Atalhos desativados · precisa de acesso de Acessibilidade";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "Mais apps da RUNNERS";
+"RunnersServicesTitle" = "Serviços da RUNNERS";
+"RunnersGet" = "Obter";

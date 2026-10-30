@@ -19,9 +19,14 @@ NSNotificationName const SplitAutomaticUpdateCheckChangedNotification = @"SplitA
 static NSString *const kWebsiteURL = @"https://runners.im/tools/split";
 static NSString *const kGitHubURL = @"https://github.com/RUNNERS-IM/split";
 
-static const CGFloat kContentWidth = 560.0;
-static const CGFloat kOuterPadding = 20.0;
-static const CGFloat kRowHorizontalPadding = 14.0;
+static const CGFloat kContentWidth = 600.0;
+static const CGFloat kOuterPadding = 28.0;
+static const CGFloat kRowHorizontalPadding = 16.0;
+/// Space above and below the text in a card row.
+static const CGFloat kRowVerticalPadding = 13.0;
+/// Space between cards, and between a card and the title above it.
+static const CGFloat kCardSpacing = 24.0;
+static const CGFloat kCardTitleSpacing = 8.0;
 static const CGFloat kRecorderWidth = 168.0;
 
 /// Shortcut groups in the order the status menu shows them. Each entry: section title key,
@@ -130,7 +135,7 @@ static NSBox *Card(NSArray<NSView *> *rows, CGFloat width)
   NSBox *box = [NSBox new];
   box.boxType = NSBoxCustom;
   box.titlePosition = NSNoTitle;
-  box.cornerRadius = 10.0;
+  box.cornerRadius = 12.0;
   box.borderWidth = 0.5;
   box.borderColor = NSColor.separatorColor;
   box.fillColor = CardFillColor();
@@ -162,6 +167,97 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
     [line.trailingAnchor constraintEqualToAnchor:row.trailingAnchor constant:-kRowHorizontalPadding],
   ]];
   return row;
+}
+
+#pragma mark - RUNNERS apps
+
+/// Other RUNNERS apps and services, from the list every RUNNERS app ships ("runners-apps" data
+/// asset, copied from _docs/작업 가이드/runners-apps.json). Split itself and rows without a link are left out.
+static NSArray<NSDictionary *> *RunnersAppGroups(void)
+{
+  NSDataAsset *asset = [[NSDataAsset alloc] initWithName:@"runners-apps"];
+  NSDictionary *root = asset ? [NSJSONSerialization JSONObjectWithData:asset.data options:0 error:nil] : nil;
+  NSMutableArray<NSDictionary *> *groups = [NSMutableArray new];
+  for (NSDictionary *group in root[@"groups"]) {
+    NSMutableArray<NSDictionary *> *items = [NSMutableArray new];
+    for (NSDictionary *item in group[@"items"]) {
+      if ([item[@"id"] isEqualToString:@"split"] || [item[@"url"] length] == 0) {
+        continue;
+      }
+      [items addObject:item];
+    }
+    if (items.count > 0) {
+      [groups addObject:@{@"id" : group[@"id"], @"items" : items}];
+    }
+  }
+  return groups;
+}
+
+/// The list only has Korean and English text; every other language gets the English line.
+static NSString *RunnersAppText(id value)
+{
+  if (![value isKindOfClass:NSDictionary.class]) {
+    return value;
+  }
+  BOOL korean = [NSBundle.mainBundle.preferredLocalizations.firstObject hasPrefix:@"ko"];
+  NSString *text = value[korean ? @"ko" : @"en"];
+  return text.length > 0 ? text : value[@"en"];
+}
+
+static NSString *RunnersAppGroupTitle(NSDictionary *group)
+{
+  return SplitLocalized([group[@"id"] isEqualToString:@"services"] ? @"RunnersServicesTitle" : @"RunnersAppsTitle");
+}
+
+static NSImage *RunnersAppIcon(NSDictionary *item, CGFloat size)
+{
+  NSImage *icon = [[NSImage imageNamed:[@"runners-app-" stringByAppendingString:item[@"id"]]] copy] ?: [NSImage new];
+  icon.size = NSMakeSize(size, size);
+  return icon;
+}
+
+/// "More apps from RUNNERS" and "Services from RUNNERS": a gray title over a card per group, one
+/// row per app with its icon, name, one-line description and a "Get" button. `target` answers
+/// openRunnersApp:, which opens the link kept in the button cell.
+@protocol SplitRunnersAppTarget <NSObject>
+- (void)openRunnersApp:(NSButton *)sender;
+@end
+
+static NSArray<NSView *> *RunnersAppSections(CGFloat cardWidth, id<SplitRunnersAppTarget> target)
+{
+  NSMutableArray<NSView *> *sections = [NSMutableArray new];
+  for (NSDictionary *group in RunnersAppGroups()) {
+    NSMutableArray<NSView *> *rows = [NSMutableArray new];
+    for (NSDictionary *item in group[@"items"]) {
+      NSImageView *appIcon = [NSImageView imageViewWithImage:RunnersAppIcon(item, 32)];
+      appIcon.translatesAutoresizingMaskIntoConstraints = NO;
+      [NSLayoutConstraint activateConstraints:@[
+        [appIcon.widthAnchor constraintEqualToConstant:32],
+        [appIcon.heightAnchor constraintEqualToConstant:32],
+      ]];
+      NSTextField *description = Label(RunnersAppText(item[@"desc"]), 11, NSFontWeightRegular, NSColor.secondaryLabelColor);
+      description.lineBreakMode = NSLineBreakByTruncatingTail;
+      [description setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
+      NSStackView *text = VerticalStack(@[
+        Label(RunnersAppText(item[@"name"]), 13, NSFontWeightRegular, NSColor.labelColor),
+        description,
+      ], 1);
+      NSButton *get = [NSButton buttonWithTitle:SplitLocalized(@"RunnersGet") target:target action:@selector(openRunnersApp:)];
+      get.controlSize = NSControlSizeSmall;
+      get.cell.representedObject = item[@"url"];
+      [rows addObject:Row(HorizontalStack(@[appIcon, text], 12), get, cardWidth, kRowVerticalPadding - 2)];
+    }
+    [sections addObject:VerticalStack(@[Label(RunnersAppGroupTitle(group), 11, NSFontWeightSemibold, NSColor.secondaryLabelColor), Card(rows, cardWidth)], kCardTitleSpacing)];
+  }
+  return sections;
+}
+
+static void OpenRunnersApp(NSButton *sender)
+{
+  NSURL *url = [NSURL URLWithString:sender.cell.representedObject];
+  if (url) {
+    [NSWorkspace.sharedWorkspace openURL:url];
+  }
 }
 
 /// A round color button for the Effects tab. "accent" is drawn as a color wheel because it
@@ -215,7 +311,7 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
 
 #pragma mark -
 
-@interface SplitPreferencesController () <NSWindowDelegate>
+@interface SplitPreferencesController () <NSWindowDelegate, SplitRunnersAppTarget>
 @end
 
 @implementation SplitPreferencesController
@@ -346,15 +442,15 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   _shortcutSheetSwitch = [self switchWithAction:@selector(toggleShortcutSheet:)];
   CGFloat gapTextWidth = cardWidth - 2 * kRowHorizontalPadding - 230;
   NSMutableArray<NSView *> *rows = [NSMutableArray arrayWithArray:@[
-    Row([self textBlockWithTitle:SplitLocalized(@"LaunchAtLogin") hint:SplitLocalized(@"LaunchAtLoginHint") width:textWidth], _loginItemSwitch, cardWidth, 10),
-    Row([self textBlockWithTitle:SplitLocalized(@"ShowMenuBarIcon") hint:SplitLocalized(@"ShowMenuBarIconHint") width:textWidth], _statusItemSwitch, cardWidth, 10),
-    Row([self textBlockWithTitle:SplitLocalized(@"WindowGap") hint:SplitLocalized(@"WindowGapHint") width:gapTextWidth], _gapControl, cardWidth, 10),
-    Row([self textBlockWithTitle:SplitLocalized(@"DisplayChange") hint:SplitLocalized(@"DisplayChangeHint") width:textWidth], _displayChangeSwitch, cardWidth, 10),
-    Row([self textBlockWithTitle:SplitLocalized(@"ShortcutSheetHold") hint:SplitLocalized(@"ShortcutSheetHoldHint") width:textWidth], _shortcutSheetSwitch, cardWidth, 10),
+    Row([self textBlockWithTitle:SplitLocalized(@"LaunchAtLogin") hint:SplitLocalized(@"LaunchAtLoginHint") width:textWidth], _loginItemSwitch, cardWidth, kRowVerticalPadding),
+    Row([self textBlockWithTitle:SplitLocalized(@"ShowMenuBarIcon") hint:SplitLocalized(@"ShowMenuBarIconHint") width:textWidth], _statusItemSwitch, cardWidth, kRowVerticalPadding),
+    Row([self textBlockWithTitle:SplitLocalized(@"WindowGap") hint:SplitLocalized(@"WindowGapHint") width:gapTextWidth], _gapControl, cardWidth, kRowVerticalPadding),
+    Row([self textBlockWithTitle:SplitLocalized(@"DisplayChange") hint:SplitLocalized(@"DisplayChangeHint") width:textWidth], _displayChangeSwitch, cardWidth, kRowVerticalPadding),
+    Row([self textBlockWithTitle:SplitLocalized(@"ShortcutSheetHold") hint:SplitLocalized(@"ShortcutSheetHoldHint") width:textWidth], _shortcutSheetSwitch, cardWidth, kRowVerticalPadding),
   ]];
 #if !SPLIT_APP_STORE
   _automaticUpdateSwitch = [self switchWithAction:@selector(toggleAutomaticUpdates:)];
-  [rows addObject:Row([self textBlockWithTitle:SplitLocalized(@"AutoUpdate") hint:SplitLocalized(@"AutoUpdateHint") width:textWidth], _automaticUpdateSwitch, cardWidth, 10)];
+  [rows addObject:Row([self textBlockWithTitle:SplitLocalized(@"AutoUpdate") hint:SplitLocalized(@"AutoUpdateHint") width:textWidth], _automaticUpdateSwitch, cardWidth, kRowVerticalPadding)];
 #endif
   NSBox *optionsCard = Card(rows, cardWidth);
 
@@ -374,7 +470,7 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   ], 3);
   _permissionButton = [NSButton buttonWithTitle:SplitLocalized(@"PermissionOpen") target:self action:@selector(openAccessibilitySettings:)];
   _permissionButton.controlSize = NSControlSizeSmall;
-  NSBox *permissionCard = Card(@[Row(permissionText, _permissionButton, cardWidth, 10)], cardWidth);
+  NSBox *permissionCard = Card(@[Row(permissionText, _permissionButton, cardWidth, kRowVerticalPadding)], cardWidth);
 
   // About line with links.
   NSImageView *icon = [NSImageView imageViewWithImage:NSApp.applicationIconImage ?: [NSImage new]];
@@ -402,7 +498,8 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   }
 #endif
   [cards addObjectsFromArray:@[permissionCard, about]];
-  NSStackView *content = VerticalStack(cards, 16);
+  [cards addObjectsFromArray:RunnersAppSections(cardWidth, self)];
+  NSStackView *content = VerticalStack(cards, kCardSpacing);
   NSView *container = [NSView new];
   [container addSubview:content];
   [NSLayoutConstraint activateConstraints:@[
@@ -510,17 +607,17 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   if (!reorders || reorders.boolValue) {
     NSButton *open = [NSButton buttonWithTitle:SplitLocalized(@"PermissionOpen") target:self action:@selector(openDesktopSettings:)];
     open.controlSize = NSControlSizeSmall;
-    [rows addObject:Row([self textBlockWithTitle:SplitLocalized(@"SpacesReorder") hint:SplitLocalized(@"SpacesReorderHint") width:textWidth], open, cardWidth, 10)];
+    [rows addObject:Row([self textBlockWithTitle:SplitLocalized(@"SpacesReorder") hint:SplitLocalized(@"SpacesReorderHint") width:textWidth], open, cardWidth, kRowVerticalPadding)];
   }
   if (!spansDisplays || !spansDisplays.boolValue) {
     NSButton *open = [NSButton buttonWithTitle:SplitLocalized(@"PermissionOpen") target:self action:@selector(openDesktopSettings:)];
     open.controlSize = NSControlSizeSmall;
-    [rows addObject:Row([self textBlockWithTitle:SplitLocalized(@"SpacesSeparate") hint:SplitLocalized(@"SpacesSeparateHint") width:textWidth], open, cardWidth, 10)];
+    [rows addObject:Row([self textBlockWithTitle:SplitLocalized(@"SpacesSeparate") hint:SplitLocalized(@"SpacesSeparateHint") width:textWidth], open, cardWidth, kRowVerticalPadding)];
   }
   if (rows.count == 0) {
     return nil;
   }
-  NSStackView *section = VerticalStack(@[Label(SplitLocalized(@"SpacesSection"), 11, NSFontWeightSemibold, NSColor.secondaryLabelColor), Card(rows, cardWidth)], 6);
+  NSStackView *section = VerticalStack(@[Label(SplitLocalized(@"SpacesSection"), 11, NSFontWeightSemibold, NSColor.secondaryLabelColor), Card(rows, cardWidth)], kCardTitleSpacing);
   return section;
 }
 
@@ -577,13 +674,13 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   _feedbackDurationControl = [self segmentsWithLabelKeys:@[@"DurationShort", @"DurationNormal", @"DurationLong"] action:@selector(changeFeedbackDuration:)];
   _feedbackPositionControl = [self segmentsWithLabelKeys:@[@"PositionBottom", @"PositionTop", @"PositionCenter"] action:@selector(changeFeedbackPosition:)];
 
-  NSView *colorRow = Row([self textBlockWithTitle:SplitLocalized(@"FeedbackColor") hint:SplitLocalized(@"FeedbackColorHint") width:textWidth], HorizontalStack(swatches, 2), cardWidth, 10);
-  NSView *shortcutRow = Row([self textBlockWithTitle:SplitLocalized(@"FeedbackShortcut") hint:SplitLocalized(@"FeedbackShortcutHint") width:textWidth], _feedbackShortcutSwitch, cardWidth, 10);
-  NSView *durationRow = Row([self textBlockWithTitle:SplitLocalized(@"FeedbackDuration") hint:nil width:textWidth], _feedbackDurationControl, cardWidth, 10);
-  _feedbackPositionRow = Row([self textBlockWithTitle:SplitLocalized(@"FeedbackPosition") hint:nil width:textWidth], _feedbackPositionControl, cardWidth, 10);
+  NSView *colorRow = Row([self textBlockWithTitle:SplitLocalized(@"FeedbackColor") hint:SplitLocalized(@"FeedbackColorHint") width:textWidth], HorizontalStack(swatches, 2), cardWidth, kRowVerticalPadding);
+  NSView *shortcutRow = Row([self textBlockWithTitle:SplitLocalized(@"FeedbackShortcut") hint:SplitLocalized(@"FeedbackShortcutHint") width:textWidth], _feedbackShortcutSwitch, cardWidth, kRowVerticalPadding);
+  NSView *durationRow = Row([self textBlockWithTitle:SplitLocalized(@"FeedbackDuration") hint:nil width:textWidth], _feedbackDurationControl, cardWidth, kRowVerticalPadding);
+  _feedbackPositionRow = Row([self textBlockWithTitle:SplitLocalized(@"FeedbackPosition") hint:nil width:textWidth], _feedbackPositionControl, cardWidth, kRowVerticalPadding);
   _feedbackDetailRows = @[colorRow, shortcutRow, durationRow];
   NSBox *card = Card(@[
-    Row([self textBlockWithTitle:SplitLocalized(@"MoveFeedback") hint:SplitLocalized(@"MoveFeedbackHint") width:textWidth], _feedbackStyleControl, cardWidth, 10),
+    Row([self textBlockWithTitle:SplitLocalized(@"MoveFeedback") hint:SplitLocalized(@"MoveFeedbackHint") width:textWidth], _feedbackStyleControl, cardWidth, kRowVerticalPadding),
     colorRow,
     shortcutRow,
     durationRow,
@@ -595,7 +692,7 @@ static NSView *Row(NSView *left, NSView *right, CGFloat width, CGFloat verticalP
   NSStackView *footer = HorizontalStack(@[Label(SplitLocalized(@"FeedbackTryHint"), 11, NSFontWeightRegular, NSColor.secondaryLabelColor), FlexibleSpace(), sample], 12);
   [footer.widthAnchor constraintEqualToConstant:cardWidth].active = YES;
 
-  NSStackView *content = VerticalStack(@[card, footer], 12);
+  NSStackView *content = VerticalStack(@[card, footer], 16);
   NSView *container = [NSView new];
   [container addSubview:content];
   [NSLayoutConstraint activateConstraints:@[
@@ -696,6 +793,11 @@ static void SetRowEnabled(NSView *view, BOOL enabled)
   [SplitAccessibilityGuideController openAccessibilitySettings];
 }
 
+- (void)openRunnersApp:(NSButton *)sender
+{
+  OpenRunnersApp(sender);
+}
+
 - (void)openWebsite:(id)sender
 {
   [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:kWebsiteURL]];
@@ -726,7 +828,7 @@ static void SetRowEnabled(NSView *view, BOOL enabled)
   ]];
   _shortcutRecorders[shortcutName] = recorder;
   NSStackView *left = HorizontalStack(@[picture, Label(SplitLocalized(shortcutName), 13, NSFontWeightRegular, NSColor.labelColor)], 10);
-  return Row(left, recorder, width, 6);
+  return Row(left, recorder, width, 8);
 }
 
 - (NSView *)makeShortcutsView
@@ -743,7 +845,7 @@ static void SetRowEnabled(NSView *view, BOOL enabled)
     for (NSString *shortcutName in section[2]) {
       [rows addObject:[self shortcutRowForName:shortcutName width:cardWidth]];
     }
-    NSStackView *sectionStack = VerticalStack(@[headerStack, Card(rows, cardWidth)], 6);
+    NSStackView *sectionStack = VerticalStack(@[headerStack, Card(rows, cardWidth)], kCardTitleSpacing);
     [sectionStack setCustomSpacing:6 afterView:headerStack];
     [sections addObject:sectionStack];
   }
@@ -848,6 +950,90 @@ static void SetRowEnabled(NSView *view, BOOL enabled)
 {
   [_permissionTimer invalidate];
   [NSNotificationCenter.defaultCenter removeObserver:self];
+}
+
+@end
+
+@interface SplitAboutWindowController () <SplitRunnersAppTarget>
+@end
+
+@implementation SplitAboutWindowController
+
+- (instancetype)init
+{
+  const CGFloat width = 520.0;
+  const CGFloat cardWidth = width - 2 * kOuterPadding;
+  NSWindow *window = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, width, 400)
+                                                 styleMask:NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskFullSizeContentView
+                                                   backing:NSBackingStoreBuffered
+                                                     defer:YES];
+  window.titlebarAppearsTransparent = YES;
+  window.titleVisibility = NSWindowTitleHidden;
+  window.releasedWhenClosed = NO;
+  window.title = SplitLocalized(@"AboutSplit");
+  if (!(self = [super initWithWindow:window])) {
+    return nil;
+  }
+
+  NSImageView *icon = [NSImageView imageViewWithImage:NSApp.applicationIconImage ?: [NSImage new]];
+  icon.translatesAutoresizingMaskIntoConstraints = NO;
+  [NSLayoutConstraint activateConstraints:@[
+    [icon.widthAnchor constraintEqualToConstant:96],
+    [icon.heightAnchor constraintEqualToConstant:96],
+  ]];
+  NSTextField *name = Label(@"Split", 20, NSFontWeightSemibold, NSColor.labelColor);
+  NSTextField *version = Label([NSString stringWithFormat:SplitLocalized(@"AboutLine"), SplitUtilities.applicationVersion], 12, NSFontWeightRegular, NSColor.secondaryLabelColor);
+  NSButton *website = [NSButton buttonWithTitle:SplitLocalized(@"Website") target:self action:@selector(openWebsite:)];
+  NSButton *github = [NSButton buttonWithTitle:@"GitHub" target:self action:@selector(openGitHub:)];
+  NSStackView *links = HorizontalStack(@[website, github], 8);
+  NSStackView *header = VerticalStack(@[icon, name, version, links], 6);
+  header.alignment = NSLayoutAttributeCenterX;
+  [header setCustomSpacing:12 afterView:icon];
+  [header setCustomSpacing:14 afterView:version];
+  [header.widthAnchor constraintEqualToConstant:cardWidth].active = YES;
+
+  NSTextField *credit = Label(@"Icons: Lucide (ISC License)", 10, NSFontWeightRegular, NSColor.tertiaryLabelColor);
+  NSMutableArray<NSView *> *views = [NSMutableArray arrayWithObject:header];
+  [views addObjectsFromArray:RunnersAppSections(cardWidth, self)];
+  [views addObject:credit];
+  NSStackView *content = VerticalStack(views, kCardSpacing);
+  [content setCustomSpacing:28 afterView:header];
+  [content setCustomSpacing:16 afterView:views[views.count - 2]];
+  content.alignment = NSLayoutAttributeCenterX;
+
+  NSView *container = window.contentView;
+  [container addSubview:content];
+  [NSLayoutConstraint activateConstraints:@[
+    [container.widthAnchor constraintEqualToConstant:width],
+    [content.topAnchor constraintEqualToAnchor:container.topAnchor constant:kOuterPadding + 12],
+    [content.bottomAnchor constraintEqualToAnchor:container.bottomAnchor constant:-kOuterPadding],
+    [content.centerXAnchor constraintEqualToAnchor:container.centerXAnchor],
+  ]];
+  [window layoutIfNeeded];
+  [window center];
+  return self;
+}
+
+- (void)showWindow:(id)sender
+{
+  [NSApp activateIgnoringOtherApps:YES];
+  [super showWindow:sender];
+  [self.window makeKeyAndOrderFront:sender];
+}
+
+- (void)openRunnersApp:(NSButton *)sender
+{
+  OpenRunnersApp(sender);
+}
+
+- (void)openWebsite:(id)sender
+{
+  [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:kWebsiteURL]];
+}
+
+- (void)openGitHub:(id)sender
+{
+  [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:kGitHubURL]];
 }
 
 @end

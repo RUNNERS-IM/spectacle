@@ -169,3 +169,8 @@
 "ShortcutsOffForHour" = "Atajos desactivados · vuelven a las %@";
 "ShortcutsOffForApplication" = "Atajos desactivados · mientras usas %@";
 "ShortcutsOffNoPermission" = "Atajos desactivados · se necesita acceso de Accesibilidad";
+
+/* Other RUNNERS apps and services, in Settings and the About panel */
+"RunnersAppsTitle" = "Más apps de RUNNERS";
+"RunnersServicesTitle" = "Servicios de RUNNERS";
+"RunnersGet" = "Obtener";
