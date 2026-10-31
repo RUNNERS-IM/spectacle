@@ -20,20 +20,20 @@ describe(@"SplitTopHalfWindowCalculation", ^{
     expect(result.windowRect).to.equal(CGRectMake(0.0f, 441.0f, 1440.0f, 436.0f));
   });
 
-  it(@"should calculate a window's CGRect in the top 2/3 of the screen", ^{
+  it(@"should calculate a window's CGRect in the top 3/4 of the screen", ^{
     SplitWindowPositionCalculationResult *result = [windowPositionCalculator calculateWindowRect:CGRectMake(0.0f, 441.0f, 1440.0f, 436.0f)
                                                                           visibleFrameOfSourceScreen:visibleFrameSourceScreen
                                                                      visibleFrameOfDestinationScreen:visibleFrameDestinationScreen
                                                                                               action:kSplitWindowActionTopHalf];
-    expect(result.windowRect).to.equal(CGRectMake(0.0f, 295.0f, 1440.0f, 582.0f));
+    expect(result.windowRect).to.equal(CGRectMake(0.0f, 223.0f, 1440.0f, 654.0f));
   });
 
-  it(@"should calculate a window's CGRect in the top 1/3 of the screen", ^{
-    SplitWindowPositionCalculationResult *result = [windowPositionCalculator calculateWindowRect:CGRectMake(0.0f, 295.0f, 1440.0f, 582.0f)
+  it(@"should calculate a window's CGRect in the top 1/4 of the screen", ^{
+    SplitWindowPositionCalculationResult *result = [windowPositionCalculator calculateWindowRect:CGRectMake(0.0f, 223.0f, 1440.0f, 654.0f)
                                                                           visibleFrameOfSourceScreen:visibleFrameSourceScreen
                                                                      visibleFrameOfDestinationScreen:visibleFrameDestinationScreen
                                                                                               action:kSplitWindowActionTopHalf];
-    expect(result.windowRect).to.equal(CGRectMake(0.0f, 586.0f, 1440.0f, 291.0f));
+    expect(result.windowRect).to.equal(CGRectMake(0.0f, 659.0f, 1440.0f, 218.0f));
   });
 });
 SpecEnd
