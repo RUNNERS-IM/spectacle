@@ -1,5 +1,6 @@
 ## 한국어
 
+- 배치 저장 · 되살리기는 무료 기능이라 메뉴와 저장 창에서 Pro 표시를 뺐습니다.
 - 반 · 모서리 단축키를 반복해서 누르면 1/2 → 3/4 → 1/4 로 바뀝니다. 3분의 1은 ⌃⌥← · ⌃⌥→ 로 그대로 쓸 수 있습니다.
 - Spectacle 이 Split 보다 늦게 켜져도 알아채고, 끌지 묻습니다. 끄면 로그인 항목에서도 빼서 다음 로그인 때 다시 켜지지 않습니다. Rectangle · Magnet 이 켜져 있으면 설정 창에 단축키가 겹칠 수 있다고 알려 줍니다.
 - Homebrew 등으로 새 판을 덮어 설치하면 켜져 있던 Split 이 새 판으로 스스로 다시 켜집니다. 껐다 켜지 않아도 됩니다.
@@ -13,6 +14,7 @@
 
 ## English
 
+- Saving and restoring layouts is free, so the Pro mark is gone from the menu and the save window.
 - Pressing a half or corner shortcut again now goes 1/2 → 3/4 → 1/4. Thirds are still on ⌃⌥← and ⌃⌥→.
 - Split now notices Spectacle even when it starts later, and offers to quit it and remove it from your login items. Settings also warns when Rectangle or Magnet is running, since their shortcuts can be the same.
 - When a new version is installed over Split while it is running (for example with Homebrew), Split restarts into it on its own.

@@ -14,7 +14,7 @@ import { layoutRects } from "../core/arrange.ts";
 import { Rect, rectWithGap } from "../core/geometry.ts";
 import type { LayoutSaveAnswer, LayoutSavePayload } from "../shared/types";
 import { t } from "./i18n.ts";
-import { proSublabel, setupPro } from "./pro.ts";
+import { setupPro } from "./pro.ts";
 
 const isMac = process.platform === "darwin";
 
@@ -547,7 +547,6 @@ export function layoutMenuItems(onChange: () => void, panel = false): MenuItemCo
 
   items.push({
     label: t("LayoutSave"),
-    sublabel: proSublabel(),
     icon: menuPicture("save"),
     // Why: wait for the menu to close, or the window opens behind it.
     click: () => afterMenuCloses(() => void askToSaveLayout().then((layout) => layout && onChange())),

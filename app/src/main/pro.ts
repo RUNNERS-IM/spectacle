@@ -1,7 +1,7 @@
 // Split Pro: what the paid features are, and the window that tells about them. Port of SplitPro.m.
 //
-// Buying, signing in and restoring are not open yet, so every Pro feature stays open to
-// everyone until launch: the "Pro" mark only tells, it never locks anything.
+// Buying, signing in and restoring are not open yet. Saving and restoring layouts stay free for
+// good, as runners.im/split says, so nothing carries the "Pro" mark until a new paid feature exists.
 import { app, BrowserWindow, ipcMain } from "electron";
 import type { ProPayload } from "../shared/types";
 import { t } from "./i18n.ts";
