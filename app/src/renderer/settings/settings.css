@@ -1,17 +1,16 @@
-/* The Split settings window, measured from SplitPreferencesController.m and shared by every
-   RUNNERS app (macOS System Settings density): content 600 wide, outer padding 28, card rows 16 / 13,
-   cards 24 apart, card title 8 above,
-   card radius 12 with a 0.5 border, recorder 168 × 24, text 13 / hints 11. */
+/* The Split settings window, measured from SplitPreferencesController.m: content 600 wide, recorder 168 × 24.
+   The spacing, text sizes and window, box and text colours come from runners-window.css (imported first in
+   main.tsx), shared by every RUNNERS app; only what is Split's own is defined here. */
 
 :root {
   --accent: #007aff;
-  --label: rgba(0, 0, 0, 0.85);
-  --secondary: rgba(0, 0, 0, 0.5);
+  --label: var(--rw-text);
+  --secondary: var(--rw-text-secondary);
   --tertiary: rgba(0, 0, 0, 0.26);
-  --window: #ececec;
-  --card: rgba(255, 255, 255, 0.85);
-  --separator: rgba(0, 0, 0, 0.1);
-  --control-track: rgba(0, 0, 0, 0.06);
+  --window: var(--rw-window-bg);
+  --card: var(--rw-box-bg);
+  --separator: var(--rw-separator);
+  --control-track: var(--rw-control-bg);
   --control-selected: #ffffff;
   --button: #ffffff;
   --button-pressed: #e6e6e6;
@@ -33,7 +32,7 @@
 
   color-scheme: light dark;
   font-family: -apple-system, BlinkMacSystemFont, system-ui, "Segoe UI", Ubuntu, Cantarell, "Noto Sans", "Malgun Gothic", sans-serif;
-  font-size: 13px;
+  font-size: var(--rw-font);
   line-height: 1.3;
   color: var(--label);
   -webkit-font-smoothing: antialiased;
@@ -51,13 +50,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --accent: #0a84ff;
-    --label: rgba(255, 255, 255, 0.85);
-    --secondary: rgba(255, 255, 255, 0.55);
     --tertiary: rgba(255, 255, 255, 0.25);
-    --window: #1e1e1e;
-    --card: rgba(255, 255, 255, 0.05);
-    --separator: rgba(255, 255, 255, 0.1);
-    --control-track: rgba(255, 255, 255, 0.08);
     --control-selected: rgba(255, 255, 255, 0.24);
     --button: rgba(255, 255, 255, 0.15);
     --button-pressed: rgba(255, 255, 255, 0.25);
@@ -184,11 +177,11 @@ p {
 .content {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--rw-box-gap);
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  padding: 28px;
+  padding: var(--rw-pad);
 }
 
 .scroll {
@@ -196,8 +189,8 @@ p {
   min-height: 0;
   overflow-y: auto;
   max-width: none;
-  padding-left: max(28px, calc((100% - 544px) / 2));
-  padding-right: max(28px, calc((100% - 544px) / 2));
+  padding-left: max(var(--rw-pad), calc((100% - 544px) / 2));
+  padding-right: max(var(--rw-pad), calc((100% - 544px) / 2));
 }
 
 .content.effects {
@@ -208,7 +201,7 @@ p {
 .section {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--rw-section-gap);
 }
 
 .section.compact {
@@ -222,39 +215,39 @@ p {
 }
 
 .section-title {
-  font-size: 11px;
+  font-size: var(--rw-font-small);
   font-weight: 600;
   color: var(--secondary);
 }
 
 .section-hint {
   padding-right: 8px;
-  font-size: 11px;
+  font-size: var(--rw-font-small);
   color: var(--tertiary);
 }
 
 .card {
   flex: none;
-  border-radius: 12px;
+  border-radius: var(--rw-radius);
   background: var(--card);
-  box-shadow: 0 0 0 0.5px var(--separator);
+  box-shadow: 0 0 0 var(--rw-border) var(--separator);
 }
 
 .card-separator {
-  height: 0.5px;
-  margin: 0 16px;
+  height: var(--rw-border);
+  margin: 0 var(--rw-row-pad-x);
   background: var(--separator);
 }
 
 .row {
-  --row-padding: 13px;
-  padding: var(--row-padding) 16px;
+  --row-padding: var(--rw-row-pad-y);
+  padding: var(--row-padding) var(--rw-row-pad-x);
 }
 
 .row-line {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--rw-row-gap);
 }
 
 .row-text {
@@ -322,7 +315,7 @@ p {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 13px 16px;
+  padding: var(--rw-row-pad-y) var(--rw-row-pad-x);
 }
 
 .about-text {
@@ -417,8 +410,8 @@ p {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px max(28px, calc((100% - 544px) / 2)) 14px;
-  border-top: 0.5px solid var(--separator);
+  padding: 12px max(var(--rw-pad), calc((100% - 544px) / 2)) 14px;
+  border-top: var(--rw-border) solid var(--separator);
 }
 
 .shortcuts-hints {
