@@ -1,5 +1,6 @@
 ## 한국어
 
+- 예전 맥 판(2.6.1030)에서 자동 업데이트로 새 판을 받을 때 "잘못 서명된 업데이트" 오류가 나던 문제를 고쳤습니다.
 - 배치 저장 · 되살리기는 무료 기능이라 메뉴와 저장 창에서 Pro 표시를 뺐습니다.
 - 반 · 모서리 단축키를 반복해서 누르면 1/2 → 3/4 → 1/4 로 바뀝니다. 3분의 1은 ⌃⌥← · ⌃⌥→ 로 그대로 쓸 수 있습니다.
 - Spectacle 이 Split 보다 늦게 켜져도 알아채고, 끌지 묻습니다. 끄면 로그인 항목에서도 빼서 다음 로그인 때 다시 켜지지 않습니다. Rectangle · Magnet 이 켜져 있으면 설정 창에 단축키가 겹칠 수 있다고 알려 줍니다.
@@ -14,6 +15,7 @@
 
 ## English
 
+- Updating from the previous Mac app (2.6.1030) no longer fails with an "improperly signed" error.
 - Saving and restoring layouts is free, so the Pro mark is gone from the menu and the save window.
 - Pressing a half or corner shortcut again now goes 1/2 → 3/4 → 1/4. Thirds are still on ⌃⌥← and ⌃⌥→.
 - Split now notices Spectacle even when it starts later, and offers to quit it and remove it from your login items. Settings also warns when Rectangle or Magnet is running, since their shortcuts can be the same.
