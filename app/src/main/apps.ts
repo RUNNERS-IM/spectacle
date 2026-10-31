@@ -1,5 +1,5 @@
 // Other running macOS apps, found through `lsappinfo` so Split needs no extra native code:
-// Spectacle (the app Split replaced) and System Settings.
+// Spectacle (the app Split replaced), other window apps with the same shortcuts, and System Settings.
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 
@@ -20,5 +20,16 @@ export async function runningPids(bundleId: string): Promise<number[]> {
     return pids;
   } catch {
     return [];
+  }
+}
+
+/** Takes `name` out of the login items so it does not start again at the next login. */
+export async function removeLoginItem(name: string): Promise<void> {
+  if (process.platform !== "darwin") return;
+  try {
+    // Why: macOS asks once whether Split may control System Events; when refused, the item stays.
+    await run("/usr/bin/osascript", ["-e", `tell application "System Events" to delete (every login item whose name is "${name}")`]);
+  } catch {
+    // Refused or not a login item.
   }
 }

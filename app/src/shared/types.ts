@@ -30,6 +30,8 @@ export interface Settings {
   disabledApps: string[];
   /** Tips already shown once under the move label. */
   shownTips: string[];
+  /** "Keep Both" was chosen when Spectacle was found running, so Split no longer offers to quit it. */
+  keepSpectacle: boolean;
 }
 
 export interface ViewState {
@@ -44,6 +46,8 @@ export interface ViewState {
   failures: string[];
   /** The app whose window Split last failed to move, until one of its windows moves again. */
   refusingApp: string | null;
+  /** Names of running window apps whose default shortcuts are the same as Split's. */
+  conflictingApps: string[];
   version: string;
   platform: "darwin" | "win32" | "linux";
   /** The App Store build has no update check. */

@@ -31,6 +31,7 @@ export function defaultSettings(): Settings {
     shortcuts: {},
     disabledApps: [],
     shownTips: [],
+    keepSpectacle: false,
   };
 }
 
@@ -96,6 +97,7 @@ export function sanitize(input: Partial<Settings> | null | undefined): Settings 
     shortcuts,
     disabledApps: strings(raw.disabledApps),
     shownTips: strings(raw.shownTips),
+    keepSpectacle: bool(raw.keepSpectacle, defaults.keepSpectacle),
   };
 }
 

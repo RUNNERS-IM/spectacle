@@ -32,7 +32,7 @@ const GAPS = [
 
 const GITHUB_URL = "https://github.com/RUNNERS-IM/split";
 
-/** Shortcuts another app holds and apps that turn Split away, so "nothing happens" has a reason. */
+/** Shortcuts another app holds, apps that turn Split away and window apps answering the same keys, so odd moves have a reason. */
 function useProblems(state: ViewState): string[] {
   const { t, f } = useStrings();
   const problems: string[] = [];
@@ -44,6 +44,9 @@ function useProblems(state: ViewState): string[] {
   }
   if (state.trusted && state.refusingApp) {
     problems.push(f("ApplicationRefusedAccess", state.refusingApp));
+  }
+  if (state.conflictingApps.length > 0) {
+    problems.push(f("ConflictingWindowApps", state.conflictingApps.join(", ")));
   }
   return problems;
 }
