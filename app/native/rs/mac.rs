@@ -140,8 +140,11 @@ fn set_rect(element: AXUIElementRef, r: &Rect) -> AXError {
     unsafe {
         let position = AXValueCreate(AX_VALUE_POINT, &p as *const _ as *const c_void);
         let size = AXValueCreate(AX_VALUE_SIZE, &s as *const _ as *const c_void);
-        let size_error = AXUIElementSetAttributeValue(element, cf(&size_name), size);
+        // Why: macOS cuts a new size down to what fits from where the window still is, so a window
+        // moving right or down comes out too small. Size, move, then size again, as the macOS app did.
+        AXUIElementSetAttributeValue(element, cf(&size_name), size);
         let position_error = AXUIElementSetAttributeValue(element, cf(&position_name), position);
+        let size_error = AXUIElementSetAttributeValue(element, cf(&size_name), size);
         CFRelease(position);
         CFRelease(size);
         if position_error != AX_SUCCESS { position_error } else { size_error }
@@ -548,3 +551,21 @@ pub fn watch(sink: Sink) {
     WATCHING.set(Some(Watching { _global: global, _local: local, _activation: activation }));
 }
 
+
+unsafe extern "C" {
+    /// mac/menu.m
+    fn split_pop_up_menu(json: *const std::ffi::c_char, x: f64, y: f64) -> *mut std::ffi::c_char;
+    fn free(pointer: *mut c_void);
+}
+
+pub fn pop_up_menu(spec: &str, x: f64, y: f64) -> Result<Option<String>, String> {
+    main_thread()?;
+    let json = std::ffi::CString::new(spec).map_err(|e| e.to_string())?;
+    let chosen = unsafe { split_pop_up_menu(json.as_ptr(), x, y) };
+    if chosen.is_null() {
+        return Ok(None);
+    }
+    let id = unsafe { std::ffi::CStr::from_ptr(chosen) }.to_string_lossy().into_owned();
+    unsafe { free(chosen.cast()) };
+    Ok(Some(id))
+}

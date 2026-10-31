@@ -31,7 +31,8 @@ import { defaultShortcut, KeyCombo } from "../core/shortcuts.ts";
 import type { LinkKind, OverlayPayload, Settings, SheetPayload, ViewState } from "../shared/types";
 import { runningPids } from "./apps.ts";
 import { displayChangeLabel, recordSoon, startDisplayWatcher } from "./displays.ts";
-import { layoutMenuItems, layoutRestoringForDisplays, restoreLayout, setupLayouts } from "./layouts.ts";
+import { layoutMenuItems, layoutPanel, layoutRestoringForDisplays, restoreLayout, setupLayouts } from "./layouts.ts";
+import { popUpMacMenu } from "./macMenu.ts";
 import { guideGranted, openAccessibilitySettings, registerGuideIpc, showGuide } from "./guide.ts";
 import { currentLanguage, loadLanguage, strings, t } from "./i18n.ts";
 import { accelerator, displayShortcut, displayText } from "./keys.ts";
@@ -91,6 +92,8 @@ interface Native {
   isTrusted(prompt: boolean): boolean;
   frontmostApp(): { id: string; name: string } | null;
   watch(callback: (event: NativeEvent) => void): void;
+  /** macOS only (macMenu.ts). */
+  popUpMenu(spec: string, x: number, y: number): string | null;
 }
 
 function resourcePath(...parts: string[]): string {
@@ -389,7 +392,8 @@ function statusLine(): { label: string; on: boolean } {
   return { label: t("ShortcutsOn"), on: true };
 }
 
-function buildMenu(): Menu {
+/** The tray menu's items. `panel` leaves room for the macOS layout panel (macMenu.ts). */
+function menuTemplate(panel: boolean): MenuItemConstructorOptions[] {
   trusted = native.isTrusted(false);
   const status = statusLine();
   const front = MAC ? native.frontmostApp() : frontApp;
@@ -423,7 +427,7 @@ function buildMenu(): Menu {
       },
     },
     { type: "separator" },
-    ...layoutMenuItems(() => {}),
+    ...layoutMenuItems(() => {}, panel),
     {
       label: t("Disable"),
       icon: menuIcon("pause"),
@@ -453,7 +457,7 @@ function buildMenu(): Menu {
     { type: "separator" },
     { label: t("QuitSplit"), icon: menuIcon("quit"), accelerator: "Command+Q", registerAccelerator: false, click: () => app.quit() },
   );
-  return Menu.buildFromTemplate(template);
+  return template;
 }
 
 function trayFrames(): Electron.NativeImage[] {
@@ -478,7 +482,16 @@ function updateTray(): void {
   const frames = trayFrames();
   tray = new Tray(frames[0]);
   tray.setToolTip(`Split ${displayVersion()}`);
-  const open = () => tray?.popUpContextMenu(buildMenu());
+  const open = () => {
+    if (!tray) return;
+    if (MAC) {
+      // Why: below the icon, as a status item's own menu opens.
+      const bounds = tray.getBounds();
+      popUpMacMenu(native, menuTemplate(true), layoutPanel(), bounds.x, bounds.y + bounds.height);
+    } else {
+      tray.popUpContextMenu(Menu.buildFromTemplate(menuTemplate(false)));
+    }
+  };
   tray.on("click", open);
   tray.on("right-click", open);
   let frame = 0;
@@ -487,6 +500,15 @@ function updateTray(): void {
     frame = (frame + 1) % frames.length;
     tray?.setImage(frames[frame]);
   }, 1000 / 15);
+}
+
+function showMenuAtPointer(): void {
+  if (MAC) {
+    const point = screen.getCursorScreenPoint();
+    popUpMacMenu(native, menuTemplate(true), layoutPanel(), point.x, point.y);
+  } else {
+    Menu.buildFromTemplate(menuTemplate(false)).popup();
+  }
 }
 
 function pauseForAnHour(): void {
@@ -791,7 +813,7 @@ if (!app.requestSingleInstanceLock()) {
     // behind the notch; `--perform MoveToLeftHalf` runs one action, for scripts and launchers.
     const action = argv[argv.indexOf("--perform") + 1] as Action | undefined;
     if (argv.includes("--perform") && action && ALL.includes(action)) perform(action);
-    else if (argv.includes("--menu")) buildMenu().popup();
+    else if (argv.includes("--menu")) showMenuAtPointer();
     // `--guide` shows the Accessibility guide even when permission is on, for support and screenshots.
     else if (argv.includes("--guide") && MAC) showGuide({ preload: preloadPath(), url: rendererUrl("guide"), register: () => undefined });
     else showSettings();

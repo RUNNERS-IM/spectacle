@@ -10,6 +10,7 @@ import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "
 import { dirname, join } from "node:path";
 import { app, BrowserWindow, ipcMain, type MenuItemConstructorOptions, nativeImage, screen } from "electron";
 import type { Move } from "../core/engine.ts";
+import { layoutRects } from "../core/arrange.ts";
 import { Rect, rectWithGap } from "../core/geometry.ts";
 import type { LayoutSaveAnswer, LayoutSavePayload } from "../shared/types";
 import { t } from "./i18n.ts";
@@ -74,26 +75,30 @@ function need(): LayoutOptions {
 // Shapes
 
 /** Each one arranges the windows of one monitor at once, the most recently used window in the first cell. */
-export const SHAPES = ["Halves", "Thirds", "MainAndTwo", "Grid", "Single"] as const;
+export const SHAPES = ["Halves", "MainAndTwo", "Grid", "Auto"] as const;
 export type LayoutShape = (typeof SHAPES)[number];
 
 /** A cell as fractions of a screen (0…1, top-left based). */
 interface Fraction { x: number; y: number; width: number; height: number }
 
-/** Cells of `shape`, first cell first. */
-export function shapeFractions(shape: LayoutShape): Fraction[] {
+/**
+ * Cells of `shape`, first cell first. "Auto" is the shortcut's arrange (core/arrange.ts), so its
+ * cells depend on how many windows the monitor has.
+ */
+export function shapeFractions(shape: LayoutShape, windowCount: number): Fraction[] {
   const cell = (x: number, y: number, width: number, height: number): Fraction => ({ x, y, width, height });
   switch (shape) {
     case "Halves":
       return [cell(0, 0, 0.5, 1), cell(0.5, 0, 0.5, 1)];
-    case "Thirds":
-      return [cell(0, 0, 1 / 3, 1), cell(1 / 3, 0, 1 / 3, 1), cell(2 / 3, 0, 1 / 3, 1)];
+    case "Auto": {
+      // Why: layoutRects rounds to whole points, so a big square keeps the fractions exact enough.
+      const side = 1200;
+      return layoutRects(windowCount, new Rect(0, 0, side, side)).map((r) => cell(r.x / side, r.y / side, r.width / side, r.height / side));
+    }
     case "MainAndTwo":
       return [cell(0, 0, 0.6, 1), cell(0.6, 0, 0.4, 0.5), cell(0.6, 0.5, 0.4, 0.5)];
     case "Grid":
       return [cell(0, 0, 0.5, 0.5), cell(0.5, 0, 0.5, 0.5), cell(0, 0.5, 0.5, 0.5), cell(0.5, 0.5, 0.5, 0.5)];
-    default:
-      return [cell(0, 0, 1, 1)];
   }
 }
 
@@ -141,8 +146,9 @@ export function applyShape(shape: LayoutShape, displayId: string): number {
   const shot = snapshot(true);
   const target = shot?.screens.find((s) => displayIdOf(s) === displayId);
   if (!shot || !target) return 0;
-  const fractions = shapeFractions(shape);
-  const windows = shot.windows.filter((w) => middleOn(w, target.frame)).slice(0, fractions.length);
+  const onScreen = shot.windows.filter((w) => middleOn(w, target.frame));
+  const fractions = shapeFractions(shape, onScreen.length);
+  const windows = onScreen.slice(0, fractions.length);
   const frame = Rect.from(target.workArea);
   // Why: the same gap as the shortcuts use (core/engine.ts), so a shape and a shortcut look alike.
   // macOS positions are in points already, so the gap needs no scaling there.
@@ -434,8 +440,8 @@ function miniScreen(fractions: Fraction[]): Electron.NativeImage {
   return image;
 }
 
-/** The windows of a saved layout drawn on one small screen: the monitor holding most of them. */
-function layoutPicture(layout: SavedLayout, screens: NativeScreen[]): Electron.NativeImage {
+/** The windows of a saved layout as cells of one small screen: the monitor holding most of them. */
+function layoutFractions(layout: SavedLayout, screens: NativeScreen[]): Fraction[] {
   const counts = new Map<string, number>();
   for (const window of layout.windows) counts.set(window.display, (counts.get(window.display) ?? 0) + 1);
   let busiest: string | null = null;
@@ -462,7 +468,7 @@ function layoutPicture(layout: SavedLayout, screens: NativeScreen[]): Electron.N
       });
     }
   }
-  return miniScreen(fractions);
+  return fractions;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -473,56 +479,69 @@ function afterMenuCloses(run: () => void): void {
   setTimeout(run, 150);
 }
 
-function shapeItems(displayId: string): MenuItemConstructorOptions[] {
+function shapeItems(displayId: string, windowCount: number): MenuItemConstructorOptions[] {
   return SHAPES.map((shape) => ({
     label: t(`LayoutShape${shape}`),
-    icon: miniScreen(shapeFractions(shape)),
+    icon: miniScreen(shapeFractions(shape, windowCount)),
     click: () => afterMenuCloses(() => applyShape(shape, displayId)),
   }));
 }
+
+/** What the macOS panel (native/mac/menu.m) draws: monitor rows, shape chips and saved layouts. */
+export interface LayoutPanel {
+  card: unknown;
+  /** Runs what a chip stands for, given the id the panel returned. */
+  choose: (chosen: string) => void;
+}
+
+/** Stands in the template for the macOS panel; macMenu.ts puts the panel there. */
+export const LAYOUT_PANEL_ID = "split-layout-panel";
 
 /**
  * The "Layouts" section of the tray menu, ending in a separator. Build it each time the menu
  * opens, so the monitors, window counts and saved layouts are current. `onChange` runs after a
  * layout was saved or removed.
  *
- * The macOS app drew this section as one custom view (monitor rows, shape chips); a plain menu
- * cannot, so with one monitor the shapes are items here, and with more each monitor is a submenu
- * of shapes, in place of choosing a monitor row first.
+ * With `panel` (macOS), the monitors, shapes and saved layouts are one item that macMenu.ts
+ * replaces with the panel the macOS app had, and `layoutPanel` describes it. A plain menu cannot
+ * hold that panel, so elsewhere with one monitor the shapes are items here, and with more each
+ * monitor is a submenu of shapes, in place of choosing a monitor row first.
  */
-export function layoutMenuItems(onChange: () => void): MenuItemConstructorOptions[] {
+export function layoutMenuItems(onChange: () => void, panel = false): MenuItemConstructorOptions[] {
   const shot = snapshot(true);
   const screens = shot?.screens ?? [];
   const items: MenuItemConstructorOptions[] = [{ label: t("LayoutSection"), enabled: false }];
-
-  if (screens.length === 1) {
-    items.push(...shapeItems(displayIdOf(screens[0])));
-  } else {
-    for (const nativeScreen of screens) {
-      const count = shot?.windows.filter((w) => middleOn(w, nativeScreen.frame)).length ?? 0;
-      const pixels = `${Math.round(nativeScreen.frame.width * nativeScreen.scale)} × ${Math.round(nativeScreen.frame.height * nativeScreen.scale)}`;
-      items.push({
-        label: displayNameOf(nativeScreen),
-        sublabel: `${pixels} · ${t("LayoutWindowCount", count)}`,
-        icon: monitorIcon(),
-        submenu: shapeItems(displayIdOf(nativeScreen)),
-      });
-    }
-  }
-
-  items.push({ type: "separator" }, { label: t("LayoutSaved"), enabled: false });
   const list = layouts();
-  if (list.length === 0) {
-    items.push({ label: t("LayoutSavedEmpty"), enabled: false });
+
+  if (panel) {
+    items.push({ id: LAYOUT_PANEL_ID, label: "" });
   } else {
-    for (const layout of list) {
-      items.push({
-        // Why: " ·A" marks the one that comes back by itself, as the macOS chip did.
-        label: layout.restoresForDisplays ? `${layout.name} ·A` : layout.name,
-        icon: layoutPicture(layout, screens),
-        ...(layout.restoresForDisplays ? { toolTip: t("LayoutSaveAuto") } : {}),
-        click: () => afterMenuCloses(() => restoreLayout(layout)),
-      });
+    if (screens.length === 1) {
+      items.push(...shapeItems(displayIdOf(screens[0]), windowCount(shot?.windows ?? [], screens[0])));
+    } else {
+      for (const nativeScreen of screens) {
+        const count = windowCount(shot?.windows ?? [], nativeScreen);
+        items.push({
+          label: displayNameOf(nativeScreen),
+          sublabel: screenDetail(nativeScreen, count),
+          icon: monitorIcon(),
+          submenu: shapeItems(displayIdOf(nativeScreen), count),
+        });
+      }
+    }
+
+    items.push({ type: "separator" }, { label: t("LayoutSaved"), enabled: false });
+    if (list.length === 0) {
+      items.push({ label: t("LayoutSavedEmpty"), enabled: false });
+    } else {
+      for (const layout of list) {
+        items.push({
+          label: savedLabel(layout),
+          icon: miniScreen(layoutFractions(layout, screens)),
+          ...(layout.restoresForDisplays ? { toolTip: t("LayoutSaveAuto") } : {}),
+          click: () => afterMenuCloses(() => restoreLayout(layout)),
+        });
+      }
     }
   }
 
@@ -548,6 +567,72 @@ export function layoutMenuItems(onChange: () => void): MenuItemConstructorOption
   }
   items.push({ type: "separator" });
   return items;
+}
+
+/** The macOS panel for the item `layoutMenuItems(…, true)` left in its place. */
+export function layoutPanel(): LayoutPanel {
+  const shot = snapshot(true);
+  const screens = shot?.screens ?? [];
+  const list = layouts();
+  const cells = (fractions: Fraction[]) => fractions.map((f) => [f.x, f.y, f.width, f.height]);
+  // The monitor under the mouse is picked first, as in the macOS app.
+  const cursor = screen.getCursorScreenPoint();
+  const underMouse = screens.find((s) => contains(s.frame, cursor.x, cursor.y)) ?? screens.find((s) => s.primary) ?? screens[0];
+  const picture = (name: string) => menuPicture(name).toPNG({ scaleFactor: 2 }).toString("base64");
+  const card = {
+    titles: { displays: t("LayoutDisplays"), shapes: t("LayoutShapes"), saved: t("LayoutSaved") },
+    empty: t("LayoutSavedEmpty"),
+    monitorImage: picture("monitor"),
+    checkImage: picture("check"),
+    selected: underMouse ? displayIdOf(underMouse) : "",
+    screens: screens.map((nativeScreen) => {
+      const count = windowCount(shot?.windows ?? [], nativeScreen);
+      return {
+        id: displayIdOf(nativeScreen),
+        name: displayNameOf(nativeScreen),
+        detail: screenDetail(nativeScreen, count),
+        auto: cells(shapeFractions("Auto", count)),
+      };
+    }),
+    shapes: SHAPES.map((shape) => ({
+      id: `shape:${shape}`,
+      label: t(`LayoutShape${shape}`),
+      ...(shape === "Auto" ? { auto: true } : { cells: cells(shapeFractions(shape, 0)) }),
+    })),
+    saved: list.map((layout) => ({
+      id: `saved:${layout.id}`,
+      label: savedLabel(layout),
+      cells: cells(layoutFractions(layout, screens)),
+      ...(layout.restoresForDisplays ? { toolTip: t("LayoutSaveAuto") } : {}),
+    })),
+  };
+  const choose = (chosen: string) => {
+    // A shape comes back as "shape:<name>\t<monitor>", a saved layout as "saved:<id>".
+    const [what, displayId] = chosen.split("\t");
+    if (what.startsWith("shape:")) {
+      const shape = what.slice("shape:".length) as LayoutShape;
+      if (SHAPES.includes(shape) && displayId) afterMenuCloses(() => applyShape(shape, displayId));
+    } else if (what.startsWith("saved:")) {
+      const layout = layouts().find((l) => l.id === what.slice("saved:".length));
+      if (layout) afterMenuCloses(() => restoreLayout(layout));
+    }
+  };
+  return { card, choose };
+}
+
+function windowCount(windows: NativeWindow[], nativeScreen: NativeScreen): number {
+  return windows.filter((w) => middleOn(w, nativeScreen.frame)).length;
+}
+
+/** "5120 × 2880 · 3 windows": pixels, as the monitor's own spec says, then the windows on it. */
+function screenDetail(nativeScreen: NativeScreen, count: number): string {
+  const pixels = `${Math.round(nativeScreen.frame.width * nativeScreen.scale)} × ${Math.round(nativeScreen.frame.height * nativeScreen.scale)}`;
+  return `${pixels} · ${t("LayoutWindowCount", count)}`;
+}
+
+/** " ·A" marks the one that comes back by itself, as the macOS chip did. */
+function savedLabel(layout: SavedLayout): string {
+  return layout.restoresForDisplays ? `${layout.name} ·A` : layout.name;
 }
 
 function resourcePath(...parts: string[]): string {
