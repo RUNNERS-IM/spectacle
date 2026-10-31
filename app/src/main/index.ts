@@ -29,7 +29,7 @@ import { Engine, type Outcome, type Snapshot, screenContaining, screensInConsist
 import { Rect } from "../core/geometry.ts";
 import { defaultShortcut, KeyCombo } from "../core/shortcuts.ts";
 import type { LinkKind, OverlayPayload, Settings, SheetPayload, ViewState } from "../shared/types";
-import { runningPids } from "./apps.ts";
+import { removeLoginItem, runningPids } from "./apps.ts";
 import { displayChangeLabel, recordSoon, startDisplayWatcher } from "./displays.ts";
 import { layoutMenuItems, layoutPanel, layoutRestoringForDisplays, restoreLayout, setupLayouts } from "./layouts.ts";
 import { popUpMacMenu } from "./macMenu.ts";
@@ -142,6 +142,7 @@ let pauseTimer: NodeJS.Timeout | null = null;
 let recording = false;
 let frontApp: { id: string; name: string } | null = null;
 let trusted = false;
+let conflictingApps: string[] = [];
 
 function shortcutLabel(action: Action): string {
   return displayText(shortcutText(settings, action));
@@ -180,6 +181,7 @@ function viewState(): ViewState {
     trusted,
     failures,
     refusingApp,
+    conflictingApps,
     version: displayVersion(),
     platform: process.platform as ViewState["platform"],
     store: STORE,
@@ -740,19 +742,62 @@ function askForTrust(): void {
 
 const SPECTACLE = "com.divisiblebyzero.Spectacle";
 
-/** Spectacle and Split answer the same shortcuts, so a Spectacle still running is asked to quit. */
-async function offerToQuitSpectacle(): Promise<void> {
-  const pids = await runningPids(SPECTACLE);
-  if (pids.length === 0) return;
+/** Window apps whose default shortcuts are Split's: Spectacle all of them, the others ⌃⌥← and ⌃⌥→. */
+const CONFLICTING_APPS: [id: string, name: string][] = [
+  [SPECTACLE, "Spectacle"],
+  ["com.knollsoft.Rectangle", "Rectangle"],
+  ["com.crowdcafe.windowmagnet", "Magnet"],
+];
+
+/**
+ * Spectacle and Split answer the same shortcuts and each counts its own 1/2 → 2/3 → 1/3 turn, so
+ * windows land in odd sizes. It is often a login item that starts after Split, so the running
+ * apps are checked all along, not only at launch.
+ */
+function watchConflictingApps(): void {
+  let spectacleWasRunning = false;
+  let asking = false;
+  const check = async () => {
+    const running: string[] = [];
+    let spectaclePids: number[] = [];
+    for (const [id, name] of CONFLICTING_APPS) {
+      const pids = await runningPids(id);
+      if (pids.length === 0) continue;
+      running.push(name);
+      if (id === SPECTACLE) spectaclePids = pids;
+    }
+    if (running.join() !== conflictingApps.join()) {
+      conflictingApps = running;
+      pushState();
+    }
+    const started = spectaclePids.length > 0 && !spectacleWasRunning;
+    spectacleWasRunning = spectaclePids.length > 0;
+    if (started && !asking && !settings.keepSpectacle) {
+      asking = true;
+      await offerToQuitSpectacle(spectaclePids);
+      asking = false;
+    }
+  };
+  setTimeout(() => void check(), 800);
+  setInterval(() => void check(), 5000);
+}
+
+/** Asks to quit Spectacle and take it out of the login items; "Keep Both" is remembered. */
+async function offerToQuitSpectacle(pids: number[]): Promise<void> {
   const { response } = await dialog.showMessageBox({
     type: "warning",
     message: t("Migration.LegacyRunningTitle"),
     detail: t("Migration.LegacyRunningBody"),
     buttons: [t("Migration.LegacyRunningKeep"), t("Migration.LegacyRunningQuit")],
-    defaultId: 0,
+    defaultId: 1,
     cancelId: 0,
   });
-  if (response !== 1) return;
+  if (response !== 1) {
+    settings = { ...settings, keepSpectacle: true };
+    saveSettings(settings);
+    pushState();
+    return;
+  }
   for (const pid of pids) {
     try {
       process.kill(pid);
@@ -760,6 +805,7 @@ async function offerToQuitSpectacle(): Promise<void> {
       // Already gone.
     }
   }
+  await removeLoginItem("Spectacle");
 }
 
 function start(): void {
@@ -828,7 +874,7 @@ function start(): void {
   if (!STORE) startUpdater(settings.autoUpdate);
   if (!trusted) askForTrust();
   else if (loaded.firstLaunch || !settings.showTrayIcon) showSettings();
-  if (MAC) setTimeout(() => void offerToQuitSpectacle(), 800);
+  if (MAC) watchConflictingApps();
   // Shortcuts registered before sleep can stop firing on some systems; register them again on wake.
   powerMonitor.on("resume", syncShortcuts);
   screen.on("display-metrics-changed", () => hideFeedback());

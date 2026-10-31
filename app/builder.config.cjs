@@ -55,6 +55,8 @@ module.exports = {
       LSUIElement: true,
       NSHumanReadableCopyright: '© 2026 RUNNERS. All rights reserved.',
       CFBundleShortVersionString: shownVersion,
+      // Shown when Split asks System Events to take Spectacle out of the login items.
+      NSAppleEventsUsageDescription: 'Split removes Spectacle from your login items so the two apps do not answer the same shortcuts.',
     },
   },
   win: {
