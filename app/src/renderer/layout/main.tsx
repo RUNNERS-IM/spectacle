@@ -62,10 +62,6 @@ function Save({ payload }: { payload: LayoutSavePayload }) {
             <input type="checkbox" checked={auto} onChange={(event) => setAuto(event.target.checked)} />
             <span>{payload.auto}</span>
           </label>
-          {/* Only tells; clicking it shows what Pro is, it locks nothing. */}
-          <button type="button" className="pro-pill" title="Split Pro" onClick={() => void window.split.showPro()}>
-            Pro
-          </button>
         </div>
       </div>
       <div className="buttons">

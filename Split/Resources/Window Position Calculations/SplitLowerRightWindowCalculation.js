@@ -4,17 +4,17 @@ windowPositionCalculationRegistry.registerWindowPositionCalculationWithAction(fu
     oneQuarterRect.height = Math.floor(visibleFrameOfDestinationScreen.height / 2.0);
     oneQuarterRect.x += oneQuarterRect.width;
     if (Math.abs(CGRectGetMidY(windowRect) - CGRectGetMidY(oneQuarterRect)) <= 1.0) {
-        var twoThirdRect = SplitCalculationHelpers.copyRect(oneQuarterRect);
-        twoThirdRect.width = Math.floor(visibleFrameOfDestinationScreen.width * 2 / 3.0);
-        twoThirdRect.x = visibleFrameOfDestinationScreen.x + visibleFrameOfDestinationScreen.width - twoThirdRect.width;
+        var threeQuartersRect = SplitCalculationHelpers.copyRect(oneQuarterRect);
+        threeQuartersRect.width = Math.floor(visibleFrameOfDestinationScreen.width * 3 / 4.0);
+        threeQuartersRect.x = visibleFrameOfDestinationScreen.x + visibleFrameOfDestinationScreen.width - threeQuartersRect.width;
         if (SplitCalculationHelpers.rectCenteredWithinRect(oneQuarterRect, windowRect)) {
-            return twoThirdRect;
+            return threeQuartersRect;
         }
-        if (SplitCalculationHelpers.rectCenteredWithinRect(twoThirdRect, windowRect)) {
-            var oneThirdsRect = SplitCalculationHelpers.copyRect(oneQuarterRect);
-            oneThirdsRect.width = Math.floor(visibleFrameOfDestinationScreen.width / 3.0);
-            oneThirdsRect.x = visibleFrameOfDestinationScreen.x + visibleFrameOfDestinationScreen.width - oneThirdsRect.width;
-            return oneThirdsRect;
+        if (SplitCalculationHelpers.rectCenteredWithinRect(threeQuartersRect, windowRect)) {
+            var oneFourthRect = SplitCalculationHelpers.copyRect(oneQuarterRect);
+            oneFourthRect.width = Math.floor(visibleFrameOfDestinationScreen.width / 4.0);
+            oneFourthRect.x = visibleFrameOfDestinationScreen.x + visibleFrameOfDestinationScreen.width - oneFourthRect.width;
+            return oneFourthRect;
         }
     }
     return oneQuarterRect;
