@@ -2,15 +2,15 @@ windowPositionCalculationRegistry.registerWindowPositionCalculationWithAction(fu
     var oneHalfRect = SplitCalculationHelpers.copyRect(visibleFrameOfDestinationScreen);
     oneHalfRect.height = Math.floor(oneHalfRect.height / 2.0);
     if (Math.abs(CGRectGetMidX(windowRect) - CGRectGetMidX(oneHalfRect)) <= 1.0) {
-        var twoThirdsRect = SplitCalculationHelpers.copyRect(oneHalfRect);
-        twoThirdsRect.height = Math.floor(visibleFrameOfDestinationScreen.height * 2 / 3.0);
+        var threeQuartersRect = SplitCalculationHelpers.copyRect(oneHalfRect);
+        threeQuartersRect.height = Math.floor(visibleFrameOfDestinationScreen.height * 3 / 4.0);
         if (SplitCalculationHelpers.rectCenteredWithinRect(oneHalfRect, windowRect)) {
-            return twoThirdsRect;
+            return threeQuartersRect;
         }
-        if (SplitCalculationHelpers.rectCenteredWithinRect(twoThirdsRect, windowRect)) {
-            var oneThirdRect = SplitCalculationHelpers.copyRect(oneHalfRect);
-            oneThirdRect.height = Math.floor(visibleFrameOfDestinationScreen.height / 3.0);
-            return oneThirdRect;
+        if (SplitCalculationHelpers.rectCenteredWithinRect(threeQuartersRect, windowRect)) {
+            var oneFourthRect = SplitCalculationHelpers.copyRect(oneHalfRect);
+            oneFourthRect.height = Math.floor(visibleFrameOfDestinationScreen.height / 4.0);
+            return oneFourthRect;
         }
     }
     return oneHalfRect;

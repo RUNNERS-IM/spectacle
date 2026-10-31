@@ -750,7 +750,7 @@ const CONFLICTING_APPS: [id: string, name: string][] = [
 ];
 
 /**
- * Spectacle and Split answer the same shortcuts and each counts its own 1/2 → 2/3 → 1/3 turn, so
+ * Spectacle and Split answer the same shortcuts and each counts its own turn of the repeat cycle, so
  * windows land in odd sizes. It is often a login item that starts after Split, so the running
  * apps are checked all along, not only at launch.
  */
