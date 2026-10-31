@@ -4,9 +4,9 @@
 // on screen → `Engine` (src/core) works out where windows go with the macOS JavaScript math →
 // the native module moves them → the overlay shows where they went.
 import { execFileSync } from "node:child_process";
-import { readdirSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
   app,
@@ -698,6 +698,35 @@ function watchTrust(): void {
   }, 1000);
 }
 
+/**
+ * Homebrew and a drag into Applications replace Split.app while the old Split keeps running, and
+ * the old process then loads windows and helpers from the new files and half works until it is
+ * quit. When the bundle's Info.plist changes, start the new copy once it has finished copying.
+ */
+function watchBundle(): void {
+  const plist = join(dirname(process.execPath), "..", "Info.plist");
+  const read = (): string | null => {
+    try {
+      return readFileSync(plist, "utf8");
+    } catch {
+      return null;
+    }
+  };
+  const original = read();
+  if (original === null) return;
+  let seen: string | null = null;
+  setInterval(() => {
+    const now = read();
+    // Why: wait for two equal reads in a row so a copy still in progress is not started.
+    if (now === null || now === original || now !== seen) {
+      seen = now;
+      return;
+    }
+    app.relaunch();
+    app.exit(0);
+  }, 3000);
+}
+
 /** Shows how to turn on Accessibility: the guide window on macOS, settings elsewhere. */
 function askForTrust(): void {
   const register = () => void native.isTrusted(true);
@@ -791,6 +820,7 @@ function start(): void {
   syncShortcuts();
   updateTray();
   watchTrust();
+  if (MAC && app.isPackaged) watchBundle();
   if (loaded.firstLaunch) {
     // Every RUNNERS app adds itself to the login items on its first launch; settings can turn it off.
     setLoginItem(true);
