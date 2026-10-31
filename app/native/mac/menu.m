@@ -140,12 +140,17 @@ static BOOL ParseAccelerator(NSString *accelerator, NSString **key, NSEventModif
     @"PageUp": [NSString stringWithFormat:@"%C", (unichar)NSPageUpFunctionKey],
     @"PageDown": [NSString stringWithFormat:@"%C", (unichar)NSPageDownFunctionKey],
     @"Delete": [NSString stringWithFormat:@"%C", (unichar)NSDeleteFunctionKey],
+    @"Insert": [NSString stringWithFormat:@"%C", (unichar)NSInsertFunctionKey],
     @"Backspace": [NSString stringWithFormat:@"%C", (unichar)NSBackspaceCharacter],
     @"Enter": @"\r",
     @"Tab": @"\t",
     @"Space": @" ",
   };
   NSString *character = special[name];
+  NSInteger function = [name hasPrefix:@"F"] ? [name substringFromIndex:1].integerValue : 0;
+  if (!character && function >= 1 && function <= 24) {
+    character = [NSString stringWithFormat:@"%C", (unichar)(NSF1FunctionKey + function - 1)];
+  }
   if (!character && name.length == 1) {
     character = name.lowercaseString;
   }
@@ -514,9 +519,11 @@ static NSMenu *BuildMenu(NSArray<NSDictionary *> *items, SplitMenuTarget *target
     }
     if ([type isEqualToString:@"card"]) {
       [menu addItem:item];
+      // Why: the target holds the panel, so the block must not hold the target back.
+      __weak SplitMenuTarget *weakTarget = target;
       SplitLayoutPanel *panel = [[SplitLayoutPanel alloc] initWithCard:spec[@"card"]
                                                                  item:item
-                                                               chosen:^(NSString *chosen) { target.chosen = chosen; }];
+                                                               chosen:^(NSString *chosen) { weakTarget.chosen = chosen; }];
       [target.panels addObject:panel];
       continue;
     }
