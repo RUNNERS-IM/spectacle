@@ -56,6 +56,9 @@ module.exports = {
       NSHumanReadableCopyright: '© 2026 RUNNERS. All rights reserved.',
       CFBundleShortVersionString: shownVersion,
       // Shown when Split asks System Events to take Spectacle out of the login items.
+      // Why: the previous Mac app (Sparkle 2.10.1) refuses an update whose app drops the EdDSA key it
+      // was installed with ("improperly signed"), so the Electron app carries the same public key.
+      SUPublicEDKey: '6ZRakftZ8nsC4X0dKIhLz086/SRYn5prMraBTD3vbhw=',
       NSAppleEventsUsageDescription: 'Split removes Spectacle from your login items so the two apps do not answer the same shortcuts.',
     },
   },
