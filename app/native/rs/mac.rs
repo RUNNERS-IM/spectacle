@@ -140,8 +140,11 @@ fn set_rect(element: AXUIElementRef, r: &Rect) -> AXError {
     unsafe {
         let position = AXValueCreate(AX_VALUE_POINT, &p as *const _ as *const c_void);
         let size = AXValueCreate(AX_VALUE_SIZE, &s as *const _ as *const c_void);
-        let size_error = AXUIElementSetAttributeValue(element, cf(&size_name), size);
+        // Why: macOS cuts a new size down to what fits from where the window still is, so a window
+        // moving right or down comes out too small. Size, move, then size again, as the macOS app did.
+        AXUIElementSetAttributeValue(element, cf(&size_name), size);
         let position_error = AXUIElementSetAttributeValue(element, cf(&position_name), position);
+        let size_error = AXUIElementSetAttributeValue(element, cf(&size_name), size);
         CFRelease(position);
         CFRelease(size);
         if position_error != AX_SUCCESS { position_error } else { size_error }
