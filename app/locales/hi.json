@@ -9,6 +9,10 @@
   "AccessibilityGuide.StatusWaiting": "अनुमति की प्रतीक्षा की जा रही है…",
   "AccessibilityGuide.Title": "Split के लिए एक्सेस चालू करें",
   "AccessibilityGuide.WindowTitle": "Split को विंडो हिलाने की अनुमति दें",
+  "AccessibilityGuide.ListTitle": "सुलभता",
+  "AccessibilityGuide.GrantedTitle": "सब तैयार है",
+  "AccessibilityGuide.GrantedDescription": "अब आप शॉर्टकट से विंडो खिसका सकते हैं।",
+  "AccessibilityGuide.GrantedTry": "किसी भी विंडो को सामने लाएँ और दबाएँ:",
   "AlertInformativeTextRestoreDefaults": "आपके द्वारा बदले गए शॉर्टकट वैसे ही हो जाएँगे जैसे Split में शुरू में थे।",
   "AlertInformativeTextRunningInBackground": "शॉर्टकट काम करते रहेंगे। सेटिंग्ज़ फिर से खोलने के लिए, ऐप्लिकेशन फ़ोल्डर से Split खोलें।",
   "AlertInformativeTextShortcutAlreadyInUse": "Split की कोई दूसरी क्रिया %@ का उपयोग करती है। कोई दूसरा शॉर्टकट चुनें।",
@@ -188,5 +192,9 @@
   "SectionPermission": "अनुमतियाँ",
   "SectionStatus": "स्थिति",
   "SectionAbout": "जानकारी",
-  "SectionMoveFeedback": "खिसकाने का संकेत"
+  "SectionMoveFeedback": "खिसकाने का संकेत",
+  "Side.Left": "बायाँ",
+  "Side.Right": "दायाँ",
+  "Side.Top": "ऊपर",
+  "Side.Bottom": "नीचे"
 }

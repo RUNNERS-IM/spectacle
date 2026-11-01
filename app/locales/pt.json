@@ -9,6 +9,10 @@
   "AccessibilityGuide.StatusWaiting": "Aguardando permissão…",
   "AccessibilityGuide.Title": "Ative o acesso do Split",
   "AccessibilityGuide.WindowTitle": "Permitir que o Split mova janelas",
+  "AccessibilityGuide.ListTitle": "Acessibilidade",
+  "AccessibilityGuide.GrantedTitle": "Tudo pronto",
+  "AccessibilityGuide.GrantedDescription": "Agora você pode mover janelas com atalhos.",
+  "AccessibilityGuide.GrantedTry": "Coloque qualquer janela na frente e pressione:",
   "AlertInformativeTextRestoreDefaults": "Os atalhos que você alterou voltarão a ser como eram no Split original.",
   "AlertInformativeTextRunningInBackground": "Os atalhos continuam funcionando. Para abrir os ajustes novamente, abra o Split pela pasta Aplicativos.",
   "AlertInformativeTextShortcutAlreadyInUse": "Outra ação do Split usa %@. Escolha um atalho diferente.",
@@ -188,5 +192,9 @@
   "SectionPermission": "Permissões",
   "SectionStatus": "Estado",
   "SectionAbout": "Sobre",
-  "SectionMoveFeedback": "Destaque ao mover"
+  "SectionMoveFeedback": "Destaque ao mover",
+  "Side.Left": "Esquerda",
+  "Side.Right": "Direita",
+  "Side.Top": "Topo",
+  "Side.Bottom": "Base"
 }

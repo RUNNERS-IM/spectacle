@@ -9,6 +9,10 @@
   "AccessibilityGuide.StatusWaiting": "กำลังรอสิทธิ์…",
   "AccessibilityGuide.Title": "เปิดสิทธิ์ให้ Split",
   "AccessibilityGuide.WindowTitle": "อนุญาตให้ Split ย้ายหน้าต่าง",
+  "AccessibilityGuide.ListTitle": "การช่วยการเข้าถึง",
+  "AccessibilityGuide.GrantedTitle": "พร้อมแล้ว",
+  "AccessibilityGuide.GrantedDescription": "ตอนนี้คุณย้ายหน้าต่างด้วยปุ่มลัดได้แล้ว",
+  "AccessibilityGuide.GrantedTry": "นำหน้าต่างใดก็ได้มาไว้ด้านหน้า แล้วกด:",
   "AlertInformativeTextRestoreDefaults": "คีย์ลัดที่คุณเปลี่ยนจะกลับไปเป็นค่าเดิมของ Split",
   "AlertInformativeTextRunningInBackground": "คีย์ลัดยังใช้งานได้ หากต้องการเปิดการตั้งค่าอีกครั้ง ให้เปิด Split จากโฟลเดอร์แอปพลิเคชัน",
   "AlertInformativeTextShortcutAlreadyInUse": "การทำงานอื่นของ Split ใช้ %@ อยู่ โปรดเลือกคีย์ลัดอื่น",
@@ -188,5 +192,9 @@
   "SectionPermission": "สิทธิ์",
   "SectionStatus": "สถานะ",
   "SectionAbout": "เกี่ยวกับ",
-  "SectionMoveFeedback": "ไฮไลต์การย้าย"
+  "SectionMoveFeedback": "ไฮไลต์การย้าย",
+  "Side.Left": "ซ้าย",
+  "Side.Right": "ขวา",
+  "Side.Top": "บน",
+  "Side.Bottom": "ล่าง"
 }

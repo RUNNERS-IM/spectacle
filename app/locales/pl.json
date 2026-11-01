@@ -9,6 +9,10 @@
   "AccessibilityGuide.StatusWaiting": "Oczekiwanie na pozwolenie…",
   "AccessibilityGuide.Title": "Włącz dostęp dla Split",
   "AccessibilityGuide.WindowTitle": "Pozwól Split przenosić okna",
+  "AccessibilityGuide.ListTitle": "Dostępność",
+  "AccessibilityGuide.GrantedTitle": "Wszystko gotowe",
+  "AccessibilityGuide.GrantedDescription": "Możesz teraz przesuwać okna skrótami.",
+  "AccessibilityGuide.GrantedTry": "Wysuń dowolne okno na wierzch i naciśnij:",
   "AlertInformativeTextRestoreDefaults": "Zmienione skróty wrócą do ustawień, z którymi Split był dostarczony.",
   "AlertInformativeTextRunningInBackground": "Skróty nadal będą działać. Aby ponownie otworzyć ustawienia, otwórz Split z folderu Aplikacje.",
   "AlertInformativeTextShortcutAlreadyInUse": "Inna czynność Split używa skrótu %@. Wybierz inny skrót.",
@@ -188,5 +192,9 @@
   "SectionPermission": "Uprawnienia",
   "SectionStatus": "Stan",
   "SectionAbout": "Informacje",
-  "SectionMoveFeedback": "Wyróżnienie przeniesienia"
+  "SectionMoveFeedback": "Wyróżnienie przeniesienia",
+  "Side.Left": "Lewo",
+  "Side.Right": "Prawo",
+  "Side.Top": "Góra",
+  "Side.Bottom": "Dół"
 }

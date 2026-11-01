@@ -9,6 +9,10 @@
   "AccessibilityGuide.StatusWaiting": "Menunggu izin…",
   "AccessibilityGuide.Title": "Aktifkan akses untuk Split",
   "AccessibilityGuide.WindowTitle": "Izinkan Split memindahkan jendela",
+  "AccessibilityGuide.ListTitle": "Aksesibilitas",
+  "AccessibilityGuide.GrantedTitle": "Semua siap",
+  "AccessibilityGuide.GrantedDescription": "Sekarang Anda dapat memindahkan jendela dengan pintasan.",
+  "AccessibilityGuide.GrantedTry": "Bawa jendela mana pun ke depan lalu tekan:",
   "AlertInformativeTextRestoreDefaults": "Pintasan yang Anda ubah akan kembali seperti bawaan Split.",
   "AlertInformativeTextRunningInBackground": "Pintasan tetap berfungsi. Untuk membuka pengaturan lagi, buka Split dari folder Aplikasi.",
   "AlertInformativeTextShortcutAlreadyInUse": "Tindakan Split lain menggunakan %@. Pilih pintasan lain.",
@@ -188,5 +192,9 @@
   "SectionPermission": "Izin",
   "SectionStatus": "Status",
   "SectionAbout": "Tentang",
-  "SectionMoveFeedback": "Sorotan pemindahan"
+  "SectionMoveFeedback": "Sorotan pemindahan",
+  "Side.Left": "Kiri",
+  "Side.Right": "Kanan",
+  "Side.Top": "Atas",
+  "Side.Bottom": "Bawah"
 }

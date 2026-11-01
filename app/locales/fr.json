@@ -9,6 +9,10 @@
   "AccessibilityGuide.StatusWaiting": "En attente de l’autorisation…",
   "AccessibilityGuide.Title": "Activez l’accès pour Split",
   "AccessibilityGuide.WindowTitle": "Autoriser Split à déplacer les fenêtres",
+  "AccessibilityGuide.ListTitle": "Accessibilité",
+  "AccessibilityGuide.GrantedTitle": "Tout est prêt",
+  "AccessibilityGuide.GrantedDescription": "Vous pouvez maintenant déplacer les fenêtres avec des raccourcis.",
+  "AccessibilityGuide.GrantedTry": "Mettez une fenêtre au premier plan et appuyez sur :",
   "AlertInformativeTextRestoreDefaults": "Les raccourcis que vous avez modifiés reviendront à leur réglage d’origine.",
   "AlertInformativeTextRunningInBackground": "Les raccourcis continuent de fonctionner. Pour rouvrir les réglages, ouvrez Split depuis le dossier Applications.",
   "AlertInformativeTextShortcutAlreadyInUse": "Une autre action de Split utilise %@. Choisissez un autre raccourci.",
@@ -188,5 +192,9 @@
   "SectionPermission": "Autorisations",
   "SectionStatus": "État",
   "SectionAbout": "À propos",
-  "SectionMoveFeedback": "Mise en évidence du déplacement"
+  "SectionMoveFeedback": "Mise en évidence du déplacement",
+  "Side.Left": "Gauche",
+  "Side.Right": "Droite",
+  "Side.Top": "Haut",
+  "Side.Bottom": "Bas"
 }

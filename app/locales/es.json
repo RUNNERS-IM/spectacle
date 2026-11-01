@@ -9,6 +9,10 @@
   "AccessibilityGuide.StatusWaiting": "Esperando el permiso…",
   "AccessibilityGuide.Title": "Activa el acceso para Split",
   "AccessibilityGuide.WindowTitle": "Permitir que Split mueva ventanas",
+  "AccessibilityGuide.ListTitle": "Accesibilidad",
+  "AccessibilityGuide.GrantedTitle": "Todo listo",
+  "AccessibilityGuide.GrantedDescription": "Ya puedes mover ventanas con atajos.",
+  "AccessibilityGuide.GrantedTry": "Pon cualquier ventana delante y pulsa:",
   "AlertInformativeTextRestoreDefaults": "Las funciones rápidas que hayas cambiado volverán a como venían en Split.",
   "AlertInformativeTextRunningInBackground": "Las funciones rápidas seguirán funcionando. Para volver a abrir los ajustes, abre Split desde la carpeta Aplicaciones.",
   "AlertInformativeTextShortcutAlreadyInUse": "Otra acción de Split usa %@. Elige otra función rápida.",
@@ -188,5 +192,9 @@
   "SectionPermission": "Permisos",
   "SectionStatus": "Estado",
   "SectionAbout": "Información",
-  "SectionMoveFeedback": "Resaltado al mover"
+  "SectionMoveFeedback": "Resaltado al mover",
+  "Side.Left": "Izquierda",
+  "Side.Right": "Derecha",
+  "Side.Top": "Arriba",
+  "Side.Bottom": "Abajo"
 }
