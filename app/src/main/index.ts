@@ -872,12 +872,7 @@ function start(): void {
       const layout = layoutRestoringForDisplays(ids);
       return layout ? restoreLayout(layout) : null;
     },
-    onArranged: (count, restored) => {
-      const label = displayChangeLabel(settings, count, restored, shortcutLabel("UndoLastMove"));
-      if (!label) return;
-      const area = screen.getDisplayNearestPoint(screen.getCursorScreenPoint()).workArea;
-      showFeedback({ ...overlayBase(), kind: "label", rects: [Rect.from(fromDip(area))], title: label.title, shortcut: "", tip: label.tip });
-    },
+    onArranged: showDisplayNotice,
   });
   syncShortcuts();
   updateTray();
@@ -896,6 +891,14 @@ function start(): void {
   screen.on("display-metrics-changed", () => hideFeedback());
 }
 
+/** "Monitors changed, so 3 windows were rearranged" (or "went back"), on the monitor under the pointer. */
+function showDisplayNotice(count: number, restored: boolean): void {
+  const label = displayChangeLabel(settings, count, restored, shortcutLabel("UndoLastMove"));
+  if (!label) return;
+  const area = screen.getDisplayNearestPoint(screen.getCursorScreenPoint()).workArea;
+  showFeedback({ ...overlayBase(), kind: "label", rects: [Rect.from(fromDip(area))], title: label.title, shortcut: "", tip: label.tip });
+}
+
 /**
  * `open -g -a Split --args --menu` shows the tray menu at the pointer, for when the icon is hidden
  * behind the notch; `--perform MoveToLeftHalf` (or `--perform=MoveToLeftHalf`) runs one action, for
@@ -908,6 +911,9 @@ function openedAgain(argv: string[]): void {
   const action = ALL.find((a) => a === named || (argv.includes("--perform") && argv.includes(a)));
   if (action) perform(action);
   else if (argv.includes("--menu")) showMenuAtPointer();
+  // `--display-notice` (or `--display-notice=restored`) shows the notice a monitor change brings,
+  // with 3 windows, so it can be seen and photographed without unplugging a monitor.
+  else if (argv.some((arg) => arg.startsWith("--display-notice"))) showDisplayNotice(3, argv.includes("--display-notice=restored"));
   // `--guide` shows the Accessibility guide even when permission is on, for support and screenshots.
   else if (argv.includes("--guide") && MAC) showGuide({ preload: preloadPath(), url: rendererUrl("guide"), register: () => undefined });
   else showSettings();
