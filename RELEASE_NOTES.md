@@ -1,5 +1,11 @@
 ## 한국어
 
+- 아랍어로 쓰다가 다른 언어로 바꾸면 메뉴가 오른쪽→왼쪽으로 뒤집힌 채 남던 문제를 고쳤습니다.
+- 아랍어에서 설정 · 단축키 목록 · 저장 창 · 권한 안내 창이 오른쪽→왼쪽으로 놓입니다. 단축키 글자는 ⌥⌘← 순서 그대로입니다.
+- 단축키 목록에서 긴 이름이 "…"로 잘리지 않고 끝까지 보입니다.
+- 창 개수에 맞는 낱말을 씁니다(영어 "1 window", 아랍어 · 폴란드어 복수형 등). 한국어 "⌥⌘Z을(를)" 같은 어색한 조사도 고쳤습니다.
+- 권한이 이미 켜져 있으면 권한 안내 창이 시스템 설정을 열지 않습니다.
+- 메뉴 배치 칸의 "자동" 모양을 테두리로 그려, 창 개수가 같은 다른 모양과 구별됩니다.
 - 창이 없는 모니터에서도 메뉴 배치 칸의 "자동" 모양이 빈 상자 대신 예시 모양으로 보입니다.
 - 한국어 안내 문구의 말투를 "~하십시오"로 맞췄습니다.
 - 반복해서 누를 때 창 이동 알림에 "왼쪽 반 → 왼쪽 3/4 → 왼쪽 1/4"처럼 지금 크기가 나옵니다.
@@ -21,6 +27,12 @@
 
 ## English
 
+- Menus no longer stay mirrored right to left after switching from Arabic to another language.
+- In Arabic, settings, the shortcut list, the save window and the permission guide lay out right to left; shortcut keys keep their ⌥⌘← order.
+- Long names in the shortcut list show in full instead of ending in "…".
+- Window counts use the right word for the number ("1 window", Arabic and Polish plurals).
+- The permission guide no longer opens System Settings when permission is already on.
+- The Auto shape in the menu's layout panel is drawn as outlines, so it no longer looks like the fixed shape with the same window count.
 - The Auto shape in the menu's layout panel now shows an example instead of an empty box on a monitor with no windows.
 - Pressing a shortcut again now says which size you landed on: "Left Half → Left 3/4 → Left 1/4".
 - The Accessibility guide is redrawn, and once permission is on it shows the first shortcut to try.
