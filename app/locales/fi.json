@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "Avaa Järjestelmäasetukset",
   "AccessibilityGuide.ButtonReset": "Päällä, mutta ei toimi?",
   "AccessibilityGuide.Description": "Laita vain tämä yksi kytkin päälle Järjestelmäasetuksissa.",
+  "AccessibilityGuide.DescriptionAfter": "Kun se on päällä, tämä ikkuna vaihtuu itsestään.",
   "AccessibilityGuide.StatusGranted": "Lupa myönnetty. Kaikki valmista.",
   "AccessibilityGuide.StatusWaiting": "Odotetaan lupaa…",
   "AccessibilityGuide.Title": "Salli Splitin käyttöoikeus",

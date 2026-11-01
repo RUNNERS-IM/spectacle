@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "Buka Pengaturan Sistem",
   "AccessibilityGuide.ButtonReset": "Sudah aktif tapi tidak berfungsi?",
   "AccessibilityGuide.Description": "Cukup nyalakan satu sakelar ini di Pengaturan Sistem.",
+  "AccessibilityGuide.DescriptionAfter": "Setelah aktif, jendela ini berubah sendiri.",
   "AccessibilityGuide.StatusGranted": "Izin diberikan. Semua siap.",
   "AccessibilityGuide.StatusWaiting": "Menunggu izin…",
   "AccessibilityGuide.Title": "Aktifkan akses untuk Split",

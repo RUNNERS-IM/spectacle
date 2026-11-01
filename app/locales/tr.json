@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "Sistem Ayarları'nı Aç",
   "AccessibilityGuide.ButtonReset": "Açık ama çalışmıyor mu?",
   "AccessibilityGuide.Description": "Sistem Ayarları'nda yalnızca bu anahtarı açın.",
+  "AccessibilityGuide.DescriptionAfter": "Açıldığında bu pencere kendiliğinden değişir.",
   "AccessibilityGuide.StatusGranted": "İzin verildi. Her şey hazır.",
   "AccessibilityGuide.StatusWaiting": "İzin bekleniyor…",
   "AccessibilityGuide.Title": "Split için erişimi açın",

@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "Open System Settings",
   "AccessibilityGuide.ButtonReset": "Already on but not working?",
   "AccessibilityGuide.Description": "Just turn on this one switch in System Settings.",
+  "AccessibilityGuide.DescriptionAfter": "This window changes on its own once it’s on.",
   "AccessibilityGuide.StatusGranted": "Permission granted. You're all set.",
   "AccessibilityGuide.StatusWaiting": "Waiting for permission…",
   "AccessibilityGuide.Title": "Turn on access for Split",

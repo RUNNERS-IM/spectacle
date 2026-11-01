@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "打開系統設定",
   "AccessibilityGuide.ButtonReset": "已開啟但仍無效？",
   "AccessibilityGuide.Description": "只要在系統設定中打開這一個開關。",
+  "AccessibilityGuide.DescriptionAfter": "開啟後，此視窗會自動更新。",
   "AccessibilityGuide.StatusGranted": "已取得權限，一切就緒。",
   "AccessibilityGuide.StatusWaiting": "正在等待權限⋯",
   "AccessibilityGuide.Title": "為 Split 開啟取用權限",

@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "Otwórz Ustawienia systemowe",
   "AccessibilityGuide.ButtonReset": "Włączone, ale nie działa?",
   "AccessibilityGuide.Description": "Wystarczy włączyć ten jeden przełącznik w Ustawieniach systemowych.",
+  "AccessibilityGuide.DescriptionAfter": "Po włączeniu to okno zmieni się samo.",
   "AccessibilityGuide.StatusGranted": "Pozwolenie udzielone. Wszystko gotowe.",
   "AccessibilityGuide.StatusWaiting": "Oczekiwanie na pozwolenie…",
   "AccessibilityGuide.Title": "Włącz dostęp dla Split",
