@@ -9,6 +9,10 @@
   "AccessibilityGuide.StatusWaiting": "Wachten op toestemming…",
   "AccessibilityGuide.Title": "Zet toegang voor Split aan",
   "AccessibilityGuide.WindowTitle": "Sta Split toe vensters te verplaatsen",
+  "AccessibilityGuide.ListTitle": "Toegankelijkheid",
+  "AccessibilityGuide.GrantedTitle": "Alles is klaar",
+  "AccessibilityGuide.GrantedDescription": "Je kunt nu vensters verplaatsen met sneltoetsen.",
+  "AccessibilityGuide.GrantedTry": "Zet een venster vooraan en druk op:",
   "AlertInformativeTextRestoreDefaults": "Sneltoetsen die u hebt gewijzigd, worden teruggezet naar de oorspronkelijke instellingen van Split.",
   "AlertInformativeTextRunningInBackground": "Sneltoetsen blijven werken. Open Split vanuit de map Programma's om de instellingen weer te openen.",
   "AlertInformativeTextShortcutAlreadyInUse": "Een andere Split-actie gebruikt %@. Kies een andere sneltoets.",
@@ -188,5 +192,9 @@
   "SectionPermission": "Toegang",
   "SectionStatus": "Status",
   "SectionAbout": "Info",
-  "SectionMoveFeedback": "Markering bij verplaatsen"
+  "SectionMoveFeedback": "Markering bij verplaatsen",
+  "Side.Left": "Links",
+  "Side.Right": "Rechts",
+  "Side.Top": "Boven",
+  "Side.Bottom": "Onder"
 }

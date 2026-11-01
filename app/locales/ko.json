@@ -4,11 +4,15 @@
   "AccessibilityGuide.ButtonLater": "나중에",
   "AccessibilityGuide.ButtonOpenSettings": "시스템 설정 열기",
   "AccessibilityGuide.ButtonReset": "켰는데 동작하지 않음",
-  "AccessibilityGuide.Description": "시스템 설정에서 이 스위치를 켜세요.",
+  "AccessibilityGuide.Description": "시스템 설정에서 이 스위치를 켜 주십시오.",
   "AccessibilityGuide.StatusGranted": "권한이 허용되었습니다. 이제 사용할 수 있습니다.",
   "AccessibilityGuide.StatusWaiting": "권한을 기다리는 중…",
-  "AccessibilityGuide.Title": "Split 권한을 켜 주세요",
+  "AccessibilityGuide.Title": "Split 권한을 켜 주십시오",
   "AccessibilityGuide.WindowTitle": "Split 창 이동 허용",
+  "AccessibilityGuide.ListTitle": "손쉬운 사용",
+  "AccessibilityGuide.GrantedTitle": "준비되었습니다",
+  "AccessibilityGuide.GrantedDescription": "이제 단축키로 창을 옮길 수 있습니다.",
+  "AccessibilityGuide.GrantedTry": "아무 창이나 앞에 두고 눌러 보십시오.",
   "AlertInformativeTextRestoreDefaults": "바꾼 단축키가 처음 상태로 돌아갑니다.",
   "AlertInformativeTextRunningInBackground": "단축키는 계속 동작합니다. 설정을 다시 열려면 응용 프로그램 폴더에서 Split을 여세요.",
   "AlertInformativeTextShortcutAlreadyInUse": "다른 Split 동작이 %@을(를) 사용 중입니다. 다른 단축키를 선택하세요.",
@@ -188,5 +192,9 @@
   "SectionPermission": "권한",
   "SectionStatus": "상태",
   "SectionAbout": "정보",
-  "SectionMoveFeedback": "창 이동 표시"
+  "SectionMoveFeedback": "창 이동 표시",
+  "Side.Left": "왼쪽",
+  "Side.Right": "오른쪽",
+  "Side.Top": "위쪽",
+  "Side.Bottom": "아래쪽"
 }

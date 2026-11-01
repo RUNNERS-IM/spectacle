@@ -9,6 +9,10 @@
   "AccessibilityGuide.StatusWaiting": "Odotetaan lupaa…",
   "AccessibilityGuide.Title": "Salli Splitin käyttöoikeus",
   "AccessibilityGuide.WindowTitle": "Salli Splitin siirtää ikkunoita",
+  "AccessibilityGuide.ListTitle": "Käyttöapu",
+  "AccessibilityGuide.GrantedTitle": "Valmista",
+  "AccessibilityGuide.GrantedDescription": "Voit nyt siirtää ikkunoita pikanäppäimillä.",
+  "AccessibilityGuide.GrantedTry": "Tuo mikä tahansa ikkuna eteen ja paina:",
   "AlertInformativeTextRestoreDefaults": "Muuttamasi oikotiet palautetaan Splitin alkuperäisiin.",
   "AlertInformativeTextRunningInBackground": "Oikotiet toimivat edelleen. Avaa asetukset uudelleen avaamalla Split Ohjelmat-kansiosta.",
   "AlertInformativeTextShortcutAlreadyInUse": "Toinen Splitin toiminto käyttää oikotietä %@. Valitse toinen oikotie.",
@@ -188,5 +192,9 @@
   "SectionPermission": "Käyttöoikeudet",
   "SectionStatus": "Tila",
   "SectionAbout": "Tietoja",
-  "SectionMoveFeedback": "Siirron korostus"
+  "SectionMoveFeedback": "Siirron korostus",
+  "Side.Left": "Vasen",
+  "Side.Right": "Oikea",
+  "Side.Top": "Ylä",
+  "Side.Bottom": "Ala"
 }
