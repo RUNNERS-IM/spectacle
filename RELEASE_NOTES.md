@@ -1,5 +1,7 @@
 ## 한국어
 
+- 창이 없는 모니터에서도 메뉴 배치 칸의 "자동" 모양이 빈 상자 대신 예시 모양으로 보입니다.
+- 한국어 안내 문구의 말투를 "~하십시오"로 맞췄습니다.
 - 반복해서 누를 때 창 이동 알림에 "왼쪽 반 → 왼쪽 3/4 → 왼쪽 1/4"처럼 지금 크기가 나옵니다.
 - 손쉬운 사용 권한 안내 창을 새로 그렸습니다. 권한이 켜지면 처음 써 볼 단축키를 보여 줍니다.
 - 메뉴가 열린 채로 Split 을 다시 실행하면 Split 이 꺼지던 문제를 고쳤습니다.
@@ -19,6 +21,7 @@
 
 ## English
 
+- The Auto shape in the menu's layout panel now shows an example instead of an empty box on a monitor with no windows.
 - Pressing a shortcut again now says which size you landed on: "Left Half → Left 3/4 → Left 1/4".
 - The Accessibility guide is redrawn, and once permission is on it shows the first shortcut to try.
 - Opening Split again while its menu was open no longer makes Split quit.

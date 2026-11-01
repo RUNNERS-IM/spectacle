@@ -482,7 +482,7 @@ function afterMenuCloses(run: () => void): void {
 function shapeItems(displayId: string, windowCount: number): MenuItemConstructorOptions[] {
   return SHAPES.map((shape) => ({
     label: t(`LayoutShape${shape}`),
-    icon: miniScreen(shapeFractions(shape, windowCount)),
+    icon: miniScreen(shapeFractions(shape, shape === "Auto" ? autoPreviewCount(windowCount) : windowCount)),
     click: () => afterMenuCloses(() => applyShape(shape, displayId)),
   }));
 }
@@ -590,7 +590,7 @@ export function layoutPanel(): LayoutPanel {
         id: displayIdOf(nativeScreen),
         name: displayNameOf(nativeScreen),
         detail: screenDetail(nativeScreen, count),
-        auto: cells(shapeFractions("Auto", count)),
+        auto: cells(shapeFractions("Auto", autoPreviewCount(count))),
       };
     }),
     shapes: SHAPES.map((shape) => ({
@@ -617,6 +617,14 @@ export function layoutPanel(): LayoutPanel {
     }
   };
   return { card, choose };
+}
+
+/**
+ * How many windows the "Auto" picture shows: the windows on the monitor, or six on an empty one,
+ * whose picture would otherwise be a blank screen that looks broken.
+ */
+function autoPreviewCount(count: number): number {
+  return count > 0 ? count : 6;
 }
 
 function windowCount(windows: NativeWindow[], nativeScreen: NativeScreen): number {
