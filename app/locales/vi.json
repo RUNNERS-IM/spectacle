@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "Mở Cài đặt hệ thống",
   "AccessibilityGuide.ButtonReset": "Đã bật nhưng không hoạt động?",
   "AccessibilityGuide.Description": "Chỉ cần bật công tắc này trong Cài đặt hệ thống.",
+  "AccessibilityGuide.DescriptionAfter": "Khi đã bật, cửa sổ này sẽ tự thay đổi.",
   "AccessibilityGuide.StatusGranted": "Đã cấp quyền. Mọi thứ đã sẵn sàng.",
   "AccessibilityGuide.StatusWaiting": "Đang chờ cấp quyền…",
   "AccessibilityGuide.Title": "Bật quyền truy cập cho Split",

@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "Abrir Ajustes del Sistema",
   "AccessibilityGuide.ButtonReset": "¿Ya está activado y no funciona?",
   "AccessibilityGuide.Description": "Solo activa este interruptor en Ajustes del Sistema.",
+  "AccessibilityGuide.DescriptionAfter": "Cuando esté activado, esta ventana cambiará sola.",
   "AccessibilityGuide.StatusGranted": "Permiso concedido. Todo listo.",
   "AccessibilityGuide.StatusWaiting": "Esperando el permiso…",
   "AccessibilityGuide.Title": "Activa el acceso para Split",

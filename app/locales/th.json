@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "เปิดการตั้งค่าระบบ",
   "AccessibilityGuide.ButtonReset": "เปิดแล้วแต่ยังใช้ไม่ได้?",
   "AccessibilityGuide.Description": "แค่เปิดสวิตช์นี้ในการตั้งค่าระบบ",
+  "AccessibilityGuide.DescriptionAfter": "เมื่อเปิดแล้ว หน้าต่างนี้จะเปลี่ยนเอง",
   "AccessibilityGuide.StatusGranted": "ได้รับสิทธิ์แล้ว พร้อมใช้งาน",
   "AccessibilityGuide.StatusWaiting": "กำลังรอสิทธิ์…",
   "AccessibilityGuide.Title": "เปิดสิทธิ์ให้ Split",

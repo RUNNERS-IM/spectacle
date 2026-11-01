@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "Ouvrir Réglages Système",
   "AccessibilityGuide.ButtonReset": "Déjà activé mais ça ne marche pas ?",
   "AccessibilityGuide.Description": "Activez simplement cet interrupteur dans Réglages Système.",
+  "AccessibilityGuide.DescriptionAfter": "Une fois activé, cette fenêtre change d’elle-même.",
   "AccessibilityGuide.StatusGranted": "Autorisation accordée. Tout est prêt.",
   "AccessibilityGuide.StatusWaiting": "En attente de l’autorisation…",
   "AccessibilityGuide.Title": "Activez l’accès pour Split",

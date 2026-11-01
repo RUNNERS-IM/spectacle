@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "सिस्टम सेटिंग्ज़ खोलें",
   "AccessibilityGuide.ButtonReset": "चालू है पर काम नहीं कर रहा?",
   "AccessibilityGuide.Description": "बस सिस्टम सेटिंग्स में यह एक स्विच चालू करें।",
+  "AccessibilityGuide.DescriptionAfter": "चालू होते ही यह विंडो अपने-आप बदल जाएगी।",
   "AccessibilityGuide.StatusGranted": "अनुमति मिल गई। सब तैयार है।",
   "AccessibilityGuide.StatusWaiting": "अनुमति की प्रतीक्षा की जा रही है…",
   "AccessibilityGuide.Title": "Split के लिए एक्सेस चालू करें",

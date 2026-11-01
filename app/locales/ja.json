@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "システム設定を開く",
   "AccessibilityGuide.ButtonReset": "オンなのに動かない場合",
   "AccessibilityGuide.Description": "システム設定でこのスイッチを1つオンにするだけです。",
+  "AccessibilityGuide.DescriptionAfter": "オンにすると、このウインドウが自動で切り替わります。",
   "AccessibilityGuide.StatusGranted": "許可されました。準備完了です。",
   "AccessibilityGuide.StatusWaiting": "許可を待っています…",
   "AccessibilityGuide.Title": "Splitのアクセスをオンにしてください",

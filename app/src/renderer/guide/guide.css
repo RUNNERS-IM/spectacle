@@ -20,9 +20,25 @@ body {
   -webkit-app-region: drag;
 }
 
+/* Waiting for permission: a small icon beside the title, so the switch row is the largest thing. */
+.guide-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
 .guide-icon {
-  width: 64px;
-  height: 64px;
+  width: 32px;
+  height: 32px;
+}
+
+.guide-heading h1 {
+  margin: 0;
+}
+
+.guide-heading + .guide-description {
+  margin-top: 8px;
 }
 
 h1 {
@@ -40,7 +56,7 @@ h1 {
 /* The Accessibility list in System Settings: its title, then the Split row with its switch off. */
 .guide-list {
   align-self: stretch;
-  margin-top: 16px;
+  margin-top: 18px;
   text-align: left;
 }
 
@@ -54,10 +70,11 @@ h1 {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px;
+  padding: 14px 16px;
   border: var(--rw-border) solid var(--rw-separator);
   border-radius: 10px;
   background: var(--rw-box-bg);
+  font-size: 14px;
 }
 
 .guide-row img {
