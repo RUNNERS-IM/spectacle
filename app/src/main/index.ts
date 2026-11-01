@@ -34,7 +34,7 @@ import { displayChangeLabel, recordSoon, startDisplayWatcher } from "./displays.
 import { layoutMenuItems, layoutPanel, layoutRestoringForDisplays, restoreLayout, setupLayouts } from "./layouts.ts";
 import { popUpMacMenu } from "./macMenu.ts";
 import { guideGranted, openAccessibilitySettings, registerGuideIpc, showGuide } from "./guide.ts";
-import { currentLanguage, loadLanguage, strings, t } from "./i18n.ts";
+import { currentLanguage, loadLanguage, rightToLeft, strings, t } from "./i18n.ts";
 import { accelerator, displayShortcut, displayText } from "./keys.ts";
 import { createOverlay, fromDip, hideFeedback, hideSheet, showAbout, showFeedback, showNotices, showSheet } from "./overlay.ts";
 import { bindings, loadSettings, sanitize, saveSettings, shortcutText } from "./settings.ts";
@@ -753,7 +753,7 @@ function askForTrust(): void {
     register();
     return;
   }
-  showGuide({ preload: preloadPath(), url: rendererUrl("guide"), register });
+  showGuide({ preload: preloadPath(), url: rendererUrl("guide"), register, trusted: () => native.isTrusted(false) });
 }
 
 const SPECTACLE = "com.divisiblebyzero.Spectacle";
@@ -826,6 +826,12 @@ async function offerToQuitSpectacle(pids: number[]): Promise<void> {
 
 function start(): void {
   loadLanguage();
+  // Why: Chromium writes AppleTextDirection = 1 to Split's defaults when it starts in Arabic and
+  // never clears it, so after a switch to another language the menus stayed mirrored.
+  if (MAC && !rightToLeft()) {
+    systemPreferences.removeUserDefault("AppleTextDirection");
+    systemPreferences.removeUserDefault("NSForceRightToLeftWritingDirection");
+  }
   const loaded = loadSettings();
   settings = loaded.settings;
   const scripts = app.isPackaged
@@ -915,7 +921,7 @@ function openedAgain(argv: string[]): void {
   // with 3 windows, so it can be seen and photographed without unplugging a monitor.
   else if (argv.some((arg) => arg.startsWith("--display-notice"))) showDisplayNotice(3, argv.includes("--display-notice=restored"));
   // `--guide` shows the Accessibility guide even when permission is on, for support and screenshots.
-  else if (argv.includes("--guide") && MAC) showGuide({ preload: preloadPath(), url: rendererUrl("guide"), register: () => undefined });
+  else if (argv.includes("--guide") && MAC) showGuide({ preload: preloadPath(), url: rendererUrl("guide"), register: () => undefined, trusted: () => native.isTrusted(false) });
   else showSettings();
 }
 
@@ -940,6 +946,10 @@ if (!app.requestSingleInstanceLock()) {
     contents.setWindowOpenHandler(({ url }) => {
       if (/^https?:/.test(url)) void shell.openExternal(url);
       return { action: "deny" };
+    });
+    // Why: Arabic reads right to left, so every Split page lays out mirrored, not only the title bar.
+    contents.on("dom-ready", () => {
+      if (rightToLeft()) void contents.executeJavaScript(`document.documentElement.dir = "rtl"`).catch(() => undefined);
     });
   });
   if (MAC) app.dock?.hide();
