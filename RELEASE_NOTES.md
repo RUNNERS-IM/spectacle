@@ -1,5 +1,9 @@
 ## 한국어
 
+- 반복해서 누를 때 창 이동 알림에 "왼쪽 반 → 왼쪽 3/4 → 왼쪽 1/4"처럼 지금 크기가 나옵니다.
+- 손쉬운 사용 권한 안내 창을 새로 그렸습니다. 권한이 켜지면 처음 써 볼 단축키를 보여 줍니다.
+- 메뉴가 열린 채로 Split 을 다시 실행하면 Split 이 꺼지던 문제를 고쳤습니다.
+- `Split --perform 동작이름` 이 앞에 `--` 를 붙이지 않아도 동작합니다.
 - 예전 맥 판(2.6.1030)에서 자동 업데이트로 새 판을 받을 때 "잘못 서명된 업데이트" 오류가 나던 문제를 고쳤습니다.
 - 배치 저장 · 되살리기는 무료 기능이라 메뉴와 저장 창에서 Pro 표시를 뺐습니다.
 - 반 · 모서리 단축키를 반복해서 누르면 1/2 → 3/4 → 1/4 로 바뀝니다. 3분의 1은 ⌃⌥← · ⌃⌥→ 로 그대로 쓸 수 있습니다.
@@ -15,6 +19,10 @@
 
 ## English
 
+- Pressing a shortcut again now says which size you landed on: "Left Half → Left 3/4 → Left 1/4".
+- The Accessibility guide is redrawn, and once permission is on it shows the first shortcut to try.
+- Opening Split again while its menu was open no longer makes Split quit.
+- `Split --perform ActionName` works without a leading `--`.
 - Updating from the previous Mac app (2.6.1030) no longer fails with an "improperly signed" error.
 - Saving and restoring layouts is free, so the Pro mark is gone from the menu and the save window.
 - Pressing a half or corner shortcut again now goes 1/2 → 3/4 → 1/4. Thirds are still on ⌃⌥← and ⌃⌥→.
