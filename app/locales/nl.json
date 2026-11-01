@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "Open Systeeminstellingen",
   "AccessibilityGuide.ButtonReset": "Staat al aan maar werkt niet?",
   "AccessibilityGuide.Description": "Zet alleen deze ene schakelaar aan in Systeeminstellingen.",
+  "AccessibilityGuide.DescriptionAfter": "Zodra hij aan staat, verandert dit venster vanzelf.",
   "AccessibilityGuide.StatusGranted": "Toestemming gegeven. U bent klaar.",
   "AccessibilityGuide.StatusWaiting": "Wachten op toestemming…",
   "AccessibilityGuide.Title": "Zet toegang voor Split aan",

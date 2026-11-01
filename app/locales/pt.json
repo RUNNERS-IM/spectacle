@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "Abrir Ajustes do Sistema",
   "AccessibilityGuide.ButtonReset": "Já está ativado e não funciona?",
   "AccessibilityGuide.Description": "Basta ativar este botão nos Ajustes do Sistema.",
+  "AccessibilityGuide.DescriptionAfter": "Quando estiver ativado, esta janela muda sozinha.",
   "AccessibilityGuide.StatusGranted": "Permissão concedida. Tudo pronto.",
   "AccessibilityGuide.StatusWaiting": "Aguardando permissão…",
   "AccessibilityGuide.Title": "Ative o acesso do Split",

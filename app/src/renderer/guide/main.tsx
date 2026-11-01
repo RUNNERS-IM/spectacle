@@ -51,9 +51,15 @@ function App({ initial }: { initial: ViewState }) {
   }
   return (
     <div className="guide">
-      <img className="guide-icon" src={SPLIT_ICON} alt="" draggable={false} />
-      <h1>{t("AccessibilityGuide.Title")}</h1>
-      <p className="guide-description">{t("AccessibilityGuide.Description")}</p>
+      <div className="guide-heading">
+        <img className="guide-icon" src={SPLIT_ICON} alt="" draggable={false} />
+        <h1>{t("AccessibilityGuide.Title")}</h1>
+      </div>
+      <p className="guide-description">
+        {t("AccessibilityGuide.Description")}
+        <br />
+        {t("AccessibilityGuide.DescriptionAfter")}
+      </p>
       {/* Why: drawn instead of a picture of System Settings, so it reads in every language and
           the switch sits exactly in the middle of its highlight. */}
       <div className="guide-list">

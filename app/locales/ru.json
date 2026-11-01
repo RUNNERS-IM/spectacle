@@ -5,6 +5,7 @@
   "AccessibilityGuide.ButtonOpenSettings": "Открыть Системные настройки",
   "AccessibilityGuide.ButtonReset": "Включено, но не работает?",
   "AccessibilityGuide.Description": "Просто включите этот переключатель в Системных настройках.",
+  "AccessibilityGuide.DescriptionAfter": "Когда он включится, это окно изменится само.",
   "AccessibilityGuide.StatusGranted": "Разрешение получено. Все готово.",
   "AccessibilityGuide.StatusWaiting": "Ожидание разрешения…",
   "AccessibilityGuide.Title": "Включите доступ для Split",
