@@ -46,6 +46,7 @@
   "DisplayChangeHint": "Fenster eines getrennten Monitors kommen auf die übrigen Bildschirme und kehren beim Anschließen zurück.",
   "DisplayRearranged": "Monitore geändert, %ld Fenster neu angeordnet",
   "DisplayRestored": "%ld Fenster an ihren Platz zurückgebracht",
+  "DisplayRestored|one": "%ld Fenster an seinen Platz zurückgebracht",
   "DisplayUndoTip": "%@ zum Widerrufen",
   "DurationLong": "Lang",
   "DurationNormal": "Normal",
