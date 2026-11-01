@@ -9,6 +9,10 @@
   "AccessibilityGuide.StatusWaiting": "Waiting for permission…",
   "AccessibilityGuide.Title": "Turn on access for Split",
   "AccessibilityGuide.WindowTitle": "Allow Split to move windows",
+  "AccessibilityGuide.ListTitle": "Accessibility",
+  "AccessibilityGuide.GrantedTitle": "You’re all set",
+  "AccessibilityGuide.GrantedDescription": "You can now move windows with shortcuts.",
+  "AccessibilityGuide.GrantedTry": "Bring any window to the front and press:",
   "AlertInformativeTextRestoreDefaults": "Shortcuts you changed will go back to how Split came.",
   "AlertInformativeTextRunningInBackground": "Shortcuts keep working. To open settings again, open Split from the Applications folder.",
   "AlertInformativeTextShortcutAlreadyInUse": "Another Split action uses %@. Choose a different shortcut.",
@@ -188,5 +192,9 @@
   "SectionPermission": "Permissions",
   "SectionStatus": "Status",
   "SectionAbout": "About",
-  "SectionMoveFeedback": "Move Highlight"
+  "SectionMoveFeedback": "Move Highlight",
+  "Side.Left": "Left",
+  "Side.Right": "Right",
+  "Side.Top": "Top",
+  "Side.Bottom": "Bottom"
 }

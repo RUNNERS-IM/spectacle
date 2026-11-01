@@ -9,6 +9,10 @@
   "AccessibilityGuide.StatusWaiting": "Warten auf Erlaubnis …",
   "AccessibilityGuide.Title": "Zugriff für Split aktivieren",
   "AccessibilityGuide.WindowTitle": "Split erlauben, Fenster zu bewegen",
+  "AccessibilityGuide.ListTitle": "Bedienungshilfen",
+  "AccessibilityGuide.GrantedTitle": "Alles bereit",
+  "AccessibilityGuide.GrantedDescription": "Du kannst Fenster jetzt mit Tastenkürzeln bewegen.",
+  "AccessibilityGuide.GrantedTry": "Hol ein beliebiges Fenster nach vorn und drücke:",
   "AlertInformativeTextRestoreDefaults": "Geänderte Kurzbefehle werden auf die ursprünglichen Einstellungen von Split zurückgesetzt.",
   "AlertInformativeTextRunningInBackground": "Die Kurzbefehle funktionieren weiterhin. Um die Einstellungen wieder zu öffnen, öffnen Sie Split aus dem Ordner „Programme“.",
   "AlertInformativeTextShortcutAlreadyInUse": "Eine andere Split-Aktion verwendet %@. Wählen Sie einen anderen Kurzbefehl.",
@@ -188,5 +192,9 @@
   "SectionPermission": "Berechtigungen",
   "SectionStatus": "Status",
   "SectionAbout": "Info",
-  "SectionMoveFeedback": "Verschiebe-Hervorhebung"
+  "SectionMoveFeedback": "Verschiebe-Hervorhebung",
+  "Side.Left": "Links",
+  "Side.Right": "Rechts",
+  "Side.Top": "Oben",
+  "Side.Bottom": "Unten"
 }

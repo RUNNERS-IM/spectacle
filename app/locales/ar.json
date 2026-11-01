@@ -9,6 +9,10 @@
   "AccessibilityGuide.StatusWaiting": "في انتظار الإذن…",
   "AccessibilityGuide.Title": "فعّل الوصول لتطبيق Split",
   "AccessibilityGuide.WindowTitle": "السماح لـ Split بنقل النوافذ",
+  "AccessibilityGuide.ListTitle": "تسهيلات الاستخدام",
+  "AccessibilityGuide.GrantedTitle": "كل شيء جاهز",
+  "AccessibilityGuide.GrantedDescription": "يمكنك الآن نقل النوافذ باستخدام الاختصارات.",
+  "AccessibilityGuide.GrantedTry": "اجعل أي نافذة في المقدمة واضغط:",
   "AlertInformativeTextRestoreDefaults": "ستعود الاختصارات التي غيّرتها إلى ما كانت عليه في Split في الأصل.",
   "AlertInformativeTextRunningInBackground": "ستظل الاختصارات تعمل. لفتح الإعدادات مرة أخرى، افتح Split من مجلد التطبيقات.",
   "AlertInformativeTextShortcutAlreadyInUse": "هناك إجراء آخر في Split يستخدم %@. اختر اختصارًا مختلفًا.",
@@ -188,5 +192,9 @@
   "SectionPermission": "الأذونات",
   "SectionStatus": "الحالة",
   "SectionAbout": "حول",
-  "SectionMoveFeedback": "إبراز النقل"
+  "SectionMoveFeedback": "إبراز النقل",
+  "Side.Left": "اليسار",
+  "Side.Right": "اليمين",
+  "Side.Top": "الأعلى",
+  "Side.Bottom": "الأسفل"
 }
