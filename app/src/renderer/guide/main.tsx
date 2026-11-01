@@ -34,10 +34,12 @@ function App({ initial }: { initial: ViewState }) {
               <i />
             </span>
             <span className="guide-keys">
-              {[...keys].map((key, index) => (
-                <kbd key={index}>{key}</kbd>
-              ))}
-              <span>{t("MoveToLeftHalf")}</span>
+              <span className="guide-keycaps">
+                {[...keys].map((key, index) => (
+                  <kbd key={index}>{key}</kbd>
+                ))}
+              </span>
+              <span className="guide-key-name">{t("MoveToLeftHalf")}</span>
             </span>
           </div>
         )}

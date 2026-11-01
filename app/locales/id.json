@@ -44,7 +44,7 @@
   "DisableForApplication": "Saat %@ Ada di Depan",
   "DisplayChange": "Atur ulang saat monitor berubah",
   "DisplayChangeHint": "Jendela dari monitor yang dicabut pindah ke layar lain dan kembali saat dipasang lagi.",
-  "DisplayRearranged": "Monitor berubah, %ld jendela diatur ulang",
+  "DisplayRearranged": "Layar berubah, %ld jendela diatur ulang",
   "DisplayRestored": "%ld jendela kembali ke tempatnya",
   "DisplayUndoTip": "Tekan %@ untuk membatalkan",
   "DurationLong": "Lama",

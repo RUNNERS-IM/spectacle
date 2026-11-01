@@ -27,9 +27,10 @@ export async function openAccessibilitySettings(): Promise<void> {
 
 /**
  * Shows the guide on the left third of the screen, above System Settings, and opens System
- * Settings a moment later. `register` puts Split in the Accessibility list (it asks macOS once).
+ * Settings a moment later unless `trusted` says permission is already on. `register` puts Split in
+ * the Accessibility list (it asks macOS once).
  */
-export function showGuide(options: { preload: string; url: string; register: () => void }): void {
+export function showGuide(options: { preload: string; url: string; register: () => void; trusted: () => boolean }): void {
   if (guideWindow && !guideWindow.isDestroyed()) {
     guideWindow.show();
     guideWindow.focus();
@@ -85,7 +86,7 @@ export function showGuide(options: { preload: string; url: string; register: () 
   void window.loadURL(options.url);
   options.register();
   setTimeout(() => {
-    if (!window.isDestroyed()) void openAccessibilitySettings();
+    if (!window.isDestroyed() && !options.trusted()) void openAccessibilitySettings();
   }, OPEN_SETTINGS_DELAY_MS);
 }
 

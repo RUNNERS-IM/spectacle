@@ -139,8 +139,10 @@ h1 {
   margin-top: 14px;
 }
 
-/* A screen with its left half filled, the move the shortcut makes. */
+/* A screen with its left half filled, the move the shortcut makes. Screens and keys keep their
+   left-to-right order in Arabic too, as the keyboard and the screen do. */
 .guide-halves {
+  direction: ltr;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4px;
@@ -163,6 +165,12 @@ h1 {
   gap: 3px;
 }
 
+.guide-keycaps {
+  display: flex;
+  gap: 3px;
+  direction: ltr;
+}
+
 .guide-keys kbd {
   min-width: 22px;
   padding: 1px 6px;
@@ -172,8 +180,8 @@ h1 {
   font-weight: 600;
 }
 
-.guide-keys span {
-  margin-left: 6px;
+.guide-key-name {
+  margin-inline-start: 6px;
 }
 
 .buttons {
